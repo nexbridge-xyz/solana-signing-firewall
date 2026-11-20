@@ -94,11 +94,12 @@ one person plays both roles; in real use the approver is a different person on a
 ## x402 payments
 
 An agent that pays for APIs with x402 holds a key that can sign any payment a server asks for.
-Production agents need a signing interface with per-payment and cumulative limits, not a raw private
-key. The guard is that interface, and it plugs into the client that Solana's
-[x402 quickstart](https://solana.com/developers/guides/getstarted/intro-to-x402) builds. It refuses quotes outside the policy, binds the key to the one quote the
-agent accepted, checks that the bytes pay exactly that quote, and reserves the daily budget before
-the key signs.
+Solana's [x402 guide](https://solana.com/developers/guides/getstarted/intro-to-x402), in its section
+"Build a payment-aware client", says a production agent should get "a signing interface with
+per-payment and cumulative limits" rather than a raw private key. The guard is that interface, and
+it plugs into the client the guide builds. It refuses quotes outside the policy, binds the key to
+the one quote the agent accepted, checks that the bytes pay exactly that quote, and reserves the
+daily budget before the key signs.
 
 ```ts
 const guard = createX402Guard({ inner: agentSigner, policy, loader, ledger });

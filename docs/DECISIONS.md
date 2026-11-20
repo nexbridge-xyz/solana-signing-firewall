@@ -420,3 +420,18 @@ keeps the default rules and allows that one field, for that one rule, in the run
 committed, a script checked that none of the eight demo keys appears in it or in the terminal logs.
 CI now runs gitleaks with `--verbose`, so a finding shows its rule and file, with the secret
 redacted.
+
+### D39. Release order
+
+Decided by the maintainers on 2026-11-20, after the devnet run:
+
+- The repository stays private for now: no `v0.1.0` tag, no private vulnerability reporting yet.
+- Next, an independent security review, in a separate session with its own clone.
+- After its fixes: if code the demo uses changed (`packages/` or `examples/`), the devnet demo is run
+  again on the final commit, and `docs/devnet-run/` and `docs/video/` are updated. If only documents
+  and tests changed, the run of 2026-11-20 stands.
+- Then the video is recorded. Then, each only after asking the maintainers: make the repository
+  public, turn on private vulnerability reporting, tag `v0.1.0`.
+- Open before going public: check the README's quotation of Solana's x402 guide against the page.
+  The wording comes from a maintainer's reading of the page; solana.com answered HTTP 429 to every
+  fetch from this session.
