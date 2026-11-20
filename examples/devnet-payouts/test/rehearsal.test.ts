@@ -175,10 +175,12 @@ describe('devnet demo rehearsal on a local RPC', () => {
   }, 180_000);
 
   it('verifies every sent message against the reviewed bytes', async () => {
-    expect(await verifyRun({ rpc, recordPath: paths.runRecord, log })).toEqual({
-      matched: 7,
-      total: 7,
-    });
+    expect(await verifyRun({ rpc, network: 'localnet', recordPath: paths.runRecord, log })).toEqual(
+      {
+        matched: 7,
+        total: 7,
+      },
+    );
     expect(lines).toContain('7 of 7 on-chain messages match the reviewed bytes');
   }, 60_000);
 

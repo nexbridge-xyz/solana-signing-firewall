@@ -97,7 +97,12 @@ export async function rehearse(log: Log): Promise<{ matched: number; total: numb
       ports: { facilitator: 0, shop: 0, secondShop: 0 },
     });
     log('');
-    const verified = await verifyRun({ rpc, recordPath: paths.runRecord, log });
+    const verified = await verifyRun({
+      rpc,
+      network: 'localnet',
+      recordPath: paths.runRecord,
+      log,
+    });
     log('');
     log(renderTable(run));
     await runRecycle({ rpc, cast, network: 'localnet', setupStatePath: paths.setupState, log });

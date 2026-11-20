@@ -80,10 +80,13 @@ async function main(command: string | undefined): Promise<void> {
       return;
     }
     case 'verify-run': {
-      const { rpc } = await devnet();
+      // Public chain data only: no key is read, so a fresh clone can run it.
+      const rpcUrl = rpcUrlFrom(paths.env);
+      retryRpcOnRateLimit(rpcUrl, log);
       const which = process.argv.includes('--x402') ? 'x402' : 'all';
       const { matched, total } = await verifyRun({
-        rpc,
+        rpc: createDemoRpc(rpcUrl),
+        network: 'devnet',
         recordPath: runRecordPath(paths, which),
         log,
       });
