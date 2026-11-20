@@ -1,0 +1,67 @@
+// Stable reason codes. Codes may be added; none may be renamed after v0.1.0.
+// docs/REASON_CODES.md lists each one with at least one vector.
+export const REASON_CODES = [
+  // Message format
+  'UNSUPPORTED_VERSION',
+  'VERSION_NOT_ALLOWED',
+  'MALFORMED_MESSAGE',
+  'LOOKUP_TABLE_UNRESOLVED',
+  // Fee payer and signers
+  'FEE_PAYER_NOT_ALLOWED',
+  'UNEXPECTED_SIGNER',
+  'SIGNER_NOT_REQUIRED',
+  // Lifetime
+  'DURABLE_NONCE_NOT_ALLOWED',
+  // Instruction allow-list
+  'TOKEN_BATCH_NOT_ALLOWED',
+  'TOKEN_INSTRUCTION_NOT_ALLOWED',
+  'TOKEN_PROGRAM_NOT_ALLOWED',
+  'COMPUTE_BUDGET_INSTRUCTION_NOT_ALLOWED',
+  'COMPUTE_BUDGET_INSTRUCTION_IN_V1',
+  'MEMO_NOT_ALLOWED',
+  'SYSTEM_INSTRUCTION_NOT_ALLOWED',
+  'PROGRAM_NOT_ALLOWED',
+  // Transfer checks
+  'AUTHORITY_NOT_POLICY_SIGNER',
+  'MULTISIG_AUTHORITY_NOT_SUPPORTED',
+  'MINT_NOT_ALLOWED',
+  'MINT_ACCOUNT_INVALID',
+  'DECIMALS_MISMATCH',
+  'SOURCE_NOT_ALLOWED',
+  'SOURCE_ACCOUNT_INVALID',
+  'ACCOUNT_FROZEN',
+  'DESTINATION_ACCOUNT_MISSING',
+  'DESTINATION_ACCOUNT_INVALID',
+  'DESTINATION_MINT_MISMATCH',
+  'RECIPIENT_NOT_ALLOWED',
+  'DESTINATION_NOT_ASSOCIATED_TOKEN_ACCOUNT',
+  'ZERO_AMOUNT',
+  'PER_TRANSACTION_LIMIT_EXCEEDED',
+  // Fees
+  'COMPUTE_UNIT_LIMIT_MISSING',
+  'COMPUTE_UNIT_LIMIT_EXCEEDED',
+  'FEE_CAP_EXCEEDED',
+  // State
+  'ACCOUNT_STATE_MISSING',
+  // Approvals
+  'APPROVAL_REQUIRED',
+  'APPROVAL_SIGNATURE_INVALID',
+  'APPROVER_NOT_ALLOWED',
+  'APPROVAL_EXPIRED',
+  'APPROVAL_MESSAGE_MISMATCH',
+  'APPROVAL_POLICY_MISMATCH',
+  // Signer wrapper
+  'SIGNER_ADDRESS_MISMATCH',
+  'UNSUPPORTED_INNER_SIGNER',
+  'SIGNATURE_INVALID',
+] as const;
+
+export type ReasonCode = (typeof REASON_CODES)[number];
+
+export type Reason = {
+  readonly code: ReasonCode;
+  /** Where the problem is, for example `ix[1]` or `ix[0].batch[2]`. */
+  readonly path?: string;
+  /** Human-readable detail. Not part of the stable interface. */
+  readonly detail?: string;
+};
