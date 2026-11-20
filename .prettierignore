@@ -4,3 +4,5 @@ coverage/
 reports/
 packages/fixtures/vectors/
 .stryker-tmp
+# The recorded devnet run stays byte for byte as the run wrote it.
+docs/devnet-run/
