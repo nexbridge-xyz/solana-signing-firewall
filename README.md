@@ -32,12 +32,13 @@ flowchart LR
 `review()` decodes legacy, version-0 and version-1 messages, resolves lookup tables, parses P-Token
 `batch`, and checks signers, fee payer, lifetime, programs, instructions, transfers, totals and fees
 against the policy, from a snapshot of account state. It makes no network calls. `withPolicy()`
-wraps any Kit transaction signer, a Solana Keychain signer included: it reviews every transaction
-before the inner signer sees it, and verifies every signature it returns over the reviewed bytes.
+wraps any Kit transaction partial signer, a Solana Keychain signer included: it takes its own copy
+of every transaction, reviews it before the inner signer sees anything, and verifies every
+signature it returns over the reviewed bytes.
 
 ```ts
 const signer = withPolicy(await createKeychainSigner({ backend: 'memory', keyPair }), {
-  policy: parsePolicy(policyJson),
+  policy: parsePolicyText(policyFileText),
   loader: createRpcSnapshotLoader(rpc),
   approvals: (messageDigest) => approvalStore.get(messageDigest),
 });
@@ -109,16 +110,19 @@ client.register('solana:*', new GuardedExactSvmScheme(guard, { rpcUrl }));
 const paidFetch = wrapFetchWithPayment(fetch, client);
 ```
 
-A facilitator checks a payment before it signs as fee payer or settles it:
+A facilitator checks a payment before it signs as fee payer or settles it. The check is static and
+does not simulate the transaction, so a payment it calls valid can still fail on chain: put it in
+front of a facilitator scheme that simulates, not in place of one.
 
 ```ts
-const decision = await verifyX402Payment({ transaction, requirements, config, snapshot, now });
-// or wrap any facilitator scheme: refused payments never reach it
+// Wrap the facilitator scheme: a refused payment never reaches it.
 const scheme = withX402Verifier(new ExactSvmScheme(toFacilitatorSvmSigner(feePayer)), {
   config,
   loader,
   network: 'devnet',
 });
+// Or the check alone, in front of your own facilitator's simulation:
+const decision = await verifyX402Payment({ transaction, requirements, config, snapshot, now });
 ```
 
 In v0.1.0, an x402 payment above `approvalAbove` is refused, because there is no human approval for
@@ -170,7 +174,10 @@ Keychain backends that sign the bytes they are given; tested with the memory bac
 - The wrapper protects calls that go through it. Code that holds the raw key, or the credentials of a
   remote signer, can still sign directly.
 - `review()` decides from the snapshot its loader fetched; a dishonest RPC can report false account
-  state. The decision records the snapshot slot.
+  state, and through a lookup table it can redirect a version-0 payment. The decision records the
+  snapshot slot.
+- Nothing in the signed bytes names a cluster: a signature is valid on any cluster where the same
+  accounts exist. Use a key on one cluster only.
 - Not covered: Token-2022, multisig authorities, other programs, limits across transactions outside
   x402.
 

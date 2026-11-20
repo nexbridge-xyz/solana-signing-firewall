@@ -1,4 +1,4 @@
-// `pnpm demo:setup`: the accounts both demos need (brief section 3.7). Every
+// `pnpm demo:setup`: the accounts both demos need (docs/devnet-run/README.md). Every
 // transaction here is signed with the unwrapped setup key and recorded as
 // "setup, not a scene". Setup can run again: it skips what already exists and
 // tops the agent up to 0.10 USDC.

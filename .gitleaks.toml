@@ -4,8 +4,10 @@ useDefault = true
 
 # Recorded demo decisions name their lifetime as "token": a recent blockhash or a durable nonce,
 # 32 bytes in base58 (32 to 44 characters). That is public chain data. The allowlist applies only to
-# the generic-api-key rule, only in the run record, and only to that exact field; a 64-byte secret key
-# is 87 or 88 characters in base58 and is still reported.
+# the generic-api-key rule and only under docs/devnet-run/, to every line that holds such a field:
+# gitleaks matches the line, not the field. A 64-byte secret key is 87 or 88 characters in base58
+# and does not fit the pattern. packages/fixtures/test/review-no-keys-in-history.test.ts finds keys
+# under any field name, in every commit (docs/DECISIONS.md D38).
 [[allowlists]]
 description = "Blockhash or durable nonce in a recorded decision's lifetime"
 targetRules = ["generic-api-key"]

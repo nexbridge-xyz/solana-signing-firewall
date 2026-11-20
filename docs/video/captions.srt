@@ -18,8 +18,8 @@ in front of the signer.
 
 5
 00:00:17,000 --> 00:00:21,000
-It decodes the transaction
-and checks it against a policy,
+It decodes the transaction,
+checks it against a policy,
 
 6
 00:00:21,000 --> 00:00:25,000
@@ -113,12 +113,12 @@ instead of moving tokens.
 
 26
 00:02:05,000 --> 00:02:09,000
-Every rule ships with public test vectors
+The public test vectors can be run
 
 27
 00:02:09,000 --> 00:02:13,000
-that any wallet or x402
-implementation can run.
+by any wallet or x402
+implementation.
 
 28
 00:02:13,000 --> 00:02:20,000

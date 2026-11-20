@@ -56,7 +56,9 @@ programs (`PROGRAM_NOT_ALLOWED`); the reason carries the program address.
 - Messages are parsed with `@solana/kit`'s compiled-message codec, then checked against the
   runtime's sanitization rules and the version-1 limits of SIMD-0385 (at most 64 accounts, 64
   instructions and 12 signatures; both priority-fee bits or neither; no unknown config bits; heap
-  size a multiple of 1 KiB in [32 KiB, 256 KiB]). Trailing bytes are rejected.
+  size a multiple of 1 KiB in [32 KiB, 256 KiB]). Trailing bytes are rejected. The bytes must be
+  Kit's own encoding of what was decoded (D45), and the transaction must fit one packet with its
+  signatures (D46).
 - A decode problem is `MALFORMED_MESSAGE` or `UNSUPPORTED_VERSION`. When decoding fails, no other
   reason is reported.
 - Lookup tables come only from the snapshot. A missing, foreign-owned, undecodable or deactivating
@@ -139,13 +141,17 @@ The Memo's content is checked, not only its size. The two sides differ on purpos
 
 The SDK's spend controls keep their default (on). The second shop offers options the SDK lets
 through where possible, so the guard stops them on the real payment path: the requirements filter
-and the bound signer. Each option has exactly one fault:
+and the bound signer. Options 1 to 3 have exactly one fault each:
 
 1. 0.01 USDC to the outsider: `X402_PAYTO_NOT_ALLOWED`.
 2. 0.01 USDC to the shop, with the agent itself as fee payer: `X402_FEE_PAYER_NOT_ALLOWED`.
 3. 0.01 of a token the policy does not list, to the shop. If the SDK's spend controls drop it, the
    run shows that; otherwise the guard rejects it with `X402_ASSET_NOT_ALLOWED`.
-4. 2.00 USDC to the outsider: shown as removed by the SDK's per-payment cap.
+4. 2.00 USDC to the outsider: shown as removed by the SDK's per-payment cap. It has more than one
+   fault: given to the guard, it would get `X402_PAYTO_NOT_ALLOWED`,
+   `X402_PER_PAYMENT_LIMIT_EXCEEDED` and `X402_BUDGET_EXCEEDED`. The scene lists the vectors of
+   options 1 to 3 (x402-036, x402-037, x402-035). (Corrected on 2026-11-21: this record and the
+   scene said every option had one fault, and the scene also listed x402-038, another case.)
 
 Option 3 uses the SDK's own devnet PYUSD default asset (read with `getDefaultAsset`, not typed
 by hand). It is a default asset, so the SDK's spend controls let 0.01 through and the guard refuses
@@ -255,7 +261,8 @@ made them synchronous.)
 
 - It reviews every transaction in a call before the inner signer sees any of them, then calls the
   inner signer once. Each result must be exactly one signature, by the inner signer, valid over the
-  reviewed message bytes; anything else is `SIGNATURE_INVALID`.
+  reviewed message bytes, the wrapper's own copy of them (D41); anything else is
+  `SIGNATURE_INVALID`.
 - Approvals are found by message digest through an `approvals` lookup function.
 - Keychain's Kit plugin builds signers from a backend configuration and cannot take an existing
   signer. As its documentation recommends for existing signers, the wrapped signer is installed with
@@ -305,8 +312,9 @@ and `BudgetLedger.usage` are synchronous.
 ### D27. Budget ledger
 
 - Per mint, a rolling 24-hour window; the rate limit counts all mints over 60 seconds.
-- The file ledger is for Node.js and one process. Its lock file is never removed automatically:
-  after a crash, a person deletes it. Anyone who can edit the file can reset the budget.
+- The file ledger is for Node.js and one process. Its lock file is removed by `close()` and when
+  opening fails; after a crash it stays, and a person deletes it. Anyone who can edit the file can
+  reset the budget.
 
 ### D28. Demo cast
 
@@ -342,11 +350,12 @@ and `BudgetLedger.usage` are synchronous.
 ### D31. Scene details
 
 - ComputeBudget instructions come after the token instruction, so the batch in scene 9 is
-  `ix[0]` and the reason path reads `ix[0].batch[1]` as in the brief.
-- Legacy and v0 scenes set 30,000 compute units at 1,000 micro-lamports. Version-1 scenes set
+  `ix[0]` and the reason path reads `ix[0].batch[1]`.
+- Legacy and v0 scenes set a limit of 30,000 compute units; only scene 2 also sets a price, 1,000
+  micro-lamports per unit (30 lamports). Version-1 scenes set
   30,000 compute units, 1 MiB of loaded account data and a 10,000-lamport priority fee; scene 11
   sets 5,000,000 lamports (0.005 SOL).
-- Amounts the brief leaves open: scene 7 moves 1.00 USDC, scene 9's Approve allows 1,000 USDC,
+- Amounts chosen for the demo: scene 7 moves 1.00 USDC, scene 9's Approve allows 1,000 USDC,
   scene 11 moves 0.50 USDC.
 - Scene 5's approval is valid for 60 seconds (the policy allows 90). Scene 6 presents it through
   an approval lookup that returns it for any message.
@@ -420,12 +429,17 @@ error. None of this changes a scene's checks or expected result.
 ### D38. Secret scanning and the run record
 
 gitleaks' `generic-api-key` rule reported the 14 decisions in `docs/devnet-run/run.json`: each
-names its lifetime as `"token": "<blockhash>"`, and a blockhash is public chain data. `.gitleaks.toml`
-keeps the default rules and allows that one field, for that one rule, in the run record only; a
-64-byte secret key in base58 (87 or 88 characters) is still reported. Before the record was
-committed, a script checked that none of the eight demo keys appears in it or in the terminal logs.
-CI now runs gitleaks with `--verbose`, so a finding shows its rule and file, with the secret
-redacted.
+names its lifetime as `"token": "<blockhash>"`, and a blockhash is public chain data.
+`.gitleaks.toml` keeps the default rules and allows, for that one rule and under `docs/devnet-run/`
+only, every line that holds such a field: gitleaks matches the line, not the field, so a secret on
+the same line would not be reported either, and a 32-byte seed in the field would pass. A 64-byte
+secret key in base58 (87 or 88 characters) does not fit the field pattern; gitleaks' default rules
+report it under a field name they recognize, but not under a neutral name or as a byte array.
+`packages/fixtures/test/review-no-keys-in-history.test.ts` covers those cases: it finds key pairs and
+seeds of known addresses by what they are, in every commit, and runs in CI (I-02). Before the
+record was committed, a one-off check, not kept in the repository, looked for the eight demo keys
+in it and in the terminal logs. CI runs gitleaks with `--verbose`, so a finding shows its rule and
+file, with the secret redacted.
 
 ### D39. Release order
 

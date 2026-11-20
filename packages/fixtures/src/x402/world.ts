@@ -139,7 +139,7 @@ export function x402Accounts(w: X402World): [Address, SnapshotAccount | null][] 
   ];
 }
 
-/** The demo agent's policy (brief section 3.9.2), with D6 and D7 applied. */
+/** An agent policy like the devnet demo's (docs/devnet-run/policies/), with D6 and D7 applied. */
 export function agentPolicy(w: X402World) {
   return {
     schema: 'solana-signing-firewall.policy/v0',
@@ -172,7 +172,7 @@ export function agentPolicy(w: X402World) {
   };
 }
 
-/** The local facilitator's verifier config (brief section 3.9.5), with D6 applied. */
+/** A verifier config like the demo facilitator's (docs/devnet-run/policies/), with D6 applied. */
 export function facilitatorConfig(w: X402World) {
   return {
     schema: 'solana-signing-firewall.x402-verifier/v0',

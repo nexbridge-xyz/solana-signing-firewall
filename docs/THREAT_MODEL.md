@@ -28,9 +28,13 @@ service) whose credentials only the wrapping process holds, and grant that proce
 This is the main limit of a library that runs in the same process as the application; a signing
 service that runs the same checks on its own side, or on-chain limits, close it.
 
-A wrapped signer that the inner backend does not honor is caught: every returned signature is
-verified over the reviewed bytes (`SIGNATURE_INVALID`), and a signer that would send or rewrite the
-transaction itself is refused when the wrapper is created (`UNSUPPORTED_INNER_SIGNER`).
+A wrapped signer that the inner backend does not honor is caught: the wrapper takes its own copy
+of every transaction before it does anything else, gives the inner signer a second copy, and
+verifies every returned signature over its own copy (`SIGNATURE_INVALID`, D41). A signer that would
+send or rewrite the transaction itself is refused when the wrapper is created
+(`UNSUPPORTED_INNER_SIGNER`). A backend whose `signTransactions` also sends what it signs cannot be
+told apart from one that does not; what it sends is what was reviewed only if it does not rewrite
+the bytes.
 
 ## RPC
 
@@ -40,8 +44,8 @@ belongs to someone else, or hide that an account is frozen. Mitigations:
 
 - The loader checks the RPC's genesis hash against the policy's network, so a devnet policy is not
   checked against another cluster.
-- Every decision records the snapshot slot, so a recorded decision can be compared with the chain
-  afterwards (`pnpm verify-run` does this for the message bytes).
+- Every decision records the snapshot slot (0 when the loader fetched nothing), so a recorded
+  decision can be compared with the chain afterwards (`pnpm verify-run` does this for the message bytes).
 - Your own node, or several providers compared, is the real mitigation. A loader is a small
   interface; a multi-provider loader is on the roadmap.
 
@@ -61,6 +65,13 @@ way loses at most the mint's `maxPerTransaction`; v0.1.0 has no limit across tra
 x402. Unless the RPC is a node of your own, leave `v0` out of `messageVersions`, or send
 version-0 messages that use no lookup table. x402 payments already refuse lookup tables. A policy
 that pins the tables it accepts together with their entries would close this; v0.1.0 has none.
+
+## The cluster
+
+Nothing in the signed bytes names a cluster. `review()` does not look at the blockhash, and in x402
+the quote can supply it (`extra.recentBlockhash`). A signature is valid on any cluster where the
+same accounts exist, so use a key on one cluster only. The loader's genesis-hash check makes sure
+the snapshot comes from the policy's network; it does not bind the signature to that network.
 
 ## State that changes between review and execution
 
@@ -157,7 +168,8 @@ An agent that reads hostile content may try to pay again and again, or pay someo
 does not depend on the agent's judgement: the payee must be in the policy, each payment is capped,
 the daily budget is per mint over a rolling 24 hours, and the rate limit counts payments over 60
 seconds. A budget reservation is made before the key is called and is never released, even when the
-payment does not land, so a failure cannot be used to spend twice.
+payment does not land, so a failure cannot be used to spend twice. A reservation dated after now,
+as after a step back of the clock, still counts (D43).
 
 ### A buyer who attacks the facilitator
 

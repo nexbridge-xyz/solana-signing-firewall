@@ -1,4 +1,4 @@
-// Scenes 12 to 15 (brief section 3.7). The same code runs against devnet and,
+// Scenes 12 to 15 (the scene table of README.md). The same code runs against devnet and,
 // in rehearsals, against the LiteSVM-backed local RPC; only the URL, the keys
 // and the ports differ. The forged payment of scene 15 goes only to our own
 // facilitator's /verify; it is never sent to a cluster.
@@ -241,10 +241,10 @@ export async function runX402Scenes(ctx: X402Context): Promise<SceneRecord[]> {
 
     done({
       scene: 13,
-      title: 'x402: the second shop offers four options, each with one fault',
+      title: 'x402: the second shop offers four options, each outside the policy',
       expected:
         'options 1 to 3 denied by the guard (X402_PAYTO_NOT_ALLOWED, X402_FEE_PAYER_NOT_ALLOWED, X402_ASSET_NOT_ALLOWED); option 4 removed by the SDK per-payment cap; no payment header sent; signer calls 0',
-      vectors: ['x402-036', 'x402-037', 'x402-035', 'x402-038'],
+      vectors: ['x402-036', 'x402-037', 'x402-035'],
       steps: [await purchase(`${second.url}/report`, 'try to buy from the second shop')],
     });
 

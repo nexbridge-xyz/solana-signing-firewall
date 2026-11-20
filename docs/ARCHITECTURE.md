@@ -1,9 +1,10 @@
 # Architecture
 
 Signing Firewall for Solana reads a transaction before a signer signs it, checks it against a
-policy, and lets the signer sign only what passes. It is a TypeScript library on `@solana/kit`. The
-core makes no network calls: it decides from the message bytes, the policy, a snapshot of account
-state and the time.
+policy, and lets the signer sign only what passes. It is a TypeScript library on `@solana/kit`. Its
+checks make no network calls: `review()`, `verifyApproval()`, `checkQuote()` and
+`verifyX402Payment()` decide from the message bytes, the policy, a snapshot of account state and
+the time. The snapshot loader calls the RPC, and the file budget ledger uses the file system.
 
 ## Packages
 
@@ -51,12 +52,14 @@ flowchart LR
 valid Keychain `SolanaTransactionSigner`), so it drops into Kit's signing helpers in place of the
 inner signer. For every call it:
 
-1. loads a snapshot for each transaction and runs `review()`;
-2. for a decision that needs approval, looks up an approval by message digest and verifies it;
-3. refuses the whole call, before the inner signer sees anything, if any transaction fails;
-4. calls the inner signer once, for all transactions;
-5. checks that each result is exactly one signature, by the inner signer, valid over the reviewed
-   message bytes (`SIGNATURE_INVALID` otherwise).
+1. copies each transaction once, before anything else, and from then on works only on its copy
+   (D41);
+2. loads a snapshot for each transaction and runs `review()`;
+3. for a decision that needs approval, looks up an approval by message digest and verifies it;
+4. refuses the whole call, before the inner signer sees anything, if any transaction fails;
+5. calls the inner signer once, for all transactions, with a second copy;
+6. checks that each result is exactly one signature, by the inner signer, valid over the reviewed
+   message bytes (`SIGNATURE_INVALID` otherwise), and returns those signatures.
 
 ## `review()`
 
@@ -79,7 +82,7 @@ gives its JSON form for logs and recorded runs.
 
 `review()` never assumes account state. The snapshot maps each address it fetched to an account or
 to `null` (fetched and absent); an address it never fetched is missing from the map, and a check
-that needs it fails with `ACCOUNT_STATE_MISSING`.
+that needs it fails with `ACCOUNT_STATE_MISSING` (`LOOKUP_TABLE_UNRESOLVED` for a lookup table).
 
 ## Snapshot loader
 

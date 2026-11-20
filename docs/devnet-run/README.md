@@ -13,7 +13,7 @@ person, signing on a different device.
 | File                       | What it holds                                                                                                                                                                                                                    |
 | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`run.json`](run.json)     | Every scene and step: outcome, reasons, the reviewed message digest, inner signer calls, and for sent steps the signature and slot; the approval of scene 5; every x402 quote option with its digest; balances before and after. |
-| [`scenes.md`](scenes.md)   | The scene table, written by `pnpm demo:record`.                                                                                                                                                                                  |
+| [`scenes.md`](scenes.md)   | The scene table, written by `pnpm demo:record`; scene 13's title and vectors were corrected afterwards (Notes).                                                                                                                  |
 | [`setup.json`](setup.json) | What setup created, with the signature of each setup transaction ("setup, not a scene"), and the recycling.                                                                                                                      |
 | [`policies/`](policies)    | The exact policy files of the run. Their digests are in `run.json`.                                                                                                                                                              |
 
@@ -93,5 +93,12 @@ The treasury paid 7.00 USDC to the vendors and 35,030 lamports in fees; the faci
   while setup was confirming the facilitator's 0.05 SOL transfer; the transfer had landed, and it
   was recorded in `setup.json` afterwards, with a note, from `getSignaturesForAddress`. From then
   on the demo repeats a request that got 429, with backoff, and never repeats an airdrop request
-  (`docs/DECISIONS.md`, D37). During the run, seven requests were repeated this way.
-- Recheck the run with `pnpm verify-run` (it reads only public chain data).
+  (`docs/DECISIONS.md`, D37). During the run, five requests got that answer and were sent again,
+  seven times in all; `terminal.txt` has a line for each repeat.
+- Recheck the run with `pnpm verify-run`. It reads only public chain data and needs no key: it
+  checks the cluster's genesis hash, then fetches each sent transaction, compares its message with
+  the reviewed bytes and checks that it succeeded.
+- Corrected on 2026-11-21, after the run: in `scenes.md`, scene 13 was titled "the second shop
+  offers four options, each with one fault" and listed x402-038 among its vectors. Option 4 has
+  more than one fault (`docs/DECISIONS.md`, D10), and x402-038 is another case. `run.json` and
+  `terminal.txt` keep the title as the run recorded it.

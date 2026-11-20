@@ -14,7 +14,7 @@ Recorded on devnet, 2026-11-20T13:59:24.695Z, from commit 81dc0300018c. Signer: 
 | 10 | 1.00 USDC to Thistledown Print (vendor A) using the durable nonce | deny | `DURABLE_NONCE_NOT_ALLOWED` at `ix[0]` | 0 | core-028 | not sent |
 | 11 | v1 transfer with a 0.005 SOL priority fee in transactionConfig, plus a no-op SetComputeUnitPrice of 1 micro-lamport | deny | `COMPUTE_BUDGET_INSTRUCTION_IN_V1` at `ix[1]`, `FEE_CAP_EXCEEDED` | 0 | core-037 | not sent |
 | 12 | x402: the agent buys one report from Lantern Row (report shop) for 0.02 USDC | allow | - | 1 | x402-001, x402-002 | [slot 524375290](https://explorer.solana.com/tx/4qVJW9UkZvnk7Zd7C2hjL3JijJjyG9LsF8UFv5VK8sPYdnwi6odaPcQk4AHpbyihDs7LHprfcWV9S2eBtdxrEeDf?cluster=devnet) |
-| 13 | x402: the second shop offers four options, each with one fault | deny | `X402_PAYTO_NOT_ALLOWED`, `X402_FEE_PAYER_NOT_ALLOWED`, `X402_ASSET_NOT_ALLOWED` | 0 | x402-036, x402-037, x402-035, x402-038 | not sent |
+| 13 | x402: the second shop offers four options, each outside the policy | deny | `X402_PAYTO_NOT_ALLOWED`, `X402_FEE_PAYER_NOT_ALLOWED`, `X402_ASSET_NOT_ALLOWED` | 0 | x402-036, x402-037, x402-035 | not sent |
 | 14 | x402: a second report (0.04 USDC spent today), then a third against a 0.05 USDC daily budget | allow, then deny | `X402_BUDGET_EXCEEDED` | 1, then 0 | x402-041 | [slot 524375303](https://explorer.solana.com/tx/5bcNRTvdzDcGuCWuUK9FV5k26tGPAoTdhxwiRuoLqNy3urisqF1xAebCx2aw3PHJxniTHJ7vGcJ8W2V1Q3Fkx7Pq?cluster=devnet) |
 | 15 | x402, facilitator side: a payment signed with the agent key outside the guard, whose token instruction is ApproveChecked, posted to the facilitator's /verify | invalid | `X402_NOT_TRANSFER_CHECKED` at `ix[2]` | 0 | x402-004 | not sent |
 

@@ -1,4 +1,4 @@
-// Scenes 1 to 11 (brief section 3.7). The treasury's Keychain memory signer is
+// Scenes 1 to 11 (the scene table of README.md). The treasury's Keychain memory signer is
 // wrapped with withPolicy(); every scene goes through Kit's
 // signTransactionMessageWithSigners, so the wrapper is the only way to a
 // signature. Blocked scenes are never sent.

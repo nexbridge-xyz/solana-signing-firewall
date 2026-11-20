@@ -51,7 +51,8 @@ SDK builds.
 `withPolicy()` and the x402 guard take any Kit `TransactionPartialSigner`: a signer that returns
 signatures over the bytes it is given. They work in front of Keychain backends that sign the bytes
 they are given; they were tested with the memory backend. Each returned signature is verified over
-the reviewed bytes, so a signer that signs anything else is refused (`SIGNATURE_INVALID`). A signer
+the wrapper's own copy of the reviewed bytes (the signer is handed a second copy), so a signer that
+signs anything else is refused (`SIGNATURE_INVALID`). A signer
 without `signTransactions` is refused when the wrapper is created (`UNSUPPORTED_INNER_SIGNER`): it
 would send or rewrite the transaction itself, and a check afterwards would be too late.
 
