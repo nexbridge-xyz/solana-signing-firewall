@@ -1,7 +1,7 @@
 // Security review: limits of what review() and the x402 checks look at. Nothing here moves value
 // against the policy; each test pins a behaviour the documents do not mention, so that a later
 // change to it is deliberate. All of them pass at the reviewed commit. (That review() also
-// ignored the packet size is fixed on fix/decoder-strict-encoding, with its own tests.)
+// ignored the packet size is fixed by R-06, with its own tests: review-decoder-size.test.ts.)
 import { describe, expect, it } from 'vitest';
 import {
   type Blockhash,

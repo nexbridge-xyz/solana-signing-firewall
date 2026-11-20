@@ -1,5 +1,5 @@
 // Core vector definitions. Expectations are written from how each message is
-// built, following docs/DECISIONS.md and the build brief; they are never read
+// built, following docs/DECISIONS.md and docs/FIXTURES.md; they are never read
 // back from the code under test. Runtime verdicts are confirmed in LiteSVM by
 // test/litesvm-vectors.test.ts wherever `runtimeCheckedBy` is `litesvm`.
 import { createHash } from 'node:crypto';
