@@ -17,3 +17,6 @@ reports/
 *.log
 .vscode/
 .idea/
+
+# Local working notes (never committed)
+.work/
