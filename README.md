@@ -139,7 +139,7 @@ git clone https://github.com/nexbridge-xyz/solana-signing-firewall.git
 cd solana-signing-firewall
 pnpm install --frozen-lockfile
 pnpm test              # unit, property and LiteSVM tests
-pnpm fixtures          # run the 69 core and 45 x402 vectors
+pnpm fixtures          # run the 69 core and 49 x402 vectors
 pnpm demo:rehearse     # the whole devnet demo against a local LiteSVM RPC
 ```
 
@@ -147,12 +147,12 @@ The devnet demo itself (`pnpm demo:keys`, `demo:setup`, `demo`, `verify-run`, `d
 `demo:recycle`) needs devnet SOL and USDC from the public faucets; see
 [docs/devnet-run](docs/devnet-run/README.md).
 
-Quality: 366 tests; line coverage 96.2% of `packages/signing-firewall`. CI runs typecheck, lint,
+Quality: 481 tests; line coverage 98.1% of `packages/signing-firewall`. CI runs typecheck, lint,
 the format check, tests, the vector diff, secret scanning and a dependency audit on every push.
 
 ## Test vectors
 
-69 core vectors and 45 x402 vectors in `packages/fixtures/vectors`, one JSON file each: the bytes,
+69 core vectors and 49 x402 vectors in `packages/fixtures/vectors`, one JSON file each: the bytes,
 the policy, the account state and the expected answer, so another wallet, signer or x402
 implementation can run them without this code. Each core vector also records what the Solana runtime
 does with the transaction against its snapshot; LiteSVM confirms it for 64 of them, and the other

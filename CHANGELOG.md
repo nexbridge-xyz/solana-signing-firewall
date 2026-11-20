@@ -17,7 +17,7 @@ Semantic Versioning. No version has been published to npm.
 - x402: quote checks, a single-use bound signer, memory and file budget ledgers, and
   `verifyX402Payment()` for facilitators; `x402RequirementsFilter`, `GuardedExactSvmScheme` and
   `withX402Verifier` for the `@x402` packages.
-- 69 core vectors and 45 x402 vectors, with a generator, a runner and LiteSVM checks of the runtime
+- 69 core vectors and 49 x402 vectors, with a generator, a runner and LiteSVM checks of the runtime
   verdict.
 - The devnet demo (scenes 1 to 15), with a local rehearsal on LiteSVM, and its recorded devnet run
   of 2026-11-20 (`docs/devnet-run/`): 7 transactions sent, verify-run 7 of 7.
