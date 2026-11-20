@@ -32,6 +32,10 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
   bytes; a caller that changed its transaction objects during the review could get unreviewed
   bytes signed. `checkReturnedSignatures()` now takes the reviewed message bytes and returns the
   verified signatures.
+- R-02: THREAT_MODEL no longer says the associated-token-account rule stops a dishonest RPC from
+  redirecting a payment through a lookup table, and says what to do instead.
+- R-03: a reservation dated after now (a clock that moved back) still counts towards the daily
+  budget and the rate limit.
 
 ### Fixed before the first release
 

@@ -469,3 +469,30 @@ the commits and the records from here on use those numbers.
 - `checkReturnedSignatures()`, which is exported, now takes the reviewed message bytes instead of
   the transactions, and returns the verified signatures.
 - Tests: `packages/signing-firewall/test/review-toctou.test.ts`.
+
+### D42. Lookup tables and a dishonest RPC (R-02)
+
+- A version-0 message that uses a lookup table holds the table's address and an index, not the
+  account. `review()` learns the account behind the index from the snapshot, that is, from the RPC,
+  and the associated-token-account rule then checks that account. An RPC that reports false table
+  contents makes `review()` allow a payment to one account while the runtime, which reads the real
+  table, pays another. THREAT_MODEL said the rule prevents this; it now says the rule holds only
+  for an address the message names itself.
+- No code change in v0.1.0. `packages/fixtures/test/review-lookup-table-rpc.test.ts` shows the
+  redirect in LiteSVM. THREAT_MODEL tells an operator whose RPC is not a node of their own to leave
+  `v0` out of `messageVersions`, or to send version-0 messages that use no lookup table. x402
+  payments already refuse lookup tables.
+- Later work: a policy field that pins the lookup tables a signer accepts, with their entries, so
+  that `review()` can refuse a table whose reported contents differ from the policy's.
+
+### D43. A reservation dated after now still counts (R-03)
+
+- `usageOf()` left out every reservation whose time was later than `now`. After one step back of
+  the clock (an NTP step, a restored virtual machine, a clock set by hand), every reservation made
+  since was in the future, and the whole daily budget and the rate limit were available again,
+  without access to the ledger file.
+- Such a reservation now counts in both windows, and so does a time that cannot be read. A clock
+  that moves back cannot release a reservation. A reservation dated ahead by mistake keeps counting
+  until a day after the time it names: that fails safe.
+- The existing test that expected the future to be left out (`x402-ledger.test.ts`) was changed.
+  New tests: `packages/signing-firewall/test/review-ledger-clock.test.ts`.
