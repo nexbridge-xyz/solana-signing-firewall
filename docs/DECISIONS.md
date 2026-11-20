@@ -692,3 +692,27 @@ Each has a `stricter_than_spec` vector:
   the signer's associated token account.
 - `bindingReasons()`, which is exported, takes the fee payers to keep out of instructions.
 - Tests: `packages/signing-firewall/test/x402-source-account.test.ts`.
+
+### D55. Info items of the security review
+
+- Done: I-01 (THREAT_MODEL, "The cluster"; README), I-02 (D38; the history test fails on a shallow
+  clone, and CI checks out every commit), I-03 (setup records a transaction before it waits for the
+  confirmation, and the lookup table's address before it sends it), I-04 (`.env` back to 0600 on
+  every run), I-08 (REASON_CODES), I-09 (an empty `extra.memo` is no seller memo), I-10 (README,
+  X402.md), I-11 (D54), I-12 (`withX402Verifier()` advertises only the versions its config
+  accepts), I-13 (the version-1 layout requires `computeUnitLimit`).
+- Also from the review's list of claims: the three quote rules that no test exercised have unit
+  tests (`packages/signing-firewall/test/x402-quote-rules.test.ts`), and the documents state no
+  mutation score until it is measured again (D34).
+- Not done here:
+  - I-05: `packageManager` names pnpm without an integrity hash; adding one needs the hash of the
+    published pnpm release, which this offline pass did not fetch. The pinned Action commit ids
+    were not compared with their tags, which needs GitHub. `@solana/sysvars` stays: no file imports
+    it, but `@solana-program/token-2022` declares it as a peer dependency.
+  - I-06: nothing to do; the demo facilitator listens on 127.0.0.1 only, and SECURITY.md puts the
+    demo servers out of scope.
+  - I-07: the vector runners compare codes as sets and skip a side whose policy or config is
+    absent; comparing `path`, or failing on a skipped side, would change the vector format. Fourteen
+    verifier codes appear in no facilitator vector, and x402-009 does not isolate the Token-2022
+    rule (its note says so). The approval vectors are signed with the library's own code.
+  - I-03 has no test that loses a confirmation on purpose; the rehearsal runs the new path.

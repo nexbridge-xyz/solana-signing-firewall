@@ -60,6 +60,14 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
   account of its authority for the asset (`X402_SOURCE_NOT_PAYER_ATA`), and keep every fee payer
   the policy or the verifier config lists out of every instruction, not only the message's own
   (I-11). `bindingReasons()` takes those fee payers.
+- I-03: demo setup records each transaction before it waits for the confirmation, and the lookup
+  table's address before it sends it, so a lost confirmation creates nothing twice.
+- I-04: `ensureKeys()` sets an existing `.env` back to mode 0600.
+- I-09: an empty `extra.memo` counts as no seller memo.
+- I-12: `withX402Verifier()` advertises only the message versions its verifier config accepts.
+- I-13: the version-1 payment layout requires `computeUnitLimit`, in the guard as in the verifier.
+- Documents: the statements the review found untrue or inexact are corrected, and no mutation score
+  is stated until it is measured again (D55, D34).
 
 ### Fixed before the first release
 
