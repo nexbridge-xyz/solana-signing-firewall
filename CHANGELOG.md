@@ -46,6 +46,12 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
   of Memo text for the agent's key to sign in each payment, and that `memo.maxBytes` bounds it.
 - R-08: the bound signer refuses a payment whose message version the quote does not offer, and a
   legacy payment (`VERSION_NOT_ALLOWED`).
+- R-09: `parsePolicyText()` loads a policy file and refuses a key written twice; `parsePolicy()`
+  keeps a frozen copy of the JSON it is given, so the digest always matches the rules.
+- R-10: `pnpm verify-run` checks the cluster's genesis hash first, does not count a transaction that
+  failed on chain, and needs no key. `verifyRun()` takes a `network`.
+- R-11: `review()` returns `*_ACCOUNT_INVALID` for token account or mint bytes that do not decode,
+  instead of throwing.
 
 ### Fixed before the first release
 

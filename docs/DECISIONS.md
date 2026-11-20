@@ -564,3 +564,37 @@ the commits and the records from here on use those numbers.
   unchanged: "The sponsor enforces its own accepted set; it does not read
   `PaymentRequirements.extra.transactionVersions`." (§1.5)
 - Tests: `packages/signing-firewall-x402/test/review-guard-version.test.ts`.
+
+### D49. A repeated key in a policy file, and the policy's own copy (R-09)
+
+- `JSON.parse()` keeps the last of two equal keys without a word, so a policy file could show a
+  reader one value (the first `recipients`, say) and give the code another. `parsePolicyText(text)`
+  reads a policy from the text of its file and refuses a key written twice, in escaped form too.
+  Load policy files with it.
+- `parsePolicy()` kept the caller's object and took the digest from it on every call, so changing
+  that object afterwards changed the digest and not the rules. It now keeps a frozen copy of the
+  JSON it is given, and refuses a value that is not plain JSON (a bigint, a cycle) with a
+  `PolicyError`.
+- The digest is unchanged: SHA-256 of the RFC 8785 canonical JSON of the parsed value (POLICY.md).
+- Tests: `packages/signing-firewall/test/review-policy-file.test.ts`.
+
+### D50. verify-run checks the cluster and the result, and reads no key (R-10)
+
+- `pnpm verify-run` asked whatever RPC `.env` named for the recorded transactions, without the
+  genesis-hash check the other demo commands make, so the RPC of another cluster (mainnet, under a
+  URL that does not say so) was sent `getTransaction` requests. It counted a transaction whose
+  message matched but that failed on chain as a match. And it needed the eight demo keys although
+  it reads public data only, so it stopped in a fresh clone.
+- It now checks the genesis hash before any other request (`verifyRun()` takes a `network`),
+  reports a failed transaction as `FAILED ON CHAIN` instead of a match, and reads only
+  `SOLANA_RPC_URL` from `.env` (devnet's public endpoint when there is none).
+- Tests: `examples/devnet-payouts/test/review-verify-run.test.ts`.
+
+### D51. review() returns a reason for account bytes that do not decode (R-11)
+
+- A token-program account in the snapshot whose state byte is not 0, 1 or 2 made the codec throw
+  inside `review()`. No signature followed, but `review()` is documented to return every failing
+  reason.
+- Such an account is now `SOURCE_ACCOUNT_INVALID`, `DESTINATION_ACCOUNT_INVALID` or
+  `MINT_ACCOUNT_INVALID`.
+- Tests: `packages/signing-firewall/test/review-snapshot-bytes.test.ts`.
