@@ -1,0 +1,57 @@
+{
+  "schema": "solana-signing-firewall.policy/v0",
+  "policyId": "demo-agent",
+  "network": "devnet",
+  "signer": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7",
+  "feePayers": [
+    "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ"
+  ],
+  "messageVersions": [
+    "v0",
+    "v1"
+  ],
+  "durableNonce": "deny",
+  "tokenBatch": "deny",
+  "mints": {
+    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU": {
+      "decimals": 6,
+      "maxPerTransaction": "20000"
+    }
+  },
+  "sources": [
+    "65kegUBN4j6vG73sXLbCn9oF8ngcrunpUaJV8Sr4iuJH"
+  ],
+  "recipients": {
+    "owners": [
+      "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM"
+    ],
+    "requireAssociatedTokenAccount": true
+  },
+  "fees": {
+    "maxComputeUnitLimit": 200000,
+    "maxPriorityFeeLamports": "50000",
+    "requireExplicitComputeUnitLimit": true
+  },
+  "memo": {
+    "allowed": true,
+    "maxBytes": 256
+  },
+  "x402": {
+    "networks": [
+      "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+    ],
+    "schemes": [
+      "exact"
+    ],
+    "maxTimeoutSeconds": 120,
+    "maxComputeUnitPriceMicroLamports": "5000000",
+    "createRecipientAccount": "deny",
+    "lookupTables": "deny",
+    "budgets": {
+      "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU": {
+        "maxPerDay": "50000"
+      }
+    },
+    "maxPaymentsPerMinute": 10
+  }
+}

@@ -1,0 +1,1361 @@
+{
+  "schema": "solana-signing-firewall.demo-run/v0",
+  "network": "devnet",
+  "code": {
+    "commit": "81dc0300018c7f04cfb7b7fe44d98c11ad64f29e",
+    "dirty": false
+  },
+  "startedAt": "2026-11-20T13:59:24.695Z",
+  "signer": "Solana Keychain (memory backend), wrapped by Signing Firewall",
+  "cast": [
+    {
+      "role": "treasury",
+      "name": "Orrin & Vale (treasury)",
+      "address": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+    },
+    {
+      "role": "approver",
+      "name": "Orrin & Vale (finance approver)",
+      "address": "2JqCdsSuzJddHxjdMThsNQCufqgDWX7wQfSgnByYtXHY"
+    },
+    {
+      "role": "vendorA",
+      "name": "Thistledown Print (vendor A)",
+      "address": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck"
+    },
+    {
+      "role": "vendorB",
+      "name": "Cobbleway Freight (vendor B)",
+      "address": "4PLoVMdaoH7nYgCVisNmrFGwAmmNhjZWgaCe6vgZR7VH"
+    },
+    {
+      "role": "outsider",
+      "name": "an unknown address (outsider)",
+      "address": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs"
+    },
+    {
+      "role": "agent",
+      "name": "Orrin & Vale research agent",
+      "address": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+    },
+    {
+      "role": "shop",
+      "name": "Lantern Row (report shop)",
+      "address": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM"
+    },
+    {
+      "role": "facilitatorFeePayer",
+      "name": "local facilitator fee payer",
+      "address": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ"
+    }
+  ],
+  "policies": [
+    {
+      "policyId": "demo-payouts",
+      "digest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+      "file": "policies/demo-payouts.json"
+    },
+    {
+      "policyId": "demo-agent",
+      "digest": "ba8f62e5113d9f5e0356b08e7151be9f5e302fa31d73e2ad51105e113c30ee0c",
+      "file": "policies/demo-agent.json"
+    },
+    {
+      "policyId": "demo-facilitator-verifier",
+      "digest": "6a9d1b4e05017ef9670bc2957e44acd1e1c5e2a4def86ba1917322223ae85dbd",
+      "file": "policies/demo-facilitator-verifier.json"
+    }
+  ],
+  "finishedAt": "2026-11-20T13:59:52.543Z",
+  "complete": true,
+  "scenes": [
+    {
+      "scene": 1,
+      "title": "Legacy transfer: 1.00 USDC to Thistledown Print (vendor A)",
+      "expected": "allow, signed, sent",
+      "vectors": [
+        "core-001"
+      ],
+      "steps": [
+        {
+          "label": "review, sign and send",
+          "outcome": "allow",
+          "reasons": [],
+          "messageDigest": "f2364288b9c12d98f01bec2c7c02809470687d2832e0e87bb9452bdefb3747aa",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "allow",
+            "reasons": [],
+            "messageDigest": "f2364288b9c12d98f01bec2c7c02809470687d2832e0e87bb9452bdefb3747aa",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "legacy",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "Gk2BCRnsAPoMBxsjRa9JqVBRfaPnX44zEVAjRJncBPYr"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1000000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+                "destinationOwner": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1000000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375227"
+          },
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "3ahhXcUaTqBU3QK6gDAbnDp9TYcaHSQBUbjYe2dN4dhLksBD7VbS5gxBCoU4JCPmJQffFrgswiHEY6AMsnys9jeX",
+          "slot": "524375232",
+          "explorer": "https://explorer.solana.com/tx/3ahhXcUaTqBU3QK6gDAbnDp9TYcaHSQBUbjYe2dN4dhLksBD7VbS5gxBCoU4JCPmJQffFrgswiHEY6AMsnys9jeX?cluster=devnet"
+        }
+      ]
+    },
+    {
+      "scene": 2,
+      "title": "v0 transfer through the lookup table: 1.50 USDC to Cobbleway Freight (vendor B)",
+      "expected": "allow, sent; the lookup-table entries appear in the decision",
+      "vectors": [
+        "core-002"
+      ],
+      "steps": [
+        {
+          "label": "review, sign and send",
+          "outcome": "allow",
+          "reasons": [],
+          "messageDigest": "18919d7baacd88ee9a6d9afeeb3ccff0ff8247f66ccb80d72a55b2419427452f",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "allow",
+            "reasons": [],
+            "messageDigest": "18919d7baacd88ee9a6d9afeeb3ccff0ff8247f66ccb80d72a55b2419427452f",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v0",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "AtWurZvHKthTLrLjT7fRkJKYyprG2RePDNnQr1A7ARKm"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1500000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "B2VMFnZDkLE73ad4cSMzYxnJhP1L5pQpk32V3QcwCrtC",
+                "destinationOwner": "4PLoVMdaoH7nYgCVisNmrFGwAmmNhjZWgaCe6vgZR7VH",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1500000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": "1000",
+              "priorityFeeLamports": "30",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [
+              {
+                "table": "FVtxNdpVUmnXoVKg3CuWTL1vvVfCCbcCasjNmPzaSvk1",
+                "index": 0,
+                "address": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "writable": true
+              },
+              {
+                "table": "FVtxNdpVUmnXoVKg3CuWTL1vvVfCCbcCasjNmPzaSvk1",
+                "index": 2,
+                "address": "B2VMFnZDkLE73ad4cSMzYxnJhP1L5pQpk32V3QcwCrtC",
+                "writable": true
+              },
+              {
+                "table": "FVtxNdpVUmnXoVKg3CuWTL1vvVfCCbcCasjNmPzaSvk1",
+                "index": 4,
+                "address": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "writable": false
+              }
+            ],
+            "snapshotSlot": "524375237"
+          },
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "L8sd4nHz9KvASakaQmiUrxU5ojyHntCnfFAJ8PgPVKDuwFacQ5MpCJGXPvbmMa9oyYAxi5qpRKwpjFgMAyeGFF1",
+          "slot": "524375241",
+          "explorer": "https://explorer.solana.com/tx/L8sd4nHz9KvASakaQmiUrxU5ojyHntCnfFAJ8PgPVKDuwFacQ5MpCJGXPvbmMa9oyYAxi5qpRKwpjFgMAyeGFF1?cluster=devnet",
+          "note": "3 accounts loaded from lookup table FVtxNdpVUmnXoVKg3CuWTL1vvVfCCbcCasjNmPzaSvk1"
+        }
+      ]
+    },
+    {
+      "scene": 3,
+      "title": "v1 transfer: 0.50 USDC to Thistledown Print (vendor A), priority fee within the cap",
+      "expected": "allow, sent; fees read from transactionConfig",
+      "vectors": [
+        "core-003"
+      ],
+      "steps": [
+        {
+          "label": "review, sign and send",
+          "outcome": "allow",
+          "reasons": [],
+          "messageDigest": "278bb23cb0a1ae9c3addaacb9ef92b01645c0ecb7611c81f3b418c7437348360",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "allow",
+            "reasons": [],
+            "messageDigest": "278bb23cb0a1ae9c3addaacb9ef92b01645c0ecb7611c81f3b418c7437348360",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v1",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "BZ3dLZDKYwRGjC1YPAeUjTfE3pp2jFn1svmspxUFPDYC"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "500000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+                "destinationOwner": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "500000"
+              }
+            ],
+            "fees": {
+              "source": "transactionConfig",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "10000",
+              "loadedAccountsDataSizeLimit": 1048576,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375243"
+          },
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "3NKBhAJBEHjsecX82nCrZpap1FUB4gsMXFQxAAGqsvc1CT4m7VdZGtJyG591zYLYFSes6kWKvE6KARUvTGqLRGnJ",
+          "slot": "524375247",
+          "explorer": "https://explorer.solana.com/tx/3NKBhAJBEHjsecX82nCrZpap1FUB4gsMXFQxAAGqsvc1CT4m7VdZGtJyG591zYLYFSes6kWKvE6KARUvTGqLRGnJ?cluster=devnet",
+          "note": "priority fee 10000 lamports and compute-unit limit 30000, read from transactionConfig"
+        }
+      ]
+    },
+    {
+      "scene": 4,
+      "title": "P-Token batch: 0.40 USDC to Thistledown Print (vendor A) and 0.60 USDC to Cobbleway Freight (vendor B) in one instruction",
+      "expected": "allow, sent",
+      "vectors": [
+        "core-004"
+      ],
+      "steps": [
+        {
+          "label": "review, sign and send",
+          "outcome": "allow",
+          "reasons": [],
+          "messageDigest": "b6a57f42117835542185931664b10c6a0894b9622fcc5e8b7f1567123bf6d98e",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "allow",
+            "reasons": [],
+            "messageDigest": "b6a57f42117835542185931664b10c6a0894b9622fcc5e8b7f1567123bf6d98e",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v0",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "28tasrqgsq9UhGKPrqBJ1vpHETQgkYykc6S1CiEWjr39"
+            },
+            "transfers": [
+              {
+                "path": "ix[0].batch[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "400000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+                "destinationOwner": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              },
+              {
+                "path": "ix[0].batch[1]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "600000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "B2VMFnZDkLE73ad4cSMzYxnJhP1L5pQpk32V3QcwCrtC",
+                "destinationOwner": "4PLoVMdaoH7nYgCVisNmrFGwAmmNhjZWgaCe6vgZR7VH",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1000000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375248"
+          },
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "5pYsBboAsCby6FtUydxLhvM4mA4xEAuiYVadRG8hP5Vf7AmLLZesxMxTkmDhUWKyjAcu7bYoN5KcVqocnRgwejcf",
+          "slot": "524375252",
+          "explorer": "https://explorer.solana.com/tx/5pYsBboAsCby6FtUydxLhvM4mA4xEAuiYVadRG8hP5Vf7AmLLZesxMxTkmDhUWKyjAcu7bYoN5KcVqocnRgwejcf?cluster=devnet"
+        }
+      ]
+    },
+    {
+      "scene": 5,
+      "title": "3.00 USDC to Cobbleway Freight (vendor B)",
+      "expected": "needs approval; the approver signs; the wrapper signs; sent",
+      "vectors": [
+        "core-005",
+        "core-016"
+      ],
+      "steps": [
+        {
+          "label": "first attempt",
+          "outcome": "needs_approval",
+          "reasons": [
+            {
+              "code": "APPROVAL_REQUIRED"
+            }
+          ],
+          "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "needs_approval",
+            "reasons": [],
+            "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v0",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "GPxFsxxyTQBJucNmM3HZVrnPHY3Je6C8MhWfd9QZGxRB"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "3000000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "B2VMFnZDkLE73ad4cSMzYxnJhP1L5pQpk32V3QcwCrtC",
+                "destinationOwner": "4PLoVMdaoH7nYgCVisNmrFGwAmmNhjZWgaCe6vgZR7VH",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "3000000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375255"
+          },
+          "signerCalls": 0,
+          "sent": false
+        },
+        {
+          "label": "after the approver signs",
+          "outcome": "allow with approval",
+          "reasons": [],
+          "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "needs_approval",
+            "reasons": [],
+            "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v0",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "GPxFsxxyTQBJucNmM3HZVrnPHY3Je6C8MhWfd9QZGxRB"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "3000000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "B2VMFnZDkLE73ad4cSMzYxnJhP1L5pQpk32V3QcwCrtC",
+                "destinationOwner": "4PLoVMdaoH7nYgCVisNmrFGwAmmNhjZWgaCe6vgZR7VH",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "3000000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375255"
+          },
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "3BwLLDQS4LK65BWn6r27Rszp3NcfUNDmUtRYMHbG3qut8N3Yw7PUi1TsWSLPqkdQ3gnHZyrzmfSh5az9aB85kbuY",
+          "slot": "524375259",
+          "explorer": "https://explorer.solana.com/tx/3BwLLDQS4LK65BWn6r27Rszp3NcfUNDmUtRYMHbG3qut8N3Yw7PUi1TsWSLPqkdQ3gnHZyrzmfSh5az9aB85kbuY?cluster=devnet",
+          "approval": {
+            "schema": "solana-signing-firewall.approval/v0",
+            "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "issuedAt": "2026-11-20T13:59:31.836Z",
+            "expiresAt": "2026-11-20T14:00:31.836Z",
+            "approver": "2JqCdsSuzJddHxjdMThsNQCufqgDWX7wQfSgnByYtXHY",
+            "signature": "Bry7bG19whUgeXFUQyzve8xYyPRtmbqc9Yp4GvdyBrDcGpNjUg7W7qQdkW55p6iuxnedXxvTMNXn8sC9E9jS2zj"
+          },
+          "note": "approved by 2JqCdsSuzJddHxjdMThsNQCufqgDWX7wQfSgnByYtXHY, valid for 60 seconds, for message 28d7864a17bb..."
+        }
+      ]
+    },
+    {
+      "scene": 6,
+      "title": "A new message for 4.50 USDC to Cobbleway Freight (vendor B), presented with scene 5's approval",
+      "expected": "APPROVAL_MESSAGE_MISMATCH; signer calls 0",
+      "vectors": [
+        "core-019"
+      ],
+      "steps": [
+        {
+          "label": "review with scene 5's approval",
+          "outcome": "needs_approval",
+          "reasons": [
+            {
+              "code": "APPROVAL_MESSAGE_MISMATCH"
+            }
+          ],
+          "messageDigest": "5cacc7664a2d1a2be9d48c1bf9c1ed3c31e665f01beca2fd74fd0ee24c095373",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "needs_approval",
+            "reasons": [],
+            "messageDigest": "5cacc7664a2d1a2be9d48c1bf9c1ed3c31e665f01beca2fd74fd0ee24c095373",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v0",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "8bHmLE2PdVEWvXXydphjc6mm9MwSNxufVae6gxroy2Cp"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "4500000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "B2VMFnZDkLE73ad4cSMzYxnJhP1L5pQpk32V3QcwCrtC",
+                "destinationOwner": "4PLoVMdaoH7nYgCVisNmrFGwAmmNhjZWgaCe6vgZR7VH",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "4500000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375261"
+          },
+          "signerCalls": 0,
+          "sent": false
+        }
+      ]
+    },
+    {
+      "scene": 7,
+      "title": "1.00 USDC into the outsider's USDC account that is not an associated token account",
+      "expected": "RECIPIENT_NOT_ALLOWED, DESTINATION_NOT_ASSOCIATED_TOKEN_ACCOUNT; signer calls 0",
+      "vectors": [
+        "core-052"
+      ],
+      "steps": [
+        {
+          "label": "review",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "RECIPIENT_NOT_ALLOWED",
+              "path": "ix[0]",
+              "account": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs"
+            },
+            {
+              "code": "DESTINATION_NOT_ASSOCIATED_TOKEN_ACCOUNT",
+              "path": "ix[0]",
+              "account": "DZHtGDEQLTHyNAXxjMiZMWbE9VGBbjjDrXqjQVXDtQYc"
+            }
+          ],
+          "messageDigest": "49b393c87122f5c479d1d7fc5d6877d7f0c2c6a89921fe24eed464a1cac1c411",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "deny",
+            "reasons": [
+              {
+                "code": "RECIPIENT_NOT_ALLOWED",
+                "path": "ix[0]",
+                "account": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs"
+              },
+              {
+                "code": "DESTINATION_NOT_ASSOCIATED_TOKEN_ACCOUNT",
+                "path": "ix[0]",
+                "account": "DZHtGDEQLTHyNAXxjMiZMWbE9VGBbjjDrXqjQVXDtQYc"
+              }
+            ],
+            "messageDigest": "49b393c87122f5c479d1d7fc5d6877d7f0c2c6a89921fe24eed464a1cac1c411",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v0",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "48KqsGJrNPzXesVAeVkGeX6oZemEJzhS47jgVxk4fJsa"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1000000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "DZHtGDEQLTHyNAXxjMiZMWbE9VGBbjjDrXqjQVXDtQYc",
+                "destinationOwner": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1000000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375261"
+          },
+          "signerCalls": 0,
+          "sent": false
+        }
+      ]
+    },
+    {
+      "scene": 8,
+      "title": "Three transfers of 2.00 USDC in one transaction (cap 5.00)",
+      "expected": "PER_TRANSACTION_LIMIT_EXCEEDED; signer calls 0",
+      "vectors": [
+        "core-060"
+      ],
+      "steps": [
+        {
+          "label": "review",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "PER_TRANSACTION_LIMIT_EXCEEDED",
+              "account": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
+            }
+          ],
+          "messageDigest": "43d2e707675468e5e74602240003abe5209cf04d970cddab51d16ea67a83d21b",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "deny",
+            "reasons": [
+              {
+                "code": "PER_TRANSACTION_LIMIT_EXCEEDED",
+                "account": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "detail": "6000000 > 5000000"
+              }
+            ],
+            "messageDigest": "43d2e707675468e5e74602240003abe5209cf04d970cddab51d16ea67a83d21b",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v0",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "48KqsGJrNPzXesVAeVkGeX6oZemEJzhS47jgVxk4fJsa"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "2000000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+                "destinationOwner": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              },
+              {
+                "path": "ix[1]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "2000000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "B2VMFnZDkLE73ad4cSMzYxnJhP1L5pQpk32V3QcwCrtC",
+                "destinationOwner": "4PLoVMdaoH7nYgCVisNmrFGwAmmNhjZWgaCe6vgZR7VH",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              },
+              {
+                "path": "ix[2]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "2000000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+                "destinationOwner": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "6000000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375261"
+          },
+          "signerCalls": 0,
+          "sent": false
+        }
+      ]
+    },
+    {
+      "scene": 9,
+      "title": "A batch with 0.50 USDC to Thistledown Print (vendor A) plus an Approve that makes the outsider a delegate for 1,000 USDC",
+      "expected": "TOKEN_INSTRUCTION_NOT_ALLOWED at ix[0].batch[1]; signer calls 0",
+      "vectors": [
+        "core-030"
+      ],
+      "steps": [
+        {
+          "label": "review",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "TOKEN_INSTRUCTION_NOT_ALLOWED",
+              "path": "ix[0].batch[1]"
+            }
+          ],
+          "messageDigest": "31e2f0e8ea86a4060902ab3da24dd615a5336cf526e52b4cd65a69f99ceff94e",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "deny",
+            "reasons": [
+              {
+                "code": "TOKEN_INSTRUCTION_NOT_ALLOWED",
+                "path": "ix[0].batch[1]",
+                "detail": "Approve"
+              }
+            ],
+            "messageDigest": "31e2f0e8ea86a4060902ab3da24dd615a5336cf526e52b4cd65a69f99ceff94e",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v0",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "4aC1o9iVy775PbTYqVE3g9kUkTdARmXVk9FXhdsbK9si"
+            },
+            "transfers": [
+              {
+                "path": "ix[0].batch[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "500000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+                "destinationOwner": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "500000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375263"
+          },
+          "signerCalls": 0,
+          "sent": false
+        }
+      ]
+    },
+    {
+      "scene": 10,
+      "title": "1.00 USDC to Thistledown Print (vendor A) using the durable nonce",
+      "expected": "DURABLE_NONCE_NOT_ALLOWED; signer calls 0",
+      "vectors": [
+        "core-028"
+      ],
+      "steps": [
+        {
+          "label": "review",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "DURABLE_NONCE_NOT_ALLOWED",
+              "path": "ix[0]"
+            }
+          ],
+          "messageDigest": "88898a0e3b61a24f07a869cd6073990cdd23f831d531ef98af2ca099a6cdb17c",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "deny",
+            "reasons": [
+              {
+                "code": "DURABLE_NONCE_NOT_ALLOWED",
+                "path": "ix[0]"
+              }
+            ],
+            "messageDigest": "88898a0e3b61a24f07a869cd6073990cdd23f831d531ef98af2ca099a6cdb17c",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "legacy",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "nonce",
+              "token": "8QHyTKYFEHxzDvamiHgq32sLq4LDdnYYdBqkVQy3nJZh"
+            },
+            "transfers": [
+              {
+                "path": "ix[1]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1000000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+                "destinationOwner": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "1000000"
+              }
+            ],
+            "fees": {
+              "source": "instructions",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "0",
+              "loadedAccountsDataSizeLimit": null,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375263"
+          },
+          "signerCalls": 0,
+          "sent": false
+        }
+      ]
+    },
+    {
+      "scene": 11,
+      "title": "v1 transfer with a 0.005 SOL priority fee in transactionConfig, plus a no-op SetComputeUnitPrice of 1 micro-lamport",
+      "expected": "FEE_CAP_EXCEEDED, COMPUTE_BUDGET_INSTRUCTION_IN_V1; signer calls 0",
+      "vectors": [
+        "core-037"
+      ],
+      "steps": [
+        {
+          "label": "review",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "COMPUTE_BUDGET_INSTRUCTION_IN_V1",
+              "path": "ix[1]"
+            },
+            {
+              "code": "FEE_CAP_EXCEEDED"
+            }
+          ],
+          "messageDigest": "5abf8f51de75ec30af1f860767d27f7ab2ff4acfa014b988ba2c687ff4245290",
+          "policyId": "demo-payouts",
+          "decision": {
+            "outcome": "deny",
+            "reasons": [
+              {
+                "code": "COMPUTE_BUDGET_INSTRUCTION_IN_V1",
+                "path": "ix[1]"
+              },
+              {
+                "code": "FEE_CAP_EXCEEDED",
+                "detail": "5000000 > 50000 lamports"
+              }
+            ],
+            "messageDigest": "5abf8f51de75ec30af1f860767d27f7ab2ff4acfa014b988ba2c687ff4245290",
+            "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+            "policyId": "demo-payouts",
+            "version": "v1",
+            "feePayer": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc",
+            "requiredSigners": [
+              "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "FGbpLGyeE7jAqH8hFCuez91UuHo3inRDXvVYPPKRUpnt"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "500000",
+                "decimals": 6,
+                "source": "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+                "destination": "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+                "destinationOwner": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck",
+                "authority": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "500000"
+              }
+            ],
+            "fees": {
+              "source": "transactionConfig",
+              "computeUnitLimit": 30000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "5000000",
+              "loadedAccountsDataSizeLimit": 1048576,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375264"
+          },
+          "signerCalls": 0,
+          "sent": false
+        }
+      ]
+    },
+    {
+      "scene": 12,
+      "title": "x402: the agent buys one report from Lantern Row (report shop) for 0.02 USDC",
+      "expected": "allow; the local facilitator verifies and settles; the agent receives the report",
+      "vectors": [
+        "x402-001",
+        "x402-002"
+      ],
+      "steps": [
+        {
+          "label": "buy one report",
+          "outcome": "allow",
+          "reasons": [],
+          "messageDigest": "21a0d2e551e6d4e4230a88a0ade75696f79567417dfb81ed494acc722585b87b",
+          "policyId": "demo-agent",
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "4qVJW9UkZvnk7Zd7C2hjL3JijJjyG9LsF8UFv5VK8sPYdnwi6odaPcQk4AHpbyihDs7LHprfcWV9S2eBtdxrEeDf",
+          "slot": "524375290",
+          "explorer": "https://explorer.solana.com/tx/4qVJW9UkZvnk7Zd7C2hjL3JijJjyG9LsF8UFv5VK8sPYdnwi6odaPcQk4AHpbyihDs7LHprfcWV9S2eBtdxrEeDf?cluster=devnet",
+          "decision": {
+            "outcome": "allow",
+            "reasons": [],
+            "messageDigest": "21a0d2e551e6d4e4230a88a0ade75696f79567417dfb81ed494acc722585b87b",
+            "policyDigest": "ba8f62e5113d9f5e0356b08e7151be9f5e302fa31d73e2ad51105e113c30ee0c",
+            "policyId": "demo-agent",
+            "version": "v1",
+            "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+            "requiredSigners": [
+              "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "5pYFi4r6YUa1KGGBe99kYmXSiBR6GvTNL34eiXiGP4Vq"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "20000",
+                "decimals": 6,
+                "source": "65kegUBN4j6vG73sXLbCn9oF8ngcrunpUaJV8Sr4iuJH",
+                "destination": "4AsnBYugAXBB4fvh2ufkJstjsurg7bTjkkSeH7ySRkta",
+                "destinationOwner": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+                "authority": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "20000"
+              }
+            ],
+            "fees": {
+              "source": "transactionConfig",
+              "computeUnitLimit": 20000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "1",
+              "loadedAccountsDataSizeLimit": 4194304,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375272",
+            "x402": {
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+              "payee": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "ledger": {
+                "reservedLast24h": "0",
+                "paymentsLastMinute": 0
+              }
+            }
+          },
+          "quotes": [
+            {
+              "option": 0,
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "allow",
+              "reasons": []
+            }
+          ],
+          "note": "Paid 0.02 USDC; the local facilitator verified and settled it. Reserved in the last 24 h before this purchase: 0.00 USDC. Report: \"Lantern Row market note (fictional): orders for small hardware rose this week. Nothing here is real data.\""
+        }
+      ]
+    },
+    {
+      "scene": 13,
+      "title": "x402: the second shop offers four options, each with one fault",
+      "expected": "options 1 to 3 denied by the guard (X402_PAYTO_NOT_ALLOWED, X402_FEE_PAYER_NOT_ALLOWED, X402_ASSET_NOT_ALLOWED); option 4 removed by the SDK per-payment cap; no payment header sent; signer calls 0",
+      "vectors": [
+        "x402-036",
+        "x402-037",
+        "x402-035",
+        "x402-038"
+      ],
+      "steps": [
+        {
+          "label": "try to buy from the second shop",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "X402_PAYTO_NOT_ALLOWED",
+              "account": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs"
+            },
+            {
+              "code": "X402_FEE_PAYER_NOT_ALLOWED",
+              "account": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+            },
+            {
+              "code": "X402_ASSET_NOT_ALLOWED",
+              "account": "CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM"
+            }
+          ],
+          "signerCalls": 0,
+          "sent": false,
+          "quotes": [
+            {
+              "option": 0,
+              "requirementsDigest": "2b9818c28ce09f175f1258334403d7933a6d1a7f259edda130a4819899b1fffb",
+              "payTo": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "10000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "deny",
+              "reasons": [
+                "X402_PAYTO_NOT_ALLOWED"
+              ]
+            },
+            {
+              "option": 1,
+              "requirementsDigest": "470b92ec9ed4fad04b87e41d0e03854f737c172e545a1e1d50b38031511eef99",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "10000",
+              "feePayer": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7",
+              "outcome": "deny",
+              "reasons": [
+                "X402_FEE_PAYER_NOT_ALLOWED"
+              ]
+            },
+            {
+              "option": 2,
+              "requirementsDigest": "cd6c36991b7946dbb070c0784047e5d7c1c89d8025ed43e0b9fc2788f90579b2",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM",
+              "amount": "10000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "deny",
+              "reasons": [
+                "X402_ASSET_NOT_ALLOWED"
+              ]
+            },
+            {
+              "option": 3,
+              "requirementsDigest": "20fd8c461fd3cb051782682f5f05601a77504d47bbe53b223c2cc742e31da997",
+              "payTo": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "2000000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "removed by the SDK spend controls; the guard never saw it",
+              "reasons": []
+            }
+          ],
+          "note": "No payment header was sent. Reserved in the last 24 h before this purchase: 0.02 USDC. Client: Failed to create payment payload: All payment requirements were filtered out by policies for x402 version: 2"
+        }
+      ]
+    },
+    {
+      "scene": 14,
+      "title": "x402: a second report (0.04 USDC spent today), then a third against a 0.05 USDC daily budget",
+      "expected": "second purchase allowed and settled; third X402_BUDGET_EXCEEDED; signer calls 0 for the third",
+      "vectors": [
+        "x402-041"
+      ],
+      "steps": [
+        {
+          "label": "second report",
+          "outcome": "allow",
+          "reasons": [],
+          "messageDigest": "130e831b133a1dd9572eaf0311870cf7e198af3e22073db627e3618a1eda6304",
+          "policyId": "demo-agent",
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "5bcNRTvdzDcGuCWuUK9FV5k26tGPAoTdhxwiRuoLqNy3urisqF1xAebCx2aw3PHJxniTHJ7vGcJ8W2V1Q3Fkx7Pq",
+          "slot": "524375303",
+          "explorer": "https://explorer.solana.com/tx/5bcNRTvdzDcGuCWuUK9FV5k26tGPAoTdhxwiRuoLqNy3urisqF1xAebCx2aw3PHJxniTHJ7vGcJ8W2V1Q3Fkx7Pq?cluster=devnet",
+          "decision": {
+            "outcome": "allow",
+            "reasons": [],
+            "messageDigest": "130e831b133a1dd9572eaf0311870cf7e198af3e22073db627e3618a1eda6304",
+            "policyDigest": "ba8f62e5113d9f5e0356b08e7151be9f5e302fa31d73e2ad51105e113c30ee0c",
+            "policyId": "demo-agent",
+            "version": "v1",
+            "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+            "requiredSigners": [
+              "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "H25bxE12s1zG9UKLfYDM12gyox1rJvFBRNXRePqVgBgE"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "20000",
+                "decimals": 6,
+                "source": "65kegUBN4j6vG73sXLbCn9oF8ngcrunpUaJV8Sr4iuJH",
+                "destination": "4AsnBYugAXBB4fvh2ufkJstjsurg7bTjkkSeH7ySRkta",
+                "destinationOwner": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+                "authority": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "20000"
+              }
+            ],
+            "fees": {
+              "source": "transactionConfig",
+              "computeUnitLimit": 20000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "1",
+              "loadedAccountsDataSizeLimit": 4194304,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524375292",
+            "x402": {
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+              "payee": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "ledger": {
+                "reservedLast24h": "20000",
+                "paymentsLastMinute": 1
+              }
+            }
+          },
+          "quotes": [
+            {
+              "option": 0,
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "allow",
+              "reasons": []
+            }
+          ],
+          "note": "Paid 0.02 USDC; the local facilitator verified and settled it. Reserved in the last 24 h before this purchase: 0.02 USDC. Report: \"Lantern Row market note (fictional): orders for small hardware rose this week. Nothing here is real data.\""
+        },
+        {
+          "label": "third report",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "X402_BUDGET_EXCEEDED"
+            }
+          ],
+          "signerCalls": 0,
+          "sent": false,
+          "quotes": [
+            {
+              "option": 0,
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "deny",
+              "reasons": [
+                "X402_BUDGET_EXCEEDED"
+              ]
+            }
+          ],
+          "note": "No payment header was sent. Reserved in the last 24 h before this purchase: 0.04 USDC. Client: Failed to create payment payload: All payment requirements were filtered out by policies for x402 version: 2"
+        }
+      ]
+    },
+    {
+      "scene": 15,
+      "title": "x402, facilitator side: a payment signed with the agent key outside the guard, whose token instruction is ApproveChecked, posted to the facilitator's /verify",
+      "expected": "the verifier returns X402_NOT_TRANSFER_CHECKED; the facilitator does not sign or settle; nothing is sent",
+      "vectors": [
+        "x402-004"
+      ],
+      "steps": [
+        {
+          "label": "POST /verify",
+          "outcome": "invalid",
+          "reasons": [
+            {
+              "code": "X402_NOT_TRANSFER_CHECKED",
+              "path": "ix[2]"
+            }
+          ],
+          "messageDigest": "354d7a034f2183394ec7629c95ea02ec77bb15395f2908efcdcb6fcb6c60a67c",
+          "signerCalls": 0,
+          "sent": false,
+          "decision": {
+            "outcome": "invalid",
+            "reasons": [
+              {
+                "code": "X402_NOT_TRANSFER_CHECKED",
+                "path": "ix[2]"
+              }
+            ],
+            "messageDigest": "354d7a034f2183394ec7629c95ea02ec77bb15395f2908efcdcb6fcb6c60a67c",
+            "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+            "version": "v0",
+            "snapshotSlot": "0"
+          },
+          "note": "invalidReason solana-signing-firewall:X402_NOT_TRANSFER_CHECKED. Signer calls here count the facilitator's key. /settle was never called."
+        }
+      ]
+    }
+  ],
+  "balances": [
+    {
+      "account": "treasury",
+      "asset": "SOL",
+      "before": "938235200",
+      "after": "938200170"
+    },
+    {
+      "account": "treasury",
+      "asset": "USDC",
+      "before": "19900000",
+      "after": "12900000"
+    },
+    {
+      "account": "vendor A",
+      "asset": "USDC",
+      "before": "0",
+      "after": "1900000"
+    },
+    {
+      "account": "vendor B",
+      "asset": "USDC",
+      "before": "0",
+      "after": "5100000"
+    },
+    {
+      "account": "outsider",
+      "asset": "USDC",
+      "before": "0",
+      "after": "0"
+    },
+    {
+      "account": "outsider (not associated)",
+      "asset": "USDC",
+      "before": "0",
+      "after": "0"
+    },
+    {
+      "account": "agent",
+      "asset": "USDC",
+      "before": "100000",
+      "after": "60000"
+    },
+    {
+      "account": "shop",
+      "asset": "USDC",
+      "before": "0",
+      "after": "40000"
+    },
+    {
+      "account": "facilitator fee payer",
+      "asset": "SOL",
+      "before": "50000000",
+      "after": "49979998"
+    }
+  ]
+}

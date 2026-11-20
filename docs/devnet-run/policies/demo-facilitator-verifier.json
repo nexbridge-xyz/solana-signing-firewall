@@ -1,0 +1,25 @@
+{
+  "schema": "solana-signing-firewall.x402-verifier/v0",
+  "networks": [
+    "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+  ],
+  "feePayers": [
+    "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ"
+  ],
+  "messageVersions": [
+    "v0",
+    "v1"
+  ],
+  "assets": {
+    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU": {
+      "decimals": 6
+    }
+  },
+  "maxComputeUnitLimit": 200000,
+  "maxComputeUnitPriceMicroLamports": "5000000",
+  "maxPriorityFeeLamports": "100000",
+  "maxRequiredSignatures": 2,
+  "durableNonce": "deny",
+  "createRecipientAccount": "deny",
+  "lookupTables": "deny"
+}

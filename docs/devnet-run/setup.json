@@ -1,0 +1,64 @@
+{
+  "schema": "solana-signing-firewall.demo-setup/v0",
+  "network": "devnet",
+  "steps": [
+    {
+      "step": "USDC token accounts for the treasury, both vendors and the outsider, and a second outsider USDC account that is not associated",
+      "label": "setup, not a scene",
+      "signature": "4MV5TzAdmQCh9agMwwGdq9rvjxpLwZiA13ccfTAJjBgydD4GuSsY9UPeAbsT3wiT8LeTM4QFEBsoKvp2Tr4g1SEA",
+      "slot": "524373727",
+      "explorer": "https://explorer.solana.com/tx/4MV5TzAdmQCh9agMwwGdq9rvjxpLwZiA13ccfTAJjBgydD4GuSsY9UPeAbsT3wiT8LeTM4QFEBsoKvp2Tr4g1SEA?cluster=devnet"
+    },
+    {
+      "step": "durable-nonce account with the treasury as authority",
+      "label": "setup, not a scene",
+      "signature": "2fAUbzXqPq2MPCbgQjoQBeHKEGdQ5DgQadNAf7HgS8D8bgBzXcXAVmLBs56jszUX1trQxkS3kQJcBchDfowEyMe9",
+      "slot": "524373734",
+      "explorer": "https://explorer.solana.com/tx/2fAUbzXqPq2MPCbgQjoQBeHKEGdQ5DgQadNAf7HgS8D8bgBzXcXAVmLBs56jszUX1trQxkS3kQJcBchDfowEyMe9?cluster=devnet"
+    },
+    {
+      "step": "lookup table with the demo addresses",
+      "label": "setup, not a scene",
+      "signature": "2WFwmBQvcbN3ipDgoTUQCU1VC8yMKTFvE8wdhmmNpgfN6pUU1zPBZg92FseXnLX9jTeq4Dq5piRUJx7ZDPN6bwvr",
+      "slot": "524373740",
+      "explorer": "https://explorer.solana.com/tx/2WFwmBQvcbN3ipDgoTUQCU1VC8yMKTFvE8wdhmmNpgfN6pUU1zPBZg92FseXnLX9jTeq4Dq5piRUJx7ZDPN6bwvr?cluster=devnet"
+    },
+    {
+      "step": "0.05 SOL from the treasury to the local facilitator fee payer",
+      "label": "setup, not a scene",
+      "signature": "45jgeJATatdTcgrf61SpqqGECRrq5HtXwG1CrKWxBTa5tnQERHERxbDQJKoGzz6euNAimL78SkTZP8A7Bq3crsbp",
+      "slot": "524373747",
+      "explorer": "https://explorer.solana.com/tx/45jgeJATatdTcgrf61SpqqGECRrq5HtXwG1CrKWxBTa5tnQERHERxbDQJKoGzz6euNAimL78SkTZP8A7Bq3crsbp?cluster=devnet",
+      "note": "Recorded afterwards: the transfer landed, but the RPC answered HTTP 429 while setup polled for its confirmation, so setup stopped before recording it (D37). Found with getSignaturesForAddress on the fee payer."
+    },
+    {
+      "step": "USDC token accounts for the agent and the shop, paid by the treasury",
+      "label": "setup, not a scene",
+      "signature": "54VkMkRQ6BfXg1fDKLthjKKB1wKwk8pHc17KYmxv84dNb2qKfh6tLHSfZqudozFZfjStbBQR3M58CKyzvcEVFE4o",
+      "slot": "524375167",
+      "explorer": "https://explorer.solana.com/tx/54VkMkRQ6BfXg1fDKLthjKKB1wKwk8pHc17KYmxv84dNb2qKfh6tLHSfZqudozFZfjStbBQR3M58CKyzvcEVFE4o?cluster=devnet"
+    },
+    {
+      "step": "0.10 USDC from the treasury to the agent",
+      "label": "setup, not a scene",
+      "signature": "5i2GRDTzvKWYhoDtbiVtSFYYmPwHF1HqcrKDqRZRgvfz8eMXkmpT1bVx4J2gRdRdtJdgbPvF9do8NigXfiCCxc8a",
+      "slot": "524375175",
+      "explorer": "https://explorer.solana.com/tx/5i2GRDTzvKWYhoDtbiVtSFYYmPwHF1HqcrKDqRZRgvfz8eMXkmpT1bVx4J2gRdRdtJdgbPvF9do8NigXfiCCxc8a?cluster=devnet"
+    },
+    {
+      "step": "recycled 7.04 USDC from the vendors and the shop to the treasury",
+      "label": "recycle, not a scene",
+      "signature": "4sxZJMFpWLNbdf2kzfY1FFb6JCyM9ZhEo56jv42k7f8uzXemuAtTVVSEju37JUm7dkwd4t4tyK96rEgUpmkQQt7S",
+      "slot": "524375470",
+      "explorer": "https://explorer.solana.com/tx/4sxZJMFpWLNbdf2kzfY1FFb6JCyM9ZhEo56jv42k7f8uzXemuAtTVVSEju37JUm7dkwd4t4tyK96rEgUpmkQQt7S?cluster=devnet"
+    }
+  ],
+  "lookupTable": "FVtxNdpVUmnXoVKg3CuWTL1vvVfCCbcCasjNmPzaSvk1",
+  "lookupTableEntries": [
+    "7wC1B3825mNu2muXgnpp7cx1wTaALYhVB43b8qdrtJ44",
+    "9bFwCru6FTM8ZjKRHQXx9ETYrFrsR4ktQpJvKXACPvs5",
+    "B2VMFnZDkLE73ad4cSMzYxnJhP1L5pQpk32V3QcwCrtC",
+    "Fh2sWn1Q9zYPqfAtNcJLxTSCTVGzWKPRpDRoWihby5SD",
+    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
+  ]
+}
