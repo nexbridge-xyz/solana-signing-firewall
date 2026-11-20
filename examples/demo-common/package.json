@@ -1,0 +1,22 @@
+{
+  "name": "@nexbridge/example-demo-common",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared pieces of the Signing Firewall for Solana demos: keys in .env, the fictional cast, the demo policies, RPC helpers, the run record and a LiteSVM-backed RPC for rehearsals.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./local-rpc": "./src/local-rpc.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nexbridge/solana-signing-firewall": "workspace:*",
+    "@solana-program/token": "0.18.0",
+    "@solana/keychain": "2.0.0",
+    "@solana/kit": "8.6.0",
+    "litesvm": "1.6.2"
+  }
+}
