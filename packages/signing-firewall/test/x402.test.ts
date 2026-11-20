@@ -330,3 +330,72 @@ describe('parseVerifierConfig', () => {
     expect(() => parseVerifierConfig(bad)).toThrow(message);
   });
 });
+
+describe('createX402Guard: the bound signer itself', () => {
+  it('refuses an inner signer that cannot return signatures', () => {
+    const sending = {
+      address: agent.address,
+      signAndSendTransactions: () => Promise.resolve([]),
+    } as unknown as TransactionPartialSigner;
+    let error: unknown;
+    try {
+      createX402Guard({ inner: sending, policy, loader, ledger: createMemoryLedger() });
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeInstanceOf(PolicyViolationError);
+    expect((error as PolicyViolationError).reasons).toEqual([{ code: 'UNSUPPORTED_INNER_SIGNER' }]);
+  });
+
+  it('signs exactly one transaction, once', async () => {
+    const inner = counting(agent);
+    const guard = createX402Guard({
+      inner: inner.signer,
+      policy,
+      loader,
+      ledger: createMemoryLedger(),
+      now: () => now,
+    });
+    const twice = guard.signerFor(quote());
+    expect(await codes(twice.signTransactions([paymentFor(twice), paymentFor(twice)]))).toEqual([
+      'X402_LAYOUT_INVALID',
+    ]);
+    expect(await codes(twice.signTransactions([paymentFor(twice)]))).toEqual([
+      'X402_SIGNER_ALREADY_USED',
+    ]);
+    const none = guard.signerFor(quote());
+    expect(await codes(none.signTransactions([]))).toEqual(['X402_LAYOUT_INVALID']);
+    expect(inner.calls()).toBe(0);
+  });
+
+  it("loads state for the policy's network and keeps time by the given clock", async () => {
+    const networks: string[] = [];
+    const spy = {
+      load: (bytes: Uint8Array, options: { readonly network: typeof policy.network }) => {
+        networks.push(options.network);
+        return loader.load(bytes, options);
+      },
+    };
+    // A clock years ahead: the reservation below is in the past only by that clock.
+    const later = new Date('2030-01-01T00:00:00.000Z');
+    const ledger = createMemoryLedger([reservation(40_000n, new Date(later.getTime() - 1_000))]);
+    const guard = createX402Guard({ inner: agent, policy, loader: spy, ledger, now: () => later });
+    const bound = guard.signerFor(quote());
+    expect(await codes(bound.signTransactions([paymentFor(bound)]))).toEqual([
+      'X402_BUDGET_EXCEEDED',
+    ]);
+    expect(networks).toEqual(['localnet']);
+  });
+
+  it('uses the system clock when no clock is given', async () => {
+    const ledger = createMemoryLedger();
+    const guard = createX402Guard({ inner: agent, policy, loader, ledger });
+    const bound = guard.signerFor(quote());
+    const before = Date.now();
+    await bound.signTransactions([paymentFor(bound)]);
+    const [reserved] = await ledger.reservations();
+    const time = Date.parse(reserved?.time ?? '');
+    expect(time).toBeGreaterThanOrEqual(before);
+    expect(time).toBeLessThanOrEqual(Date.now());
+  });
+});
