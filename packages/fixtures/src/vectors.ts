@@ -281,7 +281,7 @@ async function approvalFor(
   return createApproval({
     decision: {
       messageDigest: sha256Hex(message),
-      policyDigest: await canonicalDigest(options.policy ?? payoutsPolicy(w)),
+      policyDigest: canonicalDigest(options.policy ?? payoutsPolicy(w)),
     },
     approver: options.approver ?? w.approver,
     issuedAt,

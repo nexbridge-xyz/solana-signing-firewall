@@ -321,8 +321,8 @@ function checkFees(
 export async function review(input: ReviewInput): Promise<ReviewDecision> {
   const { messageBytes, policy, snapshot } = input;
   const base = {
-    messageDigest: await sha256Hex(messageBytes),
-    policyDigest: await policyDigest(policy),
+    messageDigest: sha256Hex(messageBytes),
+    policyDigest: policyDigest(policy),
     policyId: policy.policyId,
     snapshotSlot: snapshot.slot,
   };

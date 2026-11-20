@@ -226,6 +226,12 @@ importers:
       '@solana/sysvars':
         specifier: 8.6.0
         version: 8.6.0(typescript@6.0.3)
+      '@x402/core':
+        specifier: 2.31.0
+        version: 2.31.0
+      '@x402/svm':
+        specifier: 2.31.0
+        version: 2.31.0(@solana/kit@8.6.0(typescript@6.0.3))(@solana/sysvars@8.6.0(typescript@6.0.3))(typescript@6.0.3)
     devDependencies:
       litesvm:
         specifier: 1.6.2
@@ -233,6 +239,9 @@ importers:
 
   packages/signing-firewall:
     dependencies:
+      '@noble/hashes':
+        specifier: 2.4.0
+        version: 2.4.0
       '@solana-program/address-lookup-table':
         specifier: 0.16.0
         version: 0.16.0(@solana/kit@8.6.0(typescript@6.0.3))
@@ -297,6 +306,13 @@ importers:
       '@x402/svm':
         specifier: 2.31.0
         version: 2.31.0(@solana/kit@8.6.0(typescript@6.0.3))(@solana/sysvars@8.6.0(typescript@6.0.3))(typescript@6.0.3)
+    devDependencies:
+      '@nexbridge/solana-signing-firewall-fixtures':
+        specifier: workspace:*
+        version: link:../fixtures
+      '@solana/keychain-memory':
+        specifier: 2.0.0
+        version: 2.0.0(@solana/addresses@8.6.0(typescript@6.0.3))(@solana/codecs-core@8.6.0(typescript@6.0.3))(@solana/codecs-strings@8.6.0(typescript@6.0.3))(@solana/keys@8.6.0(typescript@6.0.3))(@solana/signers@8.6.0(typescript@6.0.3))(@solana/transactions@8.6.0(typescript@6.0.3))
 
 packages:
 

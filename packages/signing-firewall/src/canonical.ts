@@ -1,3 +1,6 @@
+import { sha256 } from '@noble/hashes/sha2.js';
+import { bytesToHex } from '@noble/hashes/utils.js';
+
 /**
  * RFC 8785 (JSON Canonicalization Scheme) for the JSON values this library hashes:
  * object keys sorted by UTF-16 code units, no whitespace, strings and numbers
@@ -21,11 +24,11 @@ export function canonicalJson(value: unknown): string {
   throw new TypeError(`canonical JSON: unsupported ${typeof value}`);
 }
 
-export async function sha256Hex(bytes: Uint8Array): Promise<string> {
-  const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', new Uint8Array(bytes)));
-  return Array.from(digest, (byte) => byte.toString(16).padStart(2, '0')).join('');
+/** SHA-256, hex. Synchronous, so quote checks can run inside the x402 client's synchronous policy hook. */
+export function sha256Hex(bytes: Uint8Array): string {
+  return bytesToHex(sha256(bytes));
 }
 
-export async function canonicalDigest(value: unknown): Promise<string> {
+export function canonicalDigest(value: unknown): string {
   return sha256Hex(new TextEncoder().encode(canonicalJson(value)));
 }

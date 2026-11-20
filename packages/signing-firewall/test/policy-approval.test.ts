@@ -87,10 +87,10 @@ describe('parsePolicy', () => {
     expect(() => parsePolicy(policyJson(w, overrides))).toThrow(message);
   });
 
-  it('digests the canonical JSON, so key order does not matter', async () => {
+  it('digests the canonical JSON, so key order does not matter', () => {
     const json = policyJson(w);
     const reordered = Object.fromEntries(Object.entries(json).reverse());
-    expect(await policyDigest(parsePolicy(reordered))).toBe(await policyDigest(parsePolicy(json)));
+    expect(policyDigest(parsePolicy(reordered))).toBe(policyDigest(parsePolicy(json)));
   });
 });
 
@@ -118,8 +118,8 @@ describe('approvals', () => {
 
   it('binds to the message digest and the policy digest', async () => {
     const record = await approval();
-    expect(record.messageDigest).toBe(await sha256Hex(message));
-    expect(record.policyDigest).toBe(await policyDigest(policy));
+    expect(record.messageDigest).toBe(sha256Hex(message));
+    expect(record.policyDigest).toBe(policyDigest(policy));
     expect(await codes(record)).toEqual([]);
   });
 

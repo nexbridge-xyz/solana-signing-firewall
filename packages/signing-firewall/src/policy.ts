@@ -339,6 +339,6 @@ export function parsePolicy(json: unknown): Policy {
 }
 
 /** SHA-256 (hex) of the RFC 8785 canonical JSON of the policy file as given. */
-export function policyDigest(policy: Policy): Promise<string> {
+export function policyDigest(policy: Policy): string {
   return canonicalDigest(policy.json);
 }

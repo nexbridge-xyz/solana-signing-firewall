@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@noble/hashes": "2.4.0",
     "@solana-program/address-lookup-table": "0.16.0",
     "@solana-program/compute-budget": "0.20.0",
     "@solana-program/memo": "0.16.0",

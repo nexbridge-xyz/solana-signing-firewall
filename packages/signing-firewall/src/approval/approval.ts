@@ -139,10 +139,10 @@ export async function verifyApproval(
     });
   }
 
-  if (parsed.messageDigest !== (await sha256Hex(context.messageBytes))) {
+  if (parsed.messageDigest !== sha256Hex(context.messageBytes)) {
     reasons.push({ code: 'APPROVAL_MESSAGE_MISMATCH' });
   }
-  if (parsed.policyDigest !== (await policyDigest(context.policy))) {
+  if (parsed.policyDigest !== policyDigest(context.policy)) {
     reasons.push({ code: 'APPROVAL_POLICY_MISMATCH' });
   }
   return reasons;
