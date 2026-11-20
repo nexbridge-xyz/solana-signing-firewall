@@ -11,18 +11,19 @@ as `invalidReason: "solana-signing-firewall:<CODE>"`.
 
 Raised by: **review** (`review()` and `withPolicy()`), **approval** (`verifyApproval()`),
 **wrapper** (`withPolicy()` itself), **guard** (the x402 guard: quote checks and the bound signer),
-**verifier** (`verifyX402Payment()` and `withX402Verifier()`). A test
+**verifier** (`verifyX402Payment()` and `withX402Verifier()`). The guard runs `review()` on
+every payment, so any code marked review can also come from the guard. A test
 (`packages/fixtures/test/reason-codes-doc.test.ts`) checks that this file lists every code once and
 that each listed vector expects its code.
 
 ## Message format
 
-| Code                      | Meaning                                                                                                                                 | Raised by     | Vectors                                |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------- |
-| `UNSUPPORTED_VERSION`     | The version byte names a message version that does not exist.                                                                           | review        | core-006                               |
-| `VERSION_NOT_ALLOWED`     | The message version is not in `messageVersions`; for x402, no version the quote offers is.                                              | review, guard | core-069                               |
-| `MALFORMED_MESSAGE`       | The bytes do not decode, break a runtime sanitization rule or a version-1 limit, have trailing bytes, or hold a malformed batch.        | review        | core-007, core-008, core-009, core-013 |
-| `LOOKUP_TABLE_UNRESOLVED` | A lookup table is missing from the snapshot, foreign-owned, undecodable or deactivating, or an entry is out of range or not yet active. | review        | core-015, core-024                     |
+| Code                      | Meaning                                                                                                                                 | Raised by               | Vectors                                |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
+| `UNSUPPORTED_VERSION`     | The version byte names a message version that does not exist.                                                                           | review, verifier        | core-006                               |
+| `VERSION_NOT_ALLOWED`     | The message version is not in `messageVersions`; for x402, no version the quote offers is.                                              | review, guard, verifier | core-069                               |
+| `MALFORMED_MESSAGE`       | The bytes do not decode, break a runtime sanitization rule or a version-1 limit, have trailing bytes, or hold a malformed batch.        | review, verifier        | core-007, core-008, core-009, core-013 |
+| `LOOKUP_TABLE_UNRESOLVED` | A lookup table is missing from the snapshot, foreign-owned, undecodable or deactivating, or an entry is out of range or not yet active. | review, verifier        | core-015, core-024                     |
 
 ## Fee payer and signers
 
@@ -53,37 +54,37 @@ that each listed vector expects its code.
 
 ## Transfers
 
-| Code                                       | Meaning                                                                                                                                  | Raised by     | Vectors                                |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------- |
-| `AUTHORITY_NOT_POLICY_SIGNER`              | The transfer authority is not the policy signer.                                                                                         | review        | core-042                               |
-| `MULTISIG_AUTHORITY_NOT_SUPPORTED`         | A `TransferChecked` lists multisig co-signers.                                                                                           | review        | core-043                               |
-| `MINT_NOT_ALLOWED`                         | The mint is not in `mints`.                                                                                                              | review, guard | core-044, x402-045                     |
-| `MINT_ACCOUNT_INVALID`                     | The mint account is missing, not owned by SPL Token, not a mint, or not initialized. The owner check is stricter than the runtime (D20). | review        | core-045                               |
-| `DECIMALS_MISMATCH`                        | The instruction's decimals differ from the policy's or the mint's.                                                                       | review        | core-046                               |
-| `SOURCE_NOT_ALLOWED`                       | The source token account is not in `sources`.                                                                                            | review        | core-042, core-044, core-047           |
-| `SOURCE_ACCOUNT_INVALID`                   | The source is missing, not an initialized SPL Token account, holds another mint, or is not owned by the policy signer.                   | review, guard | core-042, core-047, x402-020           |
-| `ACCOUNT_FROZEN`                           | The source or the destination is frozen.                                                                                                 | review        | core-048                               |
-| `DESTINATION_ACCOUNT_MISSING`              | The destination was fetched and does not exist.                                                                                          | review        | core-049                               |
-| `DESTINATION_ACCOUNT_INVALID`              | The destination exists but is not an initialized SPL Token account.                                                                      | review        | core-050                               |
-| `DESTINATION_MINT_MISMATCH`                | The destination holds another mint.                                                                                                      | review, guard | core-051, x402-045                     |
-| `RECIPIENT_NOT_ALLOWED`                    | The destination's owner is not in `recipients.owners`.                                                                                   | review, guard | core-052, core-053, x402-006           |
-| `DESTINATION_NOT_ASSOCIATED_TOKEN_ACCOUNT` | The destination is not its owner's associated token account for the mint.                                                                | review, guard | core-052, x402-045                     |
-| `ZERO_AMOUNT`                              | A transfer, or an x402 quote, of zero.                                                                                                   | review, guard | core-054, x402-039                     |
-| `PER_TRANSACTION_LIMIT_EXCEEDED`           | The sum of one mint's transfers in the message, batches included, is above `maxPerTransaction` or overflows a u64.                       | review        | core-059, core-060, core-061, core-062 |
+| Code                                       | Meaning                                                                                                                                  | Raised by               | Vectors                                |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
+| `AUTHORITY_NOT_POLICY_SIGNER`              | The transfer authority is not the policy signer.                                                                                         | review                  | core-042                               |
+| `MULTISIG_AUTHORITY_NOT_SUPPORTED`         | A `TransferChecked` lists multisig co-signers.                                                                                           | review                  | core-043                               |
+| `MINT_NOT_ALLOWED`                         | The mint is not in `mints`.                                                                                                              | review, guard           | core-044, x402-045                     |
+| `MINT_ACCOUNT_INVALID`                     | The mint account is missing, not owned by SPL Token, not a mint, or not initialized. The owner check is stricter than the runtime (D20). | review                  | core-045                               |
+| `DECIMALS_MISMATCH`                        | The instruction's decimals differ from the policy's or the mint's.                                                                       | review, verifier        | core-046                               |
+| `SOURCE_NOT_ALLOWED`                       | The source token account is not in `sources`.                                                                                            | review                  | core-042, core-044, core-047           |
+| `SOURCE_ACCOUNT_INVALID`                   | The source is missing, not an initialized SPL Token account, holds another mint, or is not owned by the policy signer.                   | review, guard           | core-042, core-047, x402-020           |
+| `ACCOUNT_FROZEN`                           | The source or the destination is frozen.                                                                                                 | review                  | core-048                               |
+| `DESTINATION_ACCOUNT_MISSING`              | The destination was fetched and does not exist.                                                                                          | review, verifier        | core-049                               |
+| `DESTINATION_ACCOUNT_INVALID`              | The destination exists but is not an initialized SPL Token account.                                                                      | review                  | core-050                               |
+| `DESTINATION_MINT_MISMATCH`                | The destination holds another mint.                                                                                                      | review, guard           | core-051, x402-045                     |
+| `RECIPIENT_NOT_ALLOWED`                    | The destination's owner is not in `recipients.owners`.                                                                                   | review, guard           | core-052, core-053, x402-006           |
+| `DESTINATION_NOT_ASSOCIATED_TOKEN_ACCOUNT` | The destination is not its owner's associated token account for the mint.                                                                | review, guard           | core-052, x402-045                     |
+| `ZERO_AMOUNT`                              | A transfer, or an x402 quote, of zero.                                                                                                   | review, guard, verifier | core-054, x402-039                     |
+| `PER_TRANSACTION_LIMIT_EXCEEDED`           | The sum of one mint's transfers in the message, batches included, is above `maxPerTransaction` or overflows a u64.                       | review                  | core-059, core-060, core-061, core-062 |
 
 ## Fees
 
 | Code                          | Meaning                                                                                           | Raised by               | Vectors                                |
 | ----------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
 | `COMPUTE_UNIT_LIMIT_MISSING`  | The message sets no compute-unit limit while one is required.                                     | review, verifier        | core-063, core-067                     |
-| `COMPUTE_UNIT_LIMIT_EXCEEDED` | The limit the message sets is above `maxComputeUnitLimit`.                                        | review                  | core-064                               |
+| `COMPUTE_UNIT_LIMIT_EXCEEDED` | The limit the message sets is above `maxComputeUnitLimit`.                                        | review, verifier        | core-064                               |
 | `FEE_CAP_EXCEEDED`            | The total priority fee is above the policy's (or the verifier config's) `maxPriorityFeeLamports`. | review, guard, verifier | core-037, core-065, x402-015, x402-016 |
 
 ## State
 
-| Code                    | Meaning                                                                               | Raised by | Vectors  |
-| ----------------------- | ------------------------------------------------------------------------------------- | --------- | -------- |
-| `ACCOUNT_STATE_MISSING` | The evaluation needs an account the snapshot never fetched. `review()` never assumes. | review    | core-068 |
+| Code                    | Meaning                                                                               | Raised by        | Vectors  |
+| ----------------------- | ------------------------------------------------------------------------------------- | ---------------- | -------- |
+| `ACCOUNT_STATE_MISSING` | The evaluation needs an account the snapshot never fetched. `review()` never assumes. | review, verifier | core-068 |
 
 ## Approvals
 
@@ -113,16 +114,16 @@ vectors.
 | Code                              | Meaning                                                                                                                       | Raised by       | Vectors            |
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------ |
 | `X402_REQUIREMENTS_MALFORMED`     | The payment requirements are not valid, for example an amount that is not a decimal string or an `extra.memo` over 256 bytes. | guard, verifier | x402-022           |
-| `X402_SCHEME_NOT_ALLOWED`         | The scheme is not in `x402.schemes`.                                                                                          | guard           | x402-033           |
-| `X402_NETWORK_NOT_ALLOWED`        | The network is not in `x402.networks`.                                                                                        | guard           | x402-034           |
+| `X402_SCHEME_NOT_ALLOWED`         | The scheme is not in `x402.schemes`.                                                                                          | guard, verifier | x402-033           |
+| `X402_NETWORK_NOT_ALLOWED`        | The network is not in `x402.networks`.                                                                                        | guard, verifier | x402-034           |
 | `X402_ASSET_NOT_ALLOWED`          | The asset has no rule in the policy, or is not in the verifier config's assets.                                               | guard, verifier | x402-009, x402-035 |
 | `X402_PAYTO_NOT_ALLOWED`          | The payee is not in `recipients.owners`.                                                                                      | guard           | x402-036           |
-| `X402_FEE_PAYER_NOT_ALLOWED`      | The quote names no fee payer, names the agent itself, or names one not in `feePayers`.                                        | guard           | x402-037, x402-043 |
+| `X402_FEE_PAYER_NOT_ALLOWED`      | The quote names no fee payer, names the agent itself, or names one not in `feePayers`.                                        | guard, verifier | x402-037, x402-043 |
 | `X402_PER_PAYMENT_LIMIT_EXCEEDED` | The amount is above the mint's `maxPerTransaction`.                                                                           | guard           | x402-038           |
 | `X402_TIMEOUT_OUT_OF_RANGE`       | `maxTimeoutSeconds` is above the policy's.                                                                                    | guard           | x402-040           |
 | `X402_BUDGET_EXCEEDED`            | The payment would take the rolling 24-hour total for the mint above `maxPerDay`.                                              | guard           | x402-041           |
 | `X402_RATE_LIMIT_EXCEEDED`        | `maxPaymentsPerMinute` payments were already made in the last 60 seconds.                                                     | guard           | x402-042           |
-| `X402_SPLITS_NOT_ALLOWED`         | The quote has a non-empty `extra.splits`.                                                                                     | guard           | x402-031           |
+| `X402_SPLITS_NOT_ALLOWED`         | The quote has a non-empty `extra.splits`.                                                                                     | guard, verifier | x402-031           |
 
 ## x402: the bytes against the quote
 

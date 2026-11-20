@@ -3,3 +3,4 @@ LICENSE
 coverage/
 reports/
 packages/fixtures/vectors/
+.stryker-tmp

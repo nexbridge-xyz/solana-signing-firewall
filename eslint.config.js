@@ -8,6 +8,7 @@ export default tseslint.config(
       '**/dist/**',
       '**/coverage/**',
       '**/reports/**',
+      '**/.stryker-tmp/**',
       'packages/fixtures/vectors/**',
     ],
   },

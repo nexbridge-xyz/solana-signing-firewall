@@ -367,3 +367,22 @@ and `BudgetLedger.usage` are synchronous.
 RPC on 127.0.0.1, with throwaway keys in a temporary directory that is deleted afterwards. The local
 RPC ends a slot after each transaction, keeps SlotHashes current, and treats a request without a
 commitment as `finalized`, as a cluster does. Explorer links are printed only for devnet.
+
+### D34. Mutation testing
+
+- StrykerJS 10.1.1 mutates `evaluate/`, `approval/` and `x402/` of the core library and runs the
+  library's unit and property tests, the `@x402` glue tests and the two vector runners. The LiteSVM
+  and rehearsal tests are left out: they are slow and test the runtime, not the checks.
+- Stryker copies the project into a sandbox but links `node_modules` back to the original, so the
+  mutation config aliases the library's package name to the sandbox copy; without it, the vector
+  runners tested the unmutated library.
+- A small ignorer plugin (`stryker-ignorers.mjs`) skips mutants in free text only: a reason's
+  `detail` (not part of the stable interface) and the message of a thrown error. Every condition
+  around that text is still mutated.
+- Score on 2026-11-20: 89.05% (target 85%). Most survivors left are equivalent mutants of checks
+  that run twice on purpose (for example a reason both the quote checks and the bound signer would
+  report) and of unreachable defensive branches in the guard.
+- Found while writing the tests and fixed: the verifier config parser threw a `TypeError` instead of
+  a `VerifierConfigError` for an asset rule that is not an object, and accepted an empty or array
+  `assets`; it now refuses both and checks decimals are 0 to 255. A dead branch in the requirements
+  parser was removed.
