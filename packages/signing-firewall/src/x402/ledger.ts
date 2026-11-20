@@ -47,10 +47,14 @@ export function usageOf(records: readonly Reservation[], mint: Address, now: Dat
   let reservedLast24h = 0n;
   let paymentsLastMinute = 0;
   for (const record of records) {
+    // A reservation dated after `now` means the clock moved back, or the file was edited. It
+    // still counts, in both windows: leaving it out would release it, and a reservation is
+    // never released. A time that cannot be read counts as well.
     const age = t - Date.parse(record.time);
-    if (age < 0) continue;
-    if (age < DAY_MS && record.mint === mint) reservedLast24h += record.amount;
-    if (age < MINUTE_MS) paymentsLastMinute += 1;
+    const insideDay = !(age >= DAY_MS);
+    const insideMinute = !(age >= MINUTE_MS);
+    if (insideDay && record.mint === mint) reservedLast24h += record.amount;
+    if (insideMinute) paymentsLastMinute += 1;
   }
   return { reservedLast24h, paymentsLastMinute };
 }

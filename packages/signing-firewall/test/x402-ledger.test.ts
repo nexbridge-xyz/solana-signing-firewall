@@ -30,17 +30,24 @@ const record = (time: string, amount: bigint, m: Address = mint): Reservation =>
 const DAY = 24 * 60 * 60 * 1000;
 
 describe('usageOf and limitReasons', () => {
-  it('counts 24 hours per mint and 60 seconds across mints, without the boundaries or the future', () => {
+  it('counts 24 hours per mint and 60 seconds across mints, without the boundaries', () => {
     const records = [
       record(ago(DAY), 100n),
       record(ago(DAY - 1), 10n),
       record(ago(60_000), 1n),
       record(ago(59_999), 2n),
       record(ago(0), 3n, other),
-      record(new Date(now.getTime() + 1).toISOString(), 1_000n),
     ];
     expect(usageOf(records, mint, now)).toEqual({ reservedLast24h: 13n, paymentsLastMinute: 2 });
     expect(usageOf(records, other, now)).toEqual({ reservedLast24h: 3n, paymentsLastMinute: 2 });
+  });
+
+  it('counts a reservation dated after now: the clock moved back, and nothing is released', () => {
+    const records = [
+      record(ago(59_999), 2n),
+      record(new Date(now.getTime() + 1).toISOString(), 1_000n),
+    ];
+    expect(usageOf(records, mint, now)).toEqual({ reservedLast24h: 1_002n, paymentsLastMinute: 2 });
   });
 
   it('allows exactly the daily budget and one payment fewer than the rate', () => {
