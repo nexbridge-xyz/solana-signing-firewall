@@ -40,6 +40,22 @@ type UnsignedApproval = Omit<ApprovalRecord, 'signature'>;
 const ISO_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/;
 const HEX_DIGEST = /^[0-9a-f]{64}$/;
 
+/**
+ * The instant an ISO 8601 UTC string names, in milliseconds, or undefined when it names none.
+ *
+ * The pattern alone is not enough: "2026-11-20T23:59:60Z" and "2026-13-01T00:00:00Z" match it,
+ * Date.parse() answers NaN for them, and every comparison with NaN is false, so an expiry
+ * check would pass for ever. A date that does not exist ("2026-02-30") is refused as well,
+ * instead of being read as another day: the string must be the one the instant prints as.
+ */
+function instantOf(value: string): number | undefined {
+  if (!ISO_UTC.test(value)) return undefined;
+  const time = Date.parse(value);
+  if (!Number.isFinite(time)) return undefined;
+  const printed = new Date(time).toISOString();
+  return printed === (value.includes('.') ? value : value.replace('Z', '.000Z')) ? time : undefined;
+}
+
 function signingBytes(unsigned: UnsignedApproval): Uint8Array {
   return new TextEncoder().encode(APPROVAL_SIGNING_PREFIX + canonicalJson(unsigned));
 }
@@ -84,8 +100,9 @@ function parseRecord(record: unknown): ApprovalRecord | string {
     return 'bad messageDigest';
   if (typeof r.policyDigest !== 'string' || !HEX_DIGEST.test(r.policyDigest))
     return 'bad policyDigest';
-  if (typeof r.issuedAt !== 'string' || !ISO_UTC.test(r.issuedAt)) return 'bad issuedAt';
-  if (typeof r.expiresAt !== 'string' || !ISO_UTC.test(r.expiresAt)) return 'bad expiresAt';
+  if (typeof r.issuedAt !== 'string' || instantOf(r.issuedAt) === undefined) return 'bad issuedAt';
+  if (typeof r.expiresAt !== 'string' || instantOf(r.expiresAt) === undefined)
+    return 'bad expiresAt';
   if (typeof r.approver !== 'string' || !isAddress(r.approver)) return 'bad approver';
   if (typeof r.signature !== 'string') return 'bad signature';
   return r as ApprovalRecord;
@@ -130,9 +147,10 @@ export async function verifyApproval(
   const issuedAt = Date.parse(parsed.issuedAt);
   const expiresAt = Date.parse(parsed.expiresAt);
   const now = context.now.getTime();
-  if (now >= expiresAt) reasons.push({ code: 'APPROVAL_EXPIRED', detail: parsed.expiresAt });
+  // Written so that a value that is not a number fails each check instead of passing it.
+  if (!(now < expiresAt)) reasons.push({ code: 'APPROVAL_EXPIRED', detail: parsed.expiresAt });
   const ttlMs = (approval?.ttlSeconds ?? 0) * 1000;
-  if (issuedAt > now || expiresAt <= issuedAt || expiresAt - issuedAt > ttlMs) {
+  if (!(issuedAt <= now && expiresAt > issuedAt && expiresAt - issuedAt <= ttlMs)) {
     reasons.push({
       code: 'APPROVAL_TTL_EXCEEDED',
       detail: `issued ${parsed.issuedAt}, expires ${parsed.expiresAt}, ttl ${approval?.ttlSeconds ?? 0}s`,
