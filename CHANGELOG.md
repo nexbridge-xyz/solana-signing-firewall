@@ -24,6 +24,15 @@ Semantic Versioning. No version has been published to npm.
 - Documentation: architecture, policy format, reason codes, vectors, x402, support matrix, threat
   model, decisions; video script, shots and captions.
 
+### Fixed after the security review of 8a50ffc
+
+Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
+
+- R-01: `withPolicy()` and the x402 bound signer sign and verify their own copy of the reviewed
+  bytes; a caller that changed its transaction objects during the review could get unreviewed
+  bytes signed. `checkReturnedSignatures()` now takes the reviewed message bytes and returns the
+  verified signatures.
+
 ### Fixed before the first release
 
 - The verifier config parser threw a `TypeError` for an asset rule that is not an object, and

@@ -435,3 +435,37 @@ Decided by the maintainers on 2026-11-20, after the devnet run:
 - Open before going public: check the README's quotation of Solana's x402 guide against the page.
   The wording comes from a maintainer's reading of the page; solana.com answered HTTP 429 to every
   fetch from this session.
+
+### D40. Security review of 8a50ffc
+
+On 2026-11-20 and 2026-11-21 a separate session, working in its own clone, reviewed commit
+`8a50ffc` (D39). Its report is not in the repository. It numbers its findings `R-01` to `R-12`,
+smaller items `I-01` to `I-13`, and the properties it checked and found holding `P-01` to `P-16`;
+the commits and the records from here on use those numbers.
+
+- The review's tests and fixes came as local branches. They were committed here one by one with
+  the same changes, keeping each branch's order: the commit that adds a test comes first and the fix
+  follows, so the test can be run against the old code at `<fix commit>~1`.
+- The tests it added are the `review-*.test.ts` files. Those that passed at `8a50ffc` were committed
+  first: messages fuzzed against LiteSVM, the paths that must fail closed, malformed input, the
+  binding of an approval, the verifier against the static checks of the pinned `@x402/svm`
+  facilitator, the demo commands against another cluster's genesis hash, and a search of the whole
+  git history for private keys.
+- `REVIEW_FUZZ_RUNS` sets the number of random cases of the two fuzzing tests
+  (`packages/fixtures/test/review-runtime-differential.test.ts`,
+  `packages/signing-firewall-x402/test/review-verifier-differential.test.ts`); 400 by default.
+
+### D41. The wrappers sign their own copy of the reviewed bytes (R-01)
+
+- `withPolicy()` and the x402 bound signer reviewed a copy of the message bytes, then gave the
+  caller's own transaction objects to the inner signer and checked the returned signature against
+  those objects. A caller that changed the bytes, swapped an array element or appended a
+  transaction while the wrapper awaited got a valid signature over bytes `review()` had not
+  allowed, and so did an inner signer that rewrote its input in place.
+- Both wrappers now read each caller object once, before the first `await`
+  (`holdTransactions()`), review, approve and verify their own copy, give the inner signer a second
+  copy, and return the verified signatures in new objects. `signerFor()` binds to a JSON copy of
+  the quote, not to the caller's object.
+- `checkReturnedSignatures()`, which is exported, now takes the reviewed message bytes instead of
+  the transactions, and returns the verified signatures.
+- Tests: `packages/signing-firewall/test/review-toctou.test.ts`.
