@@ -45,33 +45,76 @@ export type WithPolicyOptions = {
   readonly onDecision?: (decision: ReviewDecision) => void;
 };
 
-/** Checks that every returned signature is a valid Ed25519 signature by `signer` over the message. */
+/**
+ * One transaction as the wrapper holds it after its single look at the caller's input.
+ *
+ * The caller keeps references to the objects it passed to `signTransactions()` and can change
+ * them while the wrapper awaits the snapshot, the review, an approval or a budget reservation.
+ * So the wrapper reads each caller object exactly once, synchronously, and never again.
+ */
+export type HeldTransaction = {
+  /** The wrapper's own copy of the message bytes: reviewed, approved, and checked against the signature. */
+  readonly messageBytes: Uint8Array;
+  /** What the inner signer receives: a second copy, so a signer that edits its input cannot change ours. */
+  readonly forSigner: SignableTransaction;
+};
+
+/** A transaction as Kit hands it to a partial signer. */
+type SignableTransaction = Parameters<TransactionPartialSigner['signTransactions']>[0][number];
+
+/** Copies the caller's transactions. Call it before the first `await`. */
+export function holdTransactions(transactions: readonly Transaction[]): HeldTransaction[] {
+  return Array.from(transactions, (transaction) => {
+    // One read of each field; a getter cannot answer differently later.
+    const {
+      messageBytes: given,
+      signatures,
+      lifetimeConstraint,
+    } = transaction as Transaction & { readonly lifetimeConstraint?: unknown };
+    const messageBytes = new Uint8Array(given);
+    const forSigner = Object.freeze({
+      messageBytes: new Uint8Array(messageBytes),
+      signatures: Object.freeze({ ...signatures }),
+      ...(typeof lifetimeConstraint === 'object' && lifetimeConstraint !== null
+        ? { lifetimeConstraint: Object.freeze({ ...lifetimeConstraint }) }
+        : {}),
+    }) as unknown as SignableTransaction;
+    return { messageBytes, forSigner };
+  });
+}
+
+/**
+ * Checks that every result is exactly one valid Ed25519 signature by `signer` over the reviewed
+ * message bytes, and returns those signatures in fresh dictionaries.
+ */
 export async function checkReturnedSignatures(
   signer: Address,
-  transactions: readonly Transaction[],
+  reviewedMessages: readonly Uint8Array[],
   returned: readonly Readonly<Record<string, SignatureBytes>>[],
-): Promise<void> {
-  if (returned.length !== transactions.length) {
+): Promise<Readonly<Record<Address, SignatureBytes>>[]> {
+  if (returned.length !== reviewedMessages.length) {
     throw new PolicyViolationError([
       { code: 'SIGNATURE_INVALID', detail: 'wrong number of results' },
     ]);
   }
   const publicKey = await getPublicKeyFromAddress(signer);
+  const verified: Readonly<Record<Address, SignatureBytes>>[] = [];
   for (const [i, dictionary] of returned.entries()) {
     const entries = Object.entries(dictionary);
     const [only] = entries;
-    const transaction = transactions[i];
+    const messageBytes = reviewedMessages[i];
     if (
       entries.length !== 1 ||
       only === undefined ||
       only[0] !== signer ||
-      transaction === undefined
+      messageBytes === undefined
     ) {
       throw new PolicyViolationError([
         { code: 'SIGNATURE_INVALID', detail: `result ${i} is not one signature by ${signer}` },
       ]);
     }
-    if (!(await verifySignature(publicKey, only[1], new Uint8Array(transaction.messageBytes)))) {
+    const signature = new Uint8Array(only[1]) as SignatureBytes;
+    if (!(await verifySignature(publicKey, signature, messageBytes))) {
       throw new PolicyViolationError([
         {
           code: 'SIGNATURE_INVALID',
@@ -79,7 +122,9 @@ export async function checkReturnedSignatures(
         },
       ]);
     }
+    verified.push(Object.freeze({ [signer]: signature }));
   }
+  return verified;
 }
 
 /**
@@ -113,10 +158,13 @@ export function withPolicy<TAddress extends string>(
       return inner.isAvailable === undefined ? true : inner.isAvailable();
     },
     async signTransactions(transactions, config) {
+      // Before the first await: take our own copies. The caller's objects are not read again.
+      const held = holdTransactions(transactions);
       // Review every transaction from scratch before the inner signer sees any of them.
-      for (const transaction of transactions) {
-        const messageBytes = new Uint8Array(transaction.messageBytes);
-        const snapshot = await loader.load(messageBytes, { network: policy.network });
+      for (const { messageBytes } of held) {
+        const snapshot = await loader.load(new Uint8Array(messageBytes), {
+          network: policy.network,
+        });
         const decision = await review({ messageBytes, policy, snapshot, now: now() });
         onDecision?.(decision);
         if (decision.outcome === 'deny') throw new PolicyViolationError(decision.reasons, decision);
@@ -129,9 +177,15 @@ export function withPolicy<TAddress extends string>(
           if (problems.length > 0) throw new PolicyViolationError(problems, decision);
         }
       }
-      const signed = await inner.signTransactions(transactions, config);
-      await checkReturnedSignatures(inner.address, transactions, signed);
-      return signed;
+      const signed = await inner.signTransactions(
+        held.map((h) => h.forSigner),
+        config,
+      );
+      return checkReturnedSignatures(
+        inner.address,
+        held.map((h) => h.messageBytes),
+        signed,
+      );
     },
   };
 }

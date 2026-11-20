@@ -7,7 +7,11 @@ import type { SnapshotLoader } from '../load/rpc-loader.js';
 import type { Policy, X402PolicyBlock } from '../policy.js';
 import type { Reason } from '../reasons.js';
 import type { Snapshot } from '../snapshot.js';
-import { PolicyViolationError, checkReturnedSignatures } from '../signer/with-policy.js';
+import {
+  PolicyViolationError,
+  checkReturnedSignatures,
+  holdTransactions,
+} from '../signer/with-policy.js';
 import type { BudgetLedger, LedgerUsage } from './ledger.js';
 import { type X402QuoteDecision, checkQuote } from './quote.js';
 import { bindingReasons, guardMemoReasons, paymentShape } from './shape.js';
@@ -130,22 +134,28 @@ export function createX402Guard(options: CreateX402GuardOptions): X402Guard {
       return decisions;
     },
 
-    signerFor(requirements) {
+    signerFor(given) {
+      // Bind to the quote as it is now, not to an object its holder can change later.
+      const requirements = copyOfQuote(given);
       let used = false;
       return {
         address: inner.address,
         async signTransactions(transactions, config) {
           if (used) throw new PolicyViolationError([{ code: 'X402_SIGNER_ALREADY_USED' }]);
           used = true;
-          const [transaction] = transactions;
-          if (transaction === undefined || transactions.length !== 1) {
+          // Before the first await: take our own copies. The caller's objects are not read again.
+          const held = holdTransactions(transactions);
+          const [only] = held;
+          if (only === undefined || held.length !== 1) {
             throw new PolicyViolationError([
               { code: 'X402_LAYOUT_INVALID', detail: 'expected exactly one transaction' },
             ]);
           }
-          const messageBytes = new Uint8Array(transaction.messageBytes);
+          const { messageBytes } = only;
           const at = now();
-          const snapshot = await loader.load(messageBytes, { network: policy.network });
+          const snapshot = await loader.load(new Uint8Array(messageBytes), {
+            network: policy.network,
+          });
           const decision = await reviewX402Payment({
             messageBytes,
             requirements,
@@ -186,11 +196,25 @@ export function createX402Guard(options: CreateX402GuardOptions): X402Guard {
             at,
           );
           if (refused.length > 0) throw new PolicyViolationError(refused, decision);
-          const signed = await inner.signTransactions(transactions, config);
-          await checkReturnedSignatures(inner.address, transactions, signed);
-          return signed;
+          const signed = await inner.signTransactions([only.forSigner], config);
+          return checkReturnedSignatures(inner.address, [messageBytes], signed);
         },
       };
     },
   };
+}
+
+/**
+ * A private copy of a quote, taken through JSON so that getters are read once and nothing is
+ * shared with the caller. A value that is not JSON becomes `undefined`, which the quote checks
+ * refuse as malformed.
+ */
+function copyOfQuote(requirements: unknown): unknown {
+  try {
+    // JSON.stringify() returns undefined for a value that has no JSON form.
+    const text = JSON.stringify(requirements) as string | undefined;
+    return text === undefined ? undefined : (JSON.parse(text) as unknown);
+  } catch {
+    return undefined;
+  }
 }
