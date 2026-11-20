@@ -53,7 +53,7 @@ export type Policy = {
   readonly approval:
     { readonly approvers: readonly Address[]; readonly ttlSeconds: number } | undefined;
   readonly x402: X402PolicyBlock | undefined;
-  /** The policy file's JSON as given. The policy digest is computed over it. */
+  /** A frozen copy of the policy file's JSON as given. The policy digest is computed over it. */
   readonly json: unknown;
 };
 
@@ -193,10 +193,123 @@ function parseX402(value: unknown, path: string): X402PolicyBlock {
 }
 
 /**
+ * The path of an object key that is written twice in JSON text, or undefined. JSON.parse()
+ * keeps the last of two equal keys and says nothing, so a file can show one value to a reader
+ * and give another to the code. The text must already be valid JSON.
+ */
+function repeatedKey(text: string): string | undefined {
+  let i = 0;
+  const skipSpace = () => {
+    while (i < text.length && ' \t\n\r'.includes(text.charAt(i))) i += 1;
+  };
+  const readString = (): string => {
+    const start = i;
+    i += 1;
+    while (i < text.length && text.charAt(i) !== '"') i += text.charAt(i) === '\\' ? 2 : 1;
+    i += 1;
+    // Unescaped, so that "signer" and "sign\u0065r" are the same key.
+    return JSON.parse(text.slice(start, i)) as string;
+  };
+  const readValue = (path: string): string | undefined => {
+    skipSpace();
+    const first = text.charAt(i);
+    if (first === '{') {
+      i += 1;
+      const seen = new Set<string>();
+      skipSpace();
+      if (text.charAt(i) === '}') {
+        i += 1;
+        return undefined;
+      }
+      for (;;) {
+        skipSpace();
+        const key = readString();
+        if (seen.has(key)) return `${path}.${key}`;
+        seen.add(key);
+        skipSpace();
+        i += 1; // the colon
+        const inside = readValue(`${path}.${key}`);
+        if (inside !== undefined) return inside;
+        skipSpace();
+        const next = text.charAt(i);
+        i += 1; // a comma or the closing brace
+        if (next !== ',') return undefined;
+      }
+    }
+    if (first === '[') {
+      i += 1;
+      skipSpace();
+      if (text.charAt(i) === ']') {
+        i += 1;
+        return undefined;
+      }
+      for (let index = 0; ; index += 1) {
+        const inside = readValue(`${path}[${index}]`);
+        if (inside !== undefined) return inside;
+        skipSpace();
+        const next = text.charAt(i);
+        i += 1; // a comma or the closing bracket
+        if (next !== ',') return undefined;
+      }
+    }
+    if (first === '"') {
+      readString();
+      return undefined;
+    }
+    // A number, true, false or null.
+    while (i < text.length && !',]} \t\n\r'.includes(text.charAt(i))) i += 1;
+    return undefined;
+  };
+  return readValue('policy');
+}
+
+/**
+ * Reads a policy from the text of its file. Like `parsePolicy(JSON.parse(text))`, and it also
+ * refuses a file in which a key is written twice, so that what a person reads in the file is
+ * what is enforced. Throws PolicyError.
+ */
+export function parsePolicyText(text: string): Policy {
+  let json: unknown;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new PolicyError('policy', 'is not valid JSON');
+  }
+  const repeated = repeatedKey(text);
+  if (repeated !== undefined) throw new PolicyError(repeated, 'is written twice in the file');
+  return parsePolicy(json);
+}
+
+/** A frozen copy of a JSON value, sharing nothing with the original. */
+function frozenCopy(json: unknown): unknown {
+  const freeze = (value: unknown): unknown => {
+    if (typeof value === 'object' && value !== null) {
+      for (const item of Object.values(value)) freeze(item);
+      Object.freeze(value);
+    }
+    return value;
+  };
+  return freeze(JSON.parse(JSON.stringify(json)) as unknown);
+}
+
+/**
  * Validates a policy file's JSON. Unknown fields are rejected; switches left
  * out take their strict default. Throws PolicyError with the failing path.
+ * To load a file, prefer `parsePolicyText()`: it also refuses repeated keys.
  */
-export function parsePolicy(json: unknown): Policy {
+export function parsePolicy(given: unknown): Policy {
+  if (typeof given !== 'object' || given === null || Array.isArray(given)) {
+    throw new PolicyError('policy', 'must be an object');
+  }
+  // Our own copy: the rules below and the digest are taken from the same, unchangeable value,
+  // whatever the caller does with its object afterwards.
+  let json: unknown;
+  try {
+    json = frozenCopy(given);
+  } catch {
+    // A bigint, or an object that refers to itself: not something a JSON file can hold.
+    throw new PolicyError('policy', 'must be plain JSON');
+  }
   const raw = object(json, 'policy', [
     'schema',
     'policyId',

@@ -6,7 +6,14 @@ value. `docs/DECISIONS.md` (D16) records why there is no separate JSON Schema fi
 
 The policy digest is SHA-256 over the RFC 8785 canonical JSON of the file as given, not over the
 filled-in form (`policyDigest()`). Approvals name this digest, so changing a policy file voids
-every approval issued under it.
+every approval issued under it. The digest covers the JSON value, not the bytes of the file:
+changing only white space or the order of keys leaves it the same.
+
+Load a policy file with `parsePolicyText(text)`. It does what `parsePolicy(JSON.parse(text))` does
+and also refuses a file in which a key is written twice; `JSON.parse()` keeps the last one
+without a word, so the file could show a reader one value and give the code another.
+`parsePolicy()` keeps its own frozen copy of the JSON it is given, so the rules and the digest
+always come from the same value.
 
 ## Example
 
