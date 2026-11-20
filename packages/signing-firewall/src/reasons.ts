@@ -1,7 +1,7 @@
 import type { Address } from '@solana/kit';
 
 // Stable reason codes. Codes may be added; none may be renamed after v0.1.0.
-// docs/REASON_CODES.md lists each one with at least one vector.
+// docs/REASON_CODES.md lists each one with the vectors or unit tests that raise it.
 export const REASON_CODES = [
   // Message format
   'UNSUPPORTED_VERSION',

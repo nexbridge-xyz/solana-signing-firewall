@@ -18,20 +18,20 @@ that each listed vector expects its code.
 
 ## Message format
 
-| Code                      | Meaning                                                                                                                                                         | Raised by               | Vectors                                |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
-| `UNSUPPORTED_VERSION`     | The version byte names a message version that does not exist.                                                                                                   | review, verifier        | core-006                               |
-| `VERSION_NOT_ALLOWED`     | The message version is not in `messageVersions`; for x402, no version the quote offers is, or the payment's version is not among the versions the quote offers. | review, guard, verifier | core-069                               |
-| `MALFORMED_MESSAGE`       | The bytes do not decode, break a runtime sanitization rule or a version-1 limit, are too large for one packet, have trailing bytes, or hold a malformed batch.  | review, verifier        | core-007, core-008, core-009, core-013 |
-| `LOOKUP_TABLE_UNRESOLVED` | A lookup table is missing from the snapshot, foreign-owned, undecodable or deactivating, or an entry is out of range or not yet active.                         | review, verifier        | core-015, core-024                     |
+| Code                      | Meaning                                                                                                                                                                       | Raised by               | Vectors                                |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
+| `UNSUPPORTED_VERSION`     | The version byte names a message version that does not exist. The verifier reports such a transaction as `MALFORMED_MESSAGE`, because the transaction itself does not decode. | review                  | core-006                               |
+| `VERSION_NOT_ALLOWED`     | The message version is not in `messageVersions`; for x402, no version the quote offers is, or the payment's version is not among the versions the quote offers.               | review, guard, verifier | core-069                               |
+| `MALFORMED_MESSAGE`       | The bytes do not decode, break a runtime sanitization rule or a version-1 limit, are too large for one packet, have trailing bytes, or hold a malformed batch.                | review, verifier        | core-007, core-008, core-009, core-013 |
+| `LOOKUP_TABLE_UNRESOLVED` | A lookup table is missing from the snapshot, foreign-owned, undecodable or deactivating, or an entry is out of range or not yet active.                                       | review, verifier        | core-015, core-024                     |
 
 ## Fee payer and signers
 
-| Code                    | Meaning                                                                                          | Raised by               | Vectors                      |
-| ----------------------- | ------------------------------------------------------------------------------------------------ | ----------------------- | ---------------------------- |
-| `FEE_PAYER_NOT_ALLOWED` | The fee payer is not in `feePayers`.                                                             | review, guard           | core-025, x402-013           |
-| `UNEXPECTED_SIGNER`     | The message requires a signature from an account other than the policy signer and the fee payer. | review, guard, verifier | core-026, core-043, x402-021 |
-| `SIGNER_NOT_REQUIRED`   | The policy signer is not a required signer of the message.                                       | review, guard           | core-027, x402-005           |
+| Code                    | Meaning                                                                                                                                                                                                                                                                                | Raised by               | Vectors                      |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | ---------------------------- |
+| `FEE_PAYER_NOT_ALLOWED` | The fee payer is not in `feePayers`.                                                                                                                                                                                                                                                   | review, guard           | core-025, x402-013           |
+| `UNEXPECTED_SIGNER`     | The message requires a signature from an account other than the policy signer and the policy's fee payers (any of them may be a required signer). For the verifier: from an account other than the buyer and the message's fee payer, or more signatures than `maxRequiredSignatures`. | review, guard, verifier | core-026, core-043, x402-021 |
+| `SIGNER_NOT_REQUIRED`   | The policy signer is not a required signer of the message.                                                                                                                                                                                                                             | review, guard           | core-027, x402-005           |
 
 ## Lifetime
 
@@ -41,16 +41,16 @@ that each listed vector expects its code.
 
 ## Instructions
 
-| Code                                     | Meaning                                                                                                                             | Raised by               | Vectors                                |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
-| `TOKEN_BATCH_NOT_ALLOWED`                | A P-Token `batch` under `tokenBatch: deny`.                                                                                         | review, guard           | core-031, x402-011                     |
-| `TOKEN_INSTRUCTION_NOT_ALLOWED`          | An SPL Token instruction other than `TransferChecked`, at top level or inside a batch.                                              | review, guard           | core-030, core-032, core-033, x402-004 |
-| `TOKEN_PROGRAM_NOT_ALLOWED`              | A Token-2022 instruction. v0.1.0 supports SPL Token only.                                                                           | review, guard, verifier | core-034, x402-009                     |
-| `COMPUTE_BUDGET_INSTRUCTION_NOT_ALLOWED` | A ComputeBudget instruction other than one `SetComputeUnitLimit` and one `SetComputeUnitPrice`.                                     | review                  | core-035, core-036                     |
-| `COMPUTE_BUDGET_INSTRUCTION_IN_V1`       | A ComputeBudget instruction in a version-1 message, where the runtime ignores it.                                                   | review, guard, verifier | core-037, x402-016                     |
-| `MEMO_NOT_ALLOWED`                       | A Memo the policy does not allow: memos off, longer than `memo.maxBytes`, not UTF-8, or with accounts other than the policy signer. | review                  | core-038                               |
-| `SYSTEM_INSTRUCTION_NOT_ALLOWED`         | A System Program instruction. A nonce advance is reported as `DURABLE_NONCE_NOT_ALLOWED` instead.                                   | review                  | core-040                               |
-| `PROGRAM_NOT_ALLOWED`                    | An instruction to any other program, including the newer Memo program. The reason carries the program address.                      | review, guard           | core-029, core-041, x402-017           |
+| Code                                     | Meaning                                                                                                                                                                                             | Raised by               | Vectors                                |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
+| `TOKEN_BATCH_NOT_ALLOWED`                | A P-Token `batch` under `tokenBatch: deny`.                                                                                                                                                         | review, guard           | core-031, x402-011                     |
+| `TOKEN_INSTRUCTION_NOT_ALLOWED`          | An SPL Token instruction other than `TransferChecked`, at top level or inside a batch; also a `TransferChecked` with the wrong data length or fewer than four accounts, and a batch inside a batch. | review, guard           | core-030, core-032, core-033, x402-004 |
+| `TOKEN_PROGRAM_NOT_ALLOWED`              | A Token-2022 instruction. v0.1.0 supports SPL Token only.                                                                                                                                           | review, guard, verifier | core-034, x402-009                     |
+| `COMPUTE_BUDGET_INSTRUCTION_NOT_ALLOWED` | A ComputeBudget instruction other than one `SetComputeUnitLimit` and one `SetComputeUnitPrice`.                                                                                                     | review                  | core-035, core-036                     |
+| `COMPUTE_BUDGET_INSTRUCTION_IN_V1`       | A ComputeBudget instruction in a version-1 message, where the runtime ignores it.                                                                                                                   | review, guard, verifier | core-037, x402-016                     |
+| `MEMO_NOT_ALLOWED`                       | A Memo the policy does not allow: memos off, longer than `memo.maxBytes`, not UTF-8, or with accounts other than the policy signer.                                                                 | review                  | core-038                               |
+| `SYSTEM_INSTRUCTION_NOT_ALLOWED`         | A System Program instruction. A nonce advance is reported as `DURABLE_NONCE_NOT_ALLOWED` instead.                                                                                                   | review                  | core-040                               |
+| `PROGRAM_NOT_ALLOWED`                    | An instruction to any other program, including the newer Memo program. The reason carries the program address.                                                                                      | review, guard           | core-029, core-041, x402-017           |
 
 ## Transfers
 
@@ -88,42 +88,50 @@ that each listed vector expects its code.
 
 ## Approvals
 
-| Code                         | Meaning                                                                                                                                                               | Raised by       | Vectors            |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------ |
-| `APPROVAL_REQUIRED`          | The total is above `approvalAbove` and no approval was presented. An x402 payment above `approvalAbove` is refused with it, because payments never wait for a person. | approval, guard | core-005, core-056 |
-| `APPROVAL_SIGNATURE_INVALID` | The approval record is malformed, or its signature does not verify.                                                                                                   | approval        | core-021           |
-| `APPROVER_NOT_ALLOWED`       | The approval is signed by someone not in `approval.approvers`.                                                                                                        | approval        | core-018           |
-| `APPROVAL_EXPIRED`           | The approval's `expiresAt` has passed.                                                                                                                                | approval        | core-017           |
-| `APPROVAL_MESSAGE_MISMATCH`  | The approval names another message digest.                                                                                                                            | approval        | core-019           |
-| `APPROVAL_POLICY_MISMATCH`   | The approval names another policy digest.                                                                                                                             | approval        | core-020           |
-| `APPROVAL_TTL_EXCEEDED`      | The approval was issued in the future, expires before it was issued, or is valid for longer than `ttlSeconds`.                                                        | approval        | core-022           |
+| Code                         | Meaning                                                                                                                                                                                                                     | Raised by      | Vectors            |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------------ |
+| `APPROVAL_REQUIRED`          | The total is above `approvalAbove` and no approval was presented (`withPolicy()`; `verifyApproval()` never returns it). An x402 payment above `approvalAbove` is refused with it, because payments never wait for a person. | wrapper, guard | core-005, core-056 |
+| `APPROVAL_SIGNATURE_INVALID` | The approval record is malformed, or its signature does not verify.                                                                                                                                                         | approval       | core-021           |
+| `APPROVER_NOT_ALLOWED`       | The approval is signed by someone not in `approval.approvers`.                                                                                                                                                              | approval       | core-018           |
+| `APPROVAL_EXPIRED`           | The approval's `expiresAt` has passed.                                                                                                                                                                                      | approval       | core-017           |
+| `APPROVAL_MESSAGE_MISMATCH`  | The approval names another message digest.                                                                                                                                                                                  | approval       | core-019           |
+| `APPROVAL_POLICY_MISMATCH`   | The approval names another policy digest.                                                                                                                                                                                   | approval       | core-020           |
+| `APPROVAL_TTL_EXCEEDED`      | The approval was issued in the future, expires before it was issued, or is valid for longer than `ttlSeconds`.                                                                                                              | approval       | core-022           |
 
 ## Signer wrapper
 
 These are about the inner signer, not about message bytes, so unit tests cover them instead of
 vectors.
 
-| Code                       | Meaning                                                                                                                 | Raised by | Vectors                                                         |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------- |
-| `SIGNER_ADDRESS_MISMATCH`  | The inner signer's address is not the policy signer.                                                                    | wrapper   | unit test: `packages/signing-firewall/test/with-policy.test.ts` |
-| `UNSUPPORTED_INNER_SIGNER` | The inner signer cannot return signatures (for example a sending signer); `withPolicy()` refuses it when it is created. | wrapper   | unit test: `packages/signing-firewall/test/with-policy.test.ts` |
-| `SIGNATURE_INVALID`        | The inner signer returned anything other than exactly one valid signature, its own, over the reviewed bytes.            | wrapper   | unit test: `packages/signing-firewall/test/with-policy.test.ts` |
+| Code                       | Meaning                                                                                                                            | Raised by      | Vectors                                                         |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------------- | --------------------------------------------------------------- |
+| `SIGNER_ADDRESS_MISMATCH`  | The inner signer's address is not the policy signer.                                                                               | wrapper, guard | unit test: `packages/signing-firewall/test/with-policy.test.ts` |
+| `UNSUPPORTED_INNER_SIGNER` | The inner signer cannot return signatures (for example a sending signer); `withPolicy()` refuses it when it is created.            | wrapper, guard | unit test: `packages/signing-firewall/test/with-policy.test.ts` |
+| `SIGNATURE_INVALID`        | The inner signer returned anything other than exactly one valid signature, its own, over the wrapper's copy of the reviewed bytes. | wrapper, guard | unit test: `packages/signing-firewall/test/with-policy.test.ts` |
 
 ## x402: the quote
 
-| Code                              | Meaning                                                                                                                       | Raised by       | Vectors            |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------ |
-| `X402_REQUIREMENTS_MALFORMED`     | The payment requirements are not valid, for example an amount that is not a decimal string or an `extra.memo` over 256 bytes. | guard, verifier | x402-022           |
-| `X402_SCHEME_NOT_ALLOWED`         | The scheme is not in `x402.schemes`.                                                                                          | guard, verifier | x402-033           |
-| `X402_NETWORK_NOT_ALLOWED`        | The network is not in `x402.networks`.                                                                                        | guard, verifier | x402-034           |
-| `X402_ASSET_NOT_ALLOWED`          | The asset has no rule in the policy, or is not in the verifier config's assets.                                               | guard, verifier | x402-009, x402-035 |
-| `X402_PAYTO_NOT_ALLOWED`          | The payee is not in `recipients.owners`.                                                                                      | guard           | x402-036           |
-| `X402_FEE_PAYER_NOT_ALLOWED`      | The quote names no fee payer, names the agent itself, or names one not in `feePayers`.                                        | guard, verifier | x402-037, x402-043 |
-| `X402_PER_PAYMENT_LIMIT_EXCEEDED` | The amount is above the mint's `maxPerTransaction`.                                                                           | guard           | x402-038           |
-| `X402_TIMEOUT_OUT_OF_RANGE`       | `maxTimeoutSeconds` is above the policy's.                                                                                    | guard           | x402-040           |
-| `X402_BUDGET_EXCEEDED`            | The payment would take the rolling 24-hour total for the mint above `maxPerDay`.                                              | guard           | x402-041           |
-| `X402_RATE_LIMIT_EXCEEDED`        | `maxPaymentsPerMinute` payments were already made in the last 60 seconds.                                                     | guard           | x402-042           |
-| `X402_SPLITS_NOT_ALLOWED`         | The quote has a non-empty `extra.splits`.                                                                                     | guard, verifier | x402-031           |
+| Code                              | Meaning                                                                                                                                   | Raised by       | Vectors            |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------ |
+| `X402_REQUIREMENTS_MALFORMED`     | The payment requirements are not valid, for example an amount that is not a decimal string or an `extra.memo` over 256 bytes.             | guard, verifier | x402-022           |
+| `X402_SCHEME_NOT_ALLOWED`         | The scheme is not in `x402.schemes`.                                                                                                      | guard, verifier | x402-033           |
+| `X402_NETWORK_NOT_ALLOWED`        | The network is not in `x402.networks`.                                                                                                    | guard, verifier | x402-034           |
+| `X402_ASSET_NOT_ALLOWED`          | The asset has no rule in the policy, or is not in the verifier config's assets.                                                           | guard, verifier | x402-009, x402-035 |
+| `X402_PAYTO_NOT_ALLOWED`          | The payee is not in `recipients.owners`.                                                                                                  | guard           | x402-036           |
+| `X402_FEE_PAYER_NOT_ALLOWED`      | The quote names no fee payer, names the agent itself, or names one not in `feePayers`.                                                    | guard, verifier | x402-037, x402-043 |
+| `X402_PER_PAYMENT_LIMIT_EXCEEDED` | The amount is above the mint's `maxPerTransaction`.                                                                                       | guard           | x402-038           |
+| `X402_TIMEOUT_OUT_OF_RANGE`       | `maxTimeoutSeconds` is above the policy's.                                                                                                | guard           | x402-040           |
+| `X402_BUDGET_EXCEEDED`            | The payment would take the rolling 24-hour total for the mint above `maxPerDay`, or the policy sets no daily budget for an allowed asset. | guard           | x402-041           |
+| `X402_RATE_LIMIT_EXCEEDED`        | `maxPaymentsPerMinute` payments were already made in the last 60 seconds.                                                                 | guard           | x402-042           |
+| `X402_SPLITS_NOT_ALLOWED`         | The quote has a non-empty `extra.splits`.                                                                                                 | guard, verifier | x402-031           |
+
+Unit tests cover the quote rules that no vector exercises
+(`packages/signing-firewall/test/x402-quote-rules.test.ts`): `APPROVAL_REQUIRED` for a quote above
+`approvalAbove`, `VERSION_NOT_ALLOWED` for a quote whose advertised versions the policy accepts none
+of, and `X402_BUDGET_EXCEEDED` for an asset without a daily budget. The bound signer's version check
+has its own (`packages/signing-firewall-x402/test/review-guard-version.test.ts`). In core-005 and
+core-056, `APPROVAL_REQUIRED` is what the vector runner reports for a `needs_approval` decision
+presented without an approval.
 
 ## x402: the bytes against the quote
 
