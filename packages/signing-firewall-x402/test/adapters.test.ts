@@ -182,6 +182,29 @@ describe('withX402Verifier', () => {
     payload: { transaction },
   });
 
+  it('advertises only the message versions its verifier config accepts', () => {
+    const { inner } = spyFacilitator();
+    const both: SchemeNetworkFacilitator = {
+      ...inner,
+      getExtra: () => ({ feePayer: w.feePayer.address, transactionVersions: [0, 1] }),
+    };
+    const v0Only = parseVerifierConfig({ ...facilitatorConfig(w), messageVersions: ['v0'] });
+    const options = { loader, network: 'localnet' as const, now };
+    expect(withX402Verifier(both, { ...options, config: v0Only }).getExtra(DEVNET)).toEqual({
+      feePayer: w.feePayer.address,
+      transactionVersions: [0],
+    });
+    expect(withX402Verifier(both, { ...options, config }).getExtra(DEVNET)).toEqual({
+      feePayer: w.feePayer.address,
+      transactionVersions: [0, 1],
+    });
+    // An inner scheme that advertises no versions accepts version 0 only.
+    expect(withX402Verifier(inner, { ...options, config }).getExtra(DEVNET)).toEqual({
+      feePayer: w.feePayer.address,
+      transactionVersions: [0],
+    });
+  });
+
   it('refuses a payment that only approves a delegate, without calling the inner facilitator (scene 15)', async () => {
     const { inner, calls } = spyFacilitator();
     const wrapped = withX402Verifier(inner, { config, loader, network: 'localnet', now });

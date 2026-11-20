@@ -118,7 +118,24 @@ export function withX402Verifier(
   const wrapped: SchemeNetworkFacilitator = {
     scheme: inner.scheme,
     caipFamily: inner.caipFamily,
-    getExtra: (network) => inner.getExtra(network),
+    getExtra: (network) => {
+      const extra = inner.getExtra(network);
+      if (extra === undefined) return undefined;
+      // Advertise only versions the verifier accepts: the inner scheme's own list (version 0
+      // when it has none, as the spec reads an absent field), narrowed to the config's.
+      const accepted: readonly number[] = options.config.messageVersions.flatMap((v) =>
+        v === 'v0' ? [0] : v === 'v1' ? [1] : [],
+      );
+      const offered: unknown[] = Array.isArray(extra.transactionVersions)
+        ? (extra.transactionVersions as unknown[])
+        : [0];
+      return {
+        ...extra,
+        transactionVersions: offered.filter(
+          (v): v is number => typeof v === 'number' && accepted.includes(v),
+        ),
+      };
+    },
     getSigners: (network) => inner.getSigners(network),
     async verify(payload, requirements, context): Promise<VerifyResponse> {
       const refusal = await check(payload, requirements);
