@@ -538,3 +538,29 @@ the commits and the records from here on use those numbers.
   What an RPC node answers for an oversized transaction was not tested.
 - Tests: `packages/signing-firewall/test/review-decoder-size.test.ts`,
   `packages/signing-firewall-x402/test/review-verifier-size.test.ts`.
+
+### D47. The Memo a seller or a replaced SDK chooses (R-07)
+
+- THREAT_MODEL and D7 said a replaced SDK could carry out at most the 16 bytes of the nonce in each
+  payment. The guard takes the quote from the SDK, so a replaced SDK, like a seller, can set
+  `extra.memo` and have up to 256 bytes of any valid UTF-8 signed in each payment, control and
+  invisible characters included. THREAT_MODEL, X402.md and D7 now say so. The bound an operator can
+  set is the policy's `memo.maxBytes` (32 still admits the SDK's nonce and refuses longer seller
+  memos).
+- No code change in v0.1.0. `packages/signing-firewall/test/review-x402-memo.test.ts` shows what
+  gets signed.
+- Later work: a policy switch that refuses seller memos, or limits the characters they may hold.
+
+### D48. A payment's version must be one the quote offers (R-08)
+
+- The quote checks compared the quote with the policy, and `review()` compared the message with the
+  policy; nothing compared the message with the quote. The bound signer signed version 1 for a quote
+  that advertises `[0]` or nothing, version 0 for one that advertises `[1]`, and a legacy message
+  when the policy listed `legacy`.
+- The spec states it for the client: "Its message version MUST be one the requirements advertise in
+  `extra.transactionVersions`, or version `0` when that field is absent (see §1.5)." (section
+  "PaymentPayload `payload` Field"), and of legacy messages, "clients MUST NOT build them" (§1.5).
+- The bound signer now refuses such a payment with `VERSION_NOT_ALLOWED`. The verifier is
+  unchanged: "The sponsor enforces its own accepted set; it does not read
+  `PaymentRequirements.extra.transactionVersions`." (§1.5)
+- Tests: `packages/signing-firewall-x402/test/review-guard-version.test.ts`.

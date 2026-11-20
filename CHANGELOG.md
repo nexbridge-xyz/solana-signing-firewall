@@ -42,6 +42,10 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
   or a length not written in its shortest form.
 - R-06: `review()`, the guard and `verifyX402Payment()` refuse a transaction too large for one
   packet (1,232 bytes, or 4,096 for version 1, signatures included).
+- R-07: THREAT_MODEL and X402.md say that a seller, or a replaced SDK, can choose up to 256 bytes
+  of Memo text for the agent's key to sign in each payment, and that `memo.maxBytes` bounds it.
+- R-08: the bound signer refuses a payment whose message version the quote does not offer, and a
+  legacy payment (`VERSION_NOT_ALLOWED`).
 
 ### Fixed before the first release
 
