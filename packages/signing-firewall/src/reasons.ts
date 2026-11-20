@@ -1,3 +1,5 @@
+import type { Address } from '@solana/kit';
+
 // Stable reason codes. Codes may be added; none may be renamed after v0.1.0.
 // docs/REASON_CODES.md lists each one with at least one vector.
 export const REASON_CODES = [
@@ -50,6 +52,7 @@ export const REASON_CODES = [
   'APPROVAL_EXPIRED',
   'APPROVAL_MESSAGE_MISMATCH',
   'APPROVAL_POLICY_MISMATCH',
+  'APPROVAL_TTL_EXCEEDED',
   // Signer wrapper
   'SIGNER_ADDRESS_MISMATCH',
   'UNSUPPORTED_INNER_SIGNER',
@@ -62,6 +65,10 @@ export type Reason = {
   readonly code: ReasonCode;
   /** Where the problem is, for example `ix[1]` or `ix[0].batch[2]`. */
   readonly path?: string;
+  /** The program that was refused (PROGRAM_NOT_ALLOWED, TOKEN_PROGRAM_NOT_ALLOWED). */
+  readonly program?: Address;
+  /** The account the reason is about, for example the one missing from the snapshot. */
+  readonly account?: Address;
   /** Human-readable detail. Not part of the stable interface. */
   readonly detail?: string;
 };

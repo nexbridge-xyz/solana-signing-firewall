@@ -21,6 +21,7 @@ type LoadedTable = { readonly addresses: readonly Address[]; readonly activeLeng
 function loadTable(tableAddress: Address, snapshot: Snapshot): LoadedTable | string {
   const account = snapshot.accounts.get(tableAddress);
   if (account === undefined) return 'not in the snapshot';
+  if (account === null) return 'does not exist';
   if (account.owner !== ADDRESS_LOOKUP_TABLE_PROGRAM_ADDRESS) {
     return 'not owned by the Address Lookup Table program';
   }
