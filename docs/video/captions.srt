@@ -1,0 +1,131 @@
+1
+00:00:00,000 --> 00:00:04,000
+A signer signs whatever bytes it is given.
+
+2
+00:00:04,000 --> 00:00:08,000
+Solana Keychain gives one signing
+interface across many backends,
+
+3
+00:00:08,000 --> 00:00:12,000
+and leaves transaction checks to you.
+
+4
+00:00:12,000 --> 00:00:17,000
+Signing Firewall sits
+in front of the signer.
+
+5
+00:00:17,000 --> 00:00:21,000
+It decodes the transaction
+and checks it against a policy,
+
+6
+00:00:21,000 --> 00:00:25,000
+and lets the signer sign what passes.
+
+7
+00:00:25,000 --> 00:00:35,000
+Legacy, v0 with a lookup table,
+the new v1 format, and a P-Token batch.
+
+8
+00:00:35,000 --> 00:00:45,000
+Each one passes and lands on devnet.
+
+9
+00:00:45,000 --> 00:00:52,000
+Above two USDC, a second person approves.
+
+10
+00:00:52,000 --> 00:01:00,000
+The approval covers these exact bytes.
+
+11
+00:01:00,000 --> 00:01:05,000
+Change the amount after approval: blocked.
+
+12
+00:01:05,000 --> 00:01:10,000
+Pay into a token account
+someone else owns: blocked.
+
+13
+00:01:10,000 --> 00:01:15,000
+Split an amount over the cap
+into three transfers: blocked.
+
+14
+00:01:15,000 --> 00:01:20,000
+Hide a delegate approval
+inside a batch: blocked.
+
+15
+00:01:20,000 --> 00:01:24,000
+Use a durable nonce: blocked.
+
+16
+00:01:24,000 --> 00:01:31,000
+Put a fee in the v1 config that
+an instruction scan would miss: blocked.
+
+17
+00:01:31,000 --> 00:01:35,000
+The signer was never called.
+
+18
+00:01:35,000 --> 00:01:40,000
+An AI agent pays for an API with x402.
+
+19
+00:01:40,000 --> 00:01:45,000
+It pays the quote it accepted,
+byte for byte, and nothing else.
+
+20
+00:01:45,000 --> 00:01:48,000
+A hostile shop offers four bad options.
+
+21
+00:01:48,000 --> 00:01:53,000
+The SDK's own cap limits only the amount,
+so the payee, the token
+
+22
+00:01:53,000 --> 00:01:56,000
+and the fee payer are the guard's job:
+all blocked before signing.
+
+23
+00:01:56,000 --> 00:01:59,000
+Over the daily budget: blocked.
+
+24
+00:01:59,000 --> 00:02:02,000
+On the other side,
+a facilitator refuses a payment
+
+25
+00:02:02,000 --> 00:02:05,000
+that only approves a delegate
+instead of moving tokens.
+
+26
+00:02:05,000 --> 00:02:09,000
+Every rule ships with public test vectors
+
+27
+00:02:09,000 --> 00:02:13,000
+that any wallet or x402
+implementation can run.
+
+28
+00:02:13,000 --> 00:02:20,000
+And every message that landed
+matches the bytes that were reviewed.
+
+29
+00:02:20,000 --> 00:02:30,000
+Open source under Apache 2.0.
+Built in Tokyo by NexBridge.
