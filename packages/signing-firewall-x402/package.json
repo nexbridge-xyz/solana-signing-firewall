@@ -18,5 +18,9 @@
     "@solana/kit": "8.6.0",
     "@x402/core": "2.31.0",
     "@x402/svm": "2.31.0"
+  },
+  "devDependencies": {
+    "@nexbridge/solana-signing-firewall-fixtures": "workspace:*",
+    "@solana/keychain-memory": "2.0.0"
   }
 }
