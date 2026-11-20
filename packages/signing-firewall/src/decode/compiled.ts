@@ -1,8 +1,10 @@
 import {
+  LEGACY_TRANSACTION_SIZE_LIMIT,
   TRANSACTION_CONFIG_COMPUTE_UNIT_LIMIT_BIT_MASK,
   TRANSACTION_CONFIG_HEAP_SIZE_BIT_MASK,
   TRANSACTION_CONFIG_LOADED_ACCOUNTS_DATA_SIZE_LIMIT_BIT_MASK,
   TRANSACTION_CONFIG_PRIORITY_FEE_LAMPORTS_BIT_MASK,
+  V1_TRANSACTION_SIZE_LIMIT,
   decompileTransactionConfig,
   getCompiledTransactionMessageDecoder,
   getCompiledTransactionMessageEncoder,
@@ -33,6 +35,7 @@ const V1_MIN_HEAP_SIZE = 32 * 1024;
 const V1_MAX_HEAP_SIZE = 256 * 1024;
 /** Account indexes are u8, so a v0 message can reference at most 256 accounts. */
 const MAX_TOTAL_ACCOUNTS = 256;
+const SIGNATURE_BYTES = 64;
 
 export function failure(
   version: MessageVersion | undefined,
@@ -147,14 +150,32 @@ export function decodeCompiledMessage(bytes: Uint8Array): DecodeResult<CompiledM
     return failure(version, 'MALFORMED_MESSAGE', `does not decode: ${describeError(error)}`);
   }
 
-  const problem = sanitize(message);
+  const problem = sanitize(message, bytes.length);
   if (problem !== undefined) return failure(version, 'MALFORMED_MESSAGE', problem);
   return { ok: true, value: message };
 }
 
-/** The runtime's message sanitization rules, plus the v1 limits of SIMD-0385. */
-function sanitize(message: CompiledMessage): string | undefined {
+/**
+ * Size of the transaction on the wire once every required signature is attached. Legacy and
+ * version-0 transactions put a one-byte signature count first (more than 127 signers could not
+ * fit in a packet anyway); version-1 transactions put the signatures after the message, with
+ * no count.
+ */
+function wireSize(message: CompiledMessage, messageLength: number): number {
+  const signatures = message.header.numSignerAccounts * SIGNATURE_BYTES;
+  return message.version === 'v1' ? messageLength + signatures : 1 + signatures + messageLength;
+}
+
+/** The runtime's message sanitization rules, the packet size, and the v1 limits of SIMD-0385. */
+function sanitize(message: CompiledMessage, messageLength: number): string | undefined {
   const { header, staticAccounts, instructions, addressTableLookups } = message;
+  // A cluster takes at most one packet: 1,232 bytes, or 4,096 for version 1 (Kit's limits).
+  const sizeLimit =
+    message.version === 'v1' ? V1_TRANSACTION_SIZE_LIMIT : LEGACY_TRANSACTION_SIZE_LIMIT;
+  const size = wireSize(message, messageLength);
+  if (size > sizeLimit) {
+    return `${size} bytes with its signatures; a ${message.version} transaction holds at most ${sizeLimit}`;
+  }
   if (header.numSignerAccounts < 1) return 'no fee payer: zero required signatures';
   if (header.numReadonlySignerAccounts >= header.numSignerAccounts) {
     return 'the fee payer would be read-only';

@@ -18,12 +18,12 @@ that each listed vector expects its code.
 
 ## Message format
 
-| Code                      | Meaning                                                                                                                                 | Raised by               | Vectors                                |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
-| `UNSUPPORTED_VERSION`     | The version byte names a message version that does not exist.                                                                           | review, verifier        | core-006                               |
-| `VERSION_NOT_ALLOWED`     | The message version is not in `messageVersions`; for x402, no version the quote offers is.                                              | review, guard, verifier | core-069                               |
-| `MALFORMED_MESSAGE`       | The bytes do not decode, break a runtime sanitization rule or a version-1 limit, have trailing bytes, or hold a malformed batch.        | review, verifier        | core-007, core-008, core-009, core-013 |
-| `LOOKUP_TABLE_UNRESOLVED` | A lookup table is missing from the snapshot, foreign-owned, undecodable or deactivating, or an entry is out of range or not yet active. | review, verifier        | core-015, core-024                     |
+| Code                      | Meaning                                                                                                                                                        | Raised by               | Vectors                                |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------- |
+| `UNSUPPORTED_VERSION`     | The version byte names a message version that does not exist.                                                                                                  | review, verifier        | core-006                               |
+| `VERSION_NOT_ALLOWED`     | The message version is not in `messageVersions`; for x402, no version the quote offers is.                                                                     | review, guard, verifier | core-069                               |
+| `MALFORMED_MESSAGE`       | The bytes do not decode, break a runtime sanitization rule or a version-1 limit, are too large for one packet, have trailing bytes, or hold a malformed batch. | review, verifier        | core-007, core-008, core-009, core-013 |
+| `LOOKUP_TABLE_UNRESOLVED` | A lookup table is missing from the snapshot, foreign-owned, undecodable or deactivating, or an entry is out of range or not yet active.                        | review, verifier        | core-015, core-024                     |
 
 ## Fee payer and signers
 
