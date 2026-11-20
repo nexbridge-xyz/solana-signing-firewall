@@ -143,10 +143,8 @@ The devnet demo itself (`pnpm demo:keys`, `demo:setup`, `demo`, `verify-run`, `d
 `demo:recycle`) needs devnet SOL and USDC from the public faucets; see
 [docs/devnet-run](docs/devnet-run/README.md).
 
-Quality: 366 tests; line coverage 96.2% of `packages/signing-firewall`; mutation score 89.05% on
-`evaluate/`, `approval/` and `x402/` (not counting mutants in free-text details and error
-messages). CI runs typecheck, lint, tests, the vector diff, secret scanning and a dependency audit
-on every push.
+Quality: 366 tests; line coverage 96.2% of `packages/signing-firewall`. CI runs typecheck, lint,
+the format check, tests, the vector diff, secret scanning and a dependency audit on every push.
 
 ## Test vectors
 

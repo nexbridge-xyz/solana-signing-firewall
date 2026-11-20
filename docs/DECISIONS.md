@@ -385,9 +385,9 @@ commitment as `finalized`, as a cluster does. Explorer links are printed only fo
 - A small ignorer plugin (`stryker-ignorers.mjs`) skips mutants in free text only: a reason's
   `detail` (not part of the stable interface) and the message of a thrown error. Every condition
   around that text is still mutated.
-- Score on 2026-11-20: 89.05% (target 85%). Most survivors left are equivalent mutants of checks
-  that run twice on purpose (for example a reason both the quote checks and the bound signer would
-  report) and of unreachable defensive branches in the guard.
+- No score is stated in the repository: the code has changed since the last run (D40 and after).
+  To measure one, run `pnpm mutation` (StrykerJS; a full run takes hours, and the report is
+  written to `reports/mutation/`), or start the manual workflow `.github/workflows/mutation.yml`.
 - Found while writing the tests and fixed: the verifier config parser threw a `TypeError` instead of
   a `VerifierConfigError` for an asset rule that is not an object, and accepted an empty or array
   `assets`; it now refuses both and checks decimals are 0 to 255. A dead branch in the requirements
