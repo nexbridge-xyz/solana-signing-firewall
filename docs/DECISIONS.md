@@ -32,7 +32,10 @@ When this file conflicts with other development instructions, this file wins.
 - Every `package.json` pins exact versions, and `pnpm-lock.yaml` is committed. pnpm refuses any
   package version published less than 7 days earlier (`minimumReleaseAge`). Dependency install
   scripts do not run.
-- TypeScript 6.0.3, because typescript-eslint 8.72 does not support TypeScript 7.
+- A security fix published less than 7 days ago may be installed as an exception, but only after
+  the maintainers agree.
+- TypeScript 6.0.3, because typescript-eslint 8.72 does not support TypeScript 7. The `DOM` lib is
+  on, because Kit's WebCrypto types (`CryptoKey`, `CryptoKeyPair`) come from it.
 - x402 rules follow the official `specs/schemes/exact/scheme_exact_svm.md` in
   `x402-foundation/x402`, commit `4f64aba41` (2026-11-06).
 
@@ -42,7 +45,11 @@ Only the SPL Memo program `MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr` counts a
 `exact` scheme names it, and the x402 SDK uses it. `@solana-program/memo` 0.16 exports it as
 `LEGACY_MEMO_PROGRAM_ADDRESS_V3`; that package's `MEMO_PROGRAM_ADDRESS` now points to a newer,
 upgradeable program. v0.1.0 treats the newer program, and the older v1 memo program, as unknown
-programs (`PROGRAM_NOT_ALLOWED`).
+programs (`PROGRAM_NOT_ALLOWED`); the reason carries the program address.
+
+- A test checks that our Memo program address equals the one in the transactions the x402 SDK
+  builds, so a change on either side turns the test red.
+- `docs/X402.md` and `docs/SUPPORT_MATRIX.md` state these facts without judging either project.
 
 ### D4. Decoding
 
@@ -85,16 +92,25 @@ programs (`PROGRAM_NOT_ALLOWED`).
 
 ### D7. x402 Memo rule (`X402_MEMO_MISMATCH`)
 
-The guard and the verifier check the Memo's content, not just its size:
+The Memo's content is checked, not only its size. The two sides differ on purpose.
 
-- Exactly one SPL Memo instruction, after `TransferChecked`, with no accounts.
-- When the requirements carry `extra.memo`, the Memo data must equal its UTF-8 bytes exactly.
-  An `extra.memo` over 256 bytes makes the requirements malformed.
-- Otherwise the data must be exactly 32 characters from `0-9a-f`: 16 random bytes, hex-encoded, as
-  the reference SDK builds it. The spec asks for at least 16 bytes, hex-encoded. We also fix the
-  length and the case, to keep the free-form content an agent signs at the minimum the spec allows.
-- Why: if the SDK is replaced or has a bug, the Memo is where the agent's key would sign arbitrary
-  content onto the chain.
+- **Guard (agent side).** Exactly one SPL Memo instruction, after `TransferChecked`, with no
+  accounts. With `extra.memo`, its data must equal the UTF-8 bytes of `extra.memo` exactly (an
+  `extra.memo` over 256 bytes makes the requirements malformed). Without it, the data must be
+  exactly 32 characters from `0-9a-f`: 16 random bytes, hex-encoded, which is what the pinned SDK
+  builds. A different format means the SDK was upgraded or altered, so refusing is right. Longer or
+  upper-case hex is valid under the spec; those vectors are `stricter_than_spec`.
+- **Verifier (facilitator side).** Only the conditions the spec states: a Memo may not come before
+  the first `TransferChecked`; with `extra.memo`, exactly one Memo whose data equals it byte for
+  byte; without it, at least one Memo whose data is a hex nonce of at least 32 characters. A
+  facilitator takes payments from other x402 implementations, and a 32-character cap would refuse
+  compliant ones; data hidden in a nonce is the payer's own risk. What the spec leaves open (letter
+  case, odd length, an upper bound, the content of extra Memos) is listed as an open question in
+  `docs/FIXTURES.md` and not enforced.
+- **Why the guard is strict:** if the SDK is replaced or has a bug, the Memo is where the agent's
+  key would sign arbitrary content onto the chain. THREAT_MODEL records what remains: an altered
+  SDK can still carry 16 bytes out in each payment's nonce; the rate limit and the daily budget
+  bound the total.
 - Vectors include at least: no Memo, two Memos, wrong content, wrong format. The transactions the
   SDK builds are `must_accept` vectors. If they ever disagree with the spec, work stops and the
   maintainers are told.
@@ -161,3 +177,81 @@ clearly labelled placeholder program to show that such an unknown program is den
 LiteSVM 1.6.2's bundled programs execute a P-Token `batch` and a version-1 transaction
 (`packages/fixtures/test/litesvm-capabilities.test.ts`). Integration tests run in LiteSVM; no
 fallback is needed.
+
+### D14. Snapshot: absent versus not fetched
+
+In a snapshot, an address mapped to `null` was fetched and does not exist; an address missing from
+the map was never fetched. A missing destination is then `DESTINATION_ACCOUNT_MISSING`, while state
+the evaluation needs but never received is `ACCOUNT_STATE_MISSING`. `review()` never assumes.
+
+### D15. `review()` is asynchronous
+
+Digests use WebCrypto SHA-256 and the associated-token-account check derives a PDA, both
+asynchronous in Kit, so `review()` returns a promise. It still makes no network calls.
+
+### D16. Policy format
+
+- `parsePolicy()` is the schema: unknown fields are rejected, amounts are decimal strings within
+  u64, and switches left out take their strict value (`tokenBatch: deny`, `durableNonce: deny`,
+  memo off, associated token accounts required, explicit compute-unit limit required).
+  `docs/POLICY.md` documents it; there is no separate JSON Schema file in v0.1.0.
+- `approvalAbove` without an `approval` section is an error.
+- `network` (`devnet`, `testnet`, `mainnet`, `localnet`) is checked by the RPC loader against the
+  cluster's genesis hash; `localnet` skips the check, for LiteSVM and local validators.
+- The policy digest is computed over the policy file's JSON as given, not over the filled-in form.
+
+### D17. Approval records
+
+- An approval carries `issuedAt` as well as `expiresAt`, so the policy's `ttlSeconds` can be checked
+  when it is verified. An approval issued in the future, expiring before it was issued, or valid
+  for longer than `ttlSeconds` is `APPROVAL_TTL_EXCEEDED` (a new code).
+- Times are ISO 8601 UTC strings; the Ed25519 signature is base58.
+- A malformed record is `APPROVAL_SIGNATURE_INVALID`.
+- `createApproval()` needs only the two digests from the decision.
+
+### D18. Fee rules
+
+- With `requireExplicitComputeUnitLimit` (the default), any legacy or v0 message without a
+  `SetComputeUnitLimit`, and any v1 message without `computeUnitLimit` in `transactionConfig`, is
+  `COMPUTE_UNIT_LIMIT_MISSING`, whether or not it sets a price.
+- Only a limit the message sets is compared with `maxComputeUnitLimit`.
+- For the fee cap, a legacy or v0 message without a limit is costed at 1,400,000 units.
+
+### D19. Instruction and transfer details
+
+- The transfer authority must be the policy signer and must sign the message.
+- A Memo's data must be valid UTF-8 and its only accounts the policy signer.
+- Reasons carry `program` (for refused programs) and `account` (for the account a reason is about).
+
+### D20. Runtime verdicts on core vectors
+
+- Each core vector states `runtimeVerdict`: `runtime_accepts` or `runtime_rejects`, what the runtime
+  does with the message signed by its required signers against the snapshot. A deny vector marked
+  `runtime_accepts` is a check stricter than the runtime.
+- A LiteSVM test sends every vector marked `runtimeCheckedBy: litesvm` as raw bytes and confirms the
+  verdict; for each vector review() lets through, it also checks that token balances change by
+  exactly the reviewed transfers.
+- LiteSVM 1.6.2 aborts the process on bytes it cannot deserialize, so such vectors are
+  `not_checked`, with a note. So are vectors whose program LiteSVM does not load, or whose state the
+  snapshot omits on purpose.
+- LiteSVM showed one expectation wrong: the token program does not check who owns the mint account
+  (it matches the mint by address). `MINT_ACCOUNT_INVALID` for a mint with the wrong owner is
+  therefore stricter than the runtime (core-045).
+
+### D21. `withPolicy()` details
+
+- It reviews every transaction in a call before the inner signer sees any of them, then calls the
+  inner signer once. Each result must be exactly one signature, by the inner signer, valid over the
+  reviewed message bytes; anything else is `SIGNATURE_INVALID`.
+- Approvals are found by message digest through an `approvals` lookup function.
+- Keychain's Kit plugin builds signers from a backend configuration and cannot take an existing
+  signer. As its documentation recommends for existing signers, the wrapped signer is installed with
+  `@solana/kit-plugin-signer`. A test sends through such a client in LiteSVM, and the wrapper passes
+  Keychain's `assertIsSolanaTransactionSigner`.
+
+### D22. CI
+
+On every push: install with the frozen lockfile, typecheck, lint, format check, tests with coverage
+(including the LiteSVM tests), the vector diff, secret scanning and a dependency audit. Mutation
+testing runs locally or by manual trigger only. Standard GitHub-hosted runners only, never larger
+runners.
