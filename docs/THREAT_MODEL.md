@@ -139,6 +139,15 @@ fee payer pay for something else or move its own funds, one with a forged buyer 
 that uses a durable nonce. `withX402Verifier()` runs `verifyX402Payment()` before the facilitator
 scheme is called at all, so a refused payment is neither signed nor simulated (scene 15).
 
+### What v0.1.0 does not do for x402
+
+- **No human approval.** A payment above `approvalAbove` is refused (`APPROVAL_REQUIRED`); v0.1.0
+  has no way for a person to approve an x402 payment, because a payment never waits (D25).
+- **No Token-2022.** The guard and the verifier both refuse Token-2022 payments
+  (`TOKEN_PROGRAM_NOT_ALLOWED`, D26).
+- **One process per budget file.** The file ledger is for one Node.js process, and anyone who can
+  edit the file can reset the budget (D27, below).
+
 ### A budget file anyone on the machine can reset
 
 The file ledger is a JSON file. Anyone who can write to it, or delete it, can reset the budget. It
@@ -155,7 +164,9 @@ kept by a separate signing service, or on chain, is out of scope for v0.1.0.
 - Limits across transactions for the core policy (daily limits outside x402).
 - Ordering, front-running and MEV.
 - The safety of the inner signer's backend itself.
-- The demo's own keys: they are throwaway devnet keys kept in a local `.env`.
+- The demo's own keys: they are throwaway devnet keys kept in a local `.env`. In the demo the
+  approver's key sits on the same machine as the treasury's, so one person plays both roles; an
+  approval protects anything only when the approver is a different person on a different device.
 
 ## Status
 
