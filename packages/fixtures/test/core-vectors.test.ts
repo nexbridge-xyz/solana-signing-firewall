@@ -27,7 +27,8 @@ describe('core vectors', () => {
     const seen = new Set<ReasonCode>(
       vectors.flatMap((v) => [...v.expect.reasons, ...(v.expect.approval?.reasons ?? [])]),
     );
-    const missing = REASON_CODES.filter((code) => !SIGNER_ONLY.includes(code) && !seen.has(code));
+    const core = REASON_CODES.filter((code) => !code.startsWith('X402_'));
+    const missing = core.filter((code) => !SIGNER_ONLY.includes(code) && !seen.has(code));
     expect(missing).toEqual([]);
   });
 });

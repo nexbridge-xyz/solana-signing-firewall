@@ -8,9 +8,10 @@ import { getBase64Decoder } from '@solana/kit';
 import { snapshotToJson } from '@nexbridge/solana-signing-firewall';
 
 import { type CoreVector, stableJson } from './format.js';
-import { CORE_DIR } from './paths.js';
+import { CORE_DIR, X402_DIR } from './paths.js';
 import { CORE_VECTORS, NOW, SLOT } from './vectors.js';
 import { POLICY_FILES, type PolicyName, createWorld, policyJson } from './world.js';
+import { buildX402Files } from './x402/generate.js';
 
 export async function buildCoreFiles(): Promise<Map<string, string>> {
   const ids = CORE_VECTORS.map((v) => v.id);
@@ -58,36 +59,47 @@ async function listJson(dir: string): Promise<string[]> {
     .sort();
 }
 
-async function main(): Promise<void> {
-  const check = process.argv.includes('--check');
-  const files = await buildCoreFiles();
-  const onDisk = await listJson(CORE_DIR);
-
+async function sync(dir: string, files: Map<string, string>, check: boolean): Promise<string[]> {
+  const onDisk = await listJson(dir);
+  const problems: string[] = [];
   if (check) {
-    const problems: string[] = [];
     for (const [name, content] of files) {
-      const current = await readFile(join(CORE_DIR, name), 'utf8').catch(() => undefined);
+      const current = await readFile(join(dir, name), 'utf8').catch(() => undefined);
       if (current === undefined) problems.push(`missing: ${name}`);
       else if (current !== content) problems.push(`differs: ${name}`);
     }
     for (const name of onDisk) if (!files.has(name)) problems.push(`not generated: ${name}`);
-    if (problems.length > 0) {
-      console.error(
-        `Vectors are out of date (run pnpm fixtures:generate):\n  ${problems.join('\n  ')}`,
-      );
-      process.exit(1);
-    }
-    console.log(`${files.size} vector files match the generator.`);
-    return;
+    return problems;
   }
-
   for (const [name, content] of files) {
-    const path = join(CORE_DIR, name);
+    const path = join(dir, name);
     await mkdir(dirname(path), { recursive: true });
     await writeFile(path, content);
   }
-  for (const name of onDisk) if (!files.has(name)) await rm(join(CORE_DIR, name));
-  console.log(`Wrote ${files.size} files to vectors/core/.`);
+  for (const name of onDisk) if (!files.has(name)) await rm(join(dir, name));
+  return problems;
+}
+
+async function main(): Promise<void> {
+  const check = process.argv.includes('--check');
+  const sets: [string, string, Map<string, string>][] = [
+    ['vectors/core', CORE_DIR, await buildCoreFiles()],
+    ['vectors/x402', X402_DIR, await buildX402Files()],
+  ];
+  const problems: string[] = [];
+  for (const [label, dir, files] of sets) {
+    problems.push(...(await sync(dir, files, check)).map((p) => `${label}: ${p}`));
+  }
+  if (problems.length > 0) {
+    console.error(
+      `Vectors are out of date (run pnpm fixtures:generate):\n  ${problems.join('\n  ')}`,
+    );
+    process.exit(1);
+  }
+  const count = sets.reduce((n, [, , files]) => n + files.size, 0);
+  console.log(
+    check ? `${count} vector files match the generator.` : `Wrote ${count} vector files.`,
+  );
 }
 
 await main();

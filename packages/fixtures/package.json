@@ -5,6 +5,9 @@
   "description": "Deterministic test vectors for Signing Firewall for Solana, their generator and runner.",
   "license": "Apache-2.0",
   "type": "module",
+  "exports": {
+    "./x402": "./src/x402/index.ts"
+  },
   "scripts": {
     "generate": "tsx src/generate.ts",
     "check": "tsx src/generate.ts --check",
@@ -20,7 +23,9 @@
     "@solana-program/token": "0.18.0",
     "@solana-program/token-2022": "0.20.1",
     "@solana/kit": "8.6.0",
-    "@solana/sysvars": "8.6.0"
+    "@solana/sysvars": "8.6.0",
+    "@x402/core": "2.31.0",
+    "@x402/svm": "2.31.0"
   },
   "devDependencies": {
     "litesvm": "1.6.2"

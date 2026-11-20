@@ -18,6 +18,7 @@ import {
 
 import type { CoreVector, DecodedExpectation } from './format.js';
 import { CORE_DIR } from './paths.js';
+import { loadX402Vectors, runX402Vector } from './x402/run.js';
 
 export function project(decoded: DecodedTransactionMessage): DecodedExpectation {
   return {
@@ -121,16 +122,20 @@ export async function loadCoreVectors(dir = CORE_DIR): Promise<CoreVector[]> {
 }
 
 async function main(): Promise<void> {
-  const results: VectorResult[] = [];
-  for (const vector of await loadCoreVectors()) results.push(await runCoreVector(vector));
+  const rows: VectorResult[] = [];
+  for (const vector of await loadCoreVectors()) rows.push(await runCoreVector(vector));
+  for (const vector of await loadX402Vectors()) rows.push(await runX402Vector(vector));
   const width = (key: 'id' | 'expected' | 'actual') =>
-    Math.max(key.length, ...results.map((r) => r[key].length));
+    Math.max(key.length, ...rows.map((r) => r[key].length));
   const row = (id: string, expected: string, actual: string, status: string) =>
     `${id.padEnd(width('id'))}  ${expected.padEnd(width('expected'))}  ${actual.padEnd(width('actual'))}  ${status}`;
   console.log(row('id', 'expected', 'actual', 'status'));
-  for (const r of results) console.log(row(r.id, r.expected, r.actual, r.pass ? 'PASS' : 'FAIL'));
-  const failed = results.filter((r) => !r.pass).length;
-  console.log(`\n${results.length} core vectors: ${results.length - failed} pass, ${failed} fail.`);
+  for (const r of rows) console.log(row(r.id, r.expected, r.actual, r.pass ? 'PASS' : 'FAIL'));
+  const failed = rows.filter((r) => !r.pass).length;
+  const core = rows.filter((r) => r.id.startsWith('core-')).length;
+  console.log(
+    `\n${core} core and ${rows.length - core} x402 vectors: ${rows.length - failed} pass, ${failed} fail.`,
+  );
   if (failed > 0) process.exit(1);
 }
 
