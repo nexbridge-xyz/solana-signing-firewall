@@ -9,6 +9,7 @@ import {
   type Instruction,
   appendTransactionMessageInstructions,
   createTransactionMessage,
+  getSignatureFromTransaction,
   lamports,
   pipe,
   setTransactionMessageFeePayerSigner,
@@ -131,17 +132,27 @@ export async function runSetup(ctx: SetupContext): Promise<SetupRecord> {
       (m) => setTransactionMessageLifetimeUsingBlockhash(blockhash, m),
       (m) => appendTransactionMessageInstructions(instructions, m),
     );
-    const { signature, slot } = await sendAndConfirm(
-      rpc,
-      await signTransactionMessageWithSigners(message),
-    );
-    record.steps.push({
+    const signed = await signTransactionMessageWithSigners(message);
+    const signature = getSignatureFromTransaction(signed);
+    // Recorded before the wait: if the confirmation is never seen (repeated HTTP 429, a timeout),
+    // the record still names what was sent, and the next run can look it up.
+    const index =
+      record.steps.push({
+        step,
+        label: 'setup, not a scene',
+        signature,
+        ...explorerFor(network, signature),
+        note: 'sent; the confirmation had not been seen when this was written',
+      }) - 1;
+    save();
+    const { slot } = await sendAndConfirm(rpc, signed);
+    record.steps[index] = {
       step,
       label: 'setup, not a scene',
       signature,
       slot: slot.toString(),
       ...explorerFor(network, signature),
-    });
+    };
     save();
     log(`  ${step}`);
     log(`    ${shownLink(network, signature)}`);
@@ -263,6 +274,11 @@ export async function runSetup(ctx: SetupContext): Promise<SetupRecord> {
   ) {
     const recentSlot = await rpc.getSlot({ commitment: 'finalized' }).send();
     const [table] = await findAddressLookupTablePda({ authority: cast.treasury, recentSlot });
+    // Recorded before it is sent: if the confirmation is never seen, the next run finds the table
+    // on chain at this address instead of creating a second one.
+    record.lookupTable = table;
+    record.lookupTableEntries = entries;
+    save();
     log('5. Lookup table:');
     await send('lookup table with the demo addresses', [
       await getCreateLookupTableInstructionAsync({ authority: payer, payer, recentSlot }),
@@ -273,9 +289,6 @@ export async function runSetup(ctx: SetupContext): Promise<SetupRecord> {
         addresses: entries,
       }),
     ]);
-    record.lookupTable = table;
-    record.lookupTableEntries = entries;
-    save();
   } else {
     log(`5. Lookup table ${record.lookupTable} exists.`);
   }
