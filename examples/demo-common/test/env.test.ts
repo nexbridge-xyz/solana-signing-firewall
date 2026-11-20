@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdtempSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -31,6 +31,14 @@ describe('demo keys', () => {
     expect(readFileSync(paths.env, 'utf8')).toBe(text);
     const keys = await loadKeyPairs(paths.env);
     expect(Object.keys(keys)).toHaveLength(8);
+  });
+
+  it('sets an existing complete .env back to mode 0600', async () => {
+    const paths = fresh();
+    await ensureKeys(paths, { requireGitIgnored: false });
+    chmodSync(paths.env, 0o644);
+    expect(await ensureKeys(paths, { requireGitIgnored: false })).toEqual([]);
+    expect(statSync(paths.env).mode & 0o777).toBe(0o600);
   });
 
   it('refuses to write keys to a file git does not ignore', async () => {

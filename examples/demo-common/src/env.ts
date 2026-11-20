@@ -2,7 +2,7 @@
 // in the key file (the repository's `.env`, which git ignores). Nothing in this
 // module prints or logs a key, and no error message carries one.
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, dirname } from 'node:path';
 
 import {
@@ -94,7 +94,11 @@ export async function ensureKeys(
       : '';
   const values = parseEnv(text);
   const missing = ROLES.filter((role) => (values.get(KEY_VARIABLES[role]) ?? '') === '');
-  if (missing.length === 0 && existsSync(paths.env)) return [];
+  if (missing.length === 0 && existsSync(paths.env)) {
+    // The file may have been created or copied with another mode.
+    chmodSync(paths.env, 0o600);
+    return [];
+  }
 
   const lines = text === '' ? [] : text.replace(/\n$/, '').split('\n');
   for (const role of missing) {
