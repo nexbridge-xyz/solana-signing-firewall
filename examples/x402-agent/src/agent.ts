@@ -1,7 +1,8 @@
-// The agent: @x402/fetch with the guard in front of its Keychain memory signer.
+// agent.ts: @x402/fetch with the guard in front of the agent's Keychain memory signer.
 import { createSolanaRpc } from '@solana/kit';
-import { wrapFetchWithPayment, x402Client } from '@x402/fetch';
+import type { SolanaTransactionSigner } from '@solana/keychain';
 import type { PaymentRequired } from '@x402/core/types';
+import { wrapFetchWithPayment, x402Client } from '@x402/fetch';
 
 import {
   type BudgetLedger,
@@ -16,7 +17,6 @@ import {
   GuardedExactSvmScheme,
   x402RequirementsFilter,
 } from '@nexbridge/solana-signing-firewall-x402';
-import type { createMemorySigner } from '@solana/keychain-memory';
 
 export type AgentEvents = {
   quotes: X402QuoteDecision[];
@@ -25,7 +25,7 @@ export type AgentEvents = {
 };
 
 export function createAgent(options: {
-  readonly signer: Awaited<ReturnType<typeof createMemorySigner>>;
+  readonly signer: SolanaTransactionSigner;
   readonly policy: Policy;
   readonly rpcUrl: string;
   readonly loaderNetwork: PolicyNetwork;
@@ -53,6 +53,7 @@ export function createAgent(options: {
       else events.payments.push(decision);
     },
   });
+  // The SDK's spend controls stay at their default (on). They run before our filter.
   const client = new x402Client();
   client.registerPolicy(x402RequirementsFilter(guard));
   client.register('solana:*', new GuardedExactSvmScheme(guard, { rpcUrl: options.rpcUrl }));
