@@ -1,4 +1,11 @@
 export * from './programs.js';
 export * from './reasons.js';
 export * from './snapshot.js';
+export * from './canonical.js';
+export * from './policy.js';
 export * from './decode/index.js';
+export * from './evaluate/decision.js';
+export { review, type ReviewInput } from './evaluate/review.js';
+export * from './approval/approval.js';
+export * from './load/rpc-loader.js';
+export * from './signer/with-policy.js';
