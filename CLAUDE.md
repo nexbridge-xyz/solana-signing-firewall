@@ -21,6 +21,7 @@ pnpm test
 pnpm fixtures:generate   # rewrite packages/fixtures/vectors/core
 pnpm fixtures:check      # fail if the committed vectors differ from the generator
 pnpm fixtures            # run every vector
+pnpm demo:rehearse       # the whole devnet demo against a local LiteSVM RPC, offline
 ```
 
 ## Rules
@@ -29,7 +30,8 @@ pnpm fixtures            # run every vector
 - Devnet and local only. No request of any kind to mainnet.
 - Keys live only in `.env`, which git ignores. Never print or log them. Fixture keys come from
   public seeds: never fund them and never use them on a network.
-- Never drive a faucet from code.
+- Never drive faucet.solana.com or faucet.circle.com from code or a browser. Demo setup may ask the
+  devnet RPC for one airdrop and never retries (D29).
 - Take program addresses from the program client packages; never type them by hand.
 - Pin exact dependency versions and commit the lockfile.
 - Small commits in Conventional Commits format.

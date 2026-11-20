@@ -191,8 +191,9 @@ the evaluation needs but never received is `ACCOUNT_STATE_MISSING`. `review()` n
 
 ### D15. `review()` is asynchronous
 
-Digests use WebCrypto SHA-256 and the associated-token-account check derives a PDA, both
-asynchronous in Kit, so `review()` returns a promise. It still makes no network calls.
+The associated-token-account check derives a PDA, which is asynchronous in Kit, so `review()`
+returns a promise. It still makes no network calls. (Digests were asynchronous too at first; D23
+made them synchronous.)
 
 ### D16. Policy format
 
@@ -298,3 +299,69 @@ and `BudgetLedger.usage` are synchronous.
 - Per mint, a rolling 24-hour window; the rate limit counts all mints over 60 seconds.
 - The file ledger is for Node.js and one process. Its lock file is never removed automatically:
   after a crash, a person deletes it. Anyone who can edit the file can reset the budget.
+
+### D28. Demo cast
+
+- Fictional names, each searched on the web on 2026-11-20 with no company of that name found:
+  Orrin & Vale (the company: treasury, finance approver, research agent), Thistledown Print
+  (vendor A), Cobbleway Freight (vendor B), Lantern Row (the report shop). A candidate close to an
+  existing logistics company's name was dropped. None comes from the Arbitrum demo.
+- The second shop and the outsider have no name.
+
+### D29. Devnet funds
+
+- Setup asks the devnet RPC for one airdrop of 1 SOL, for the treasury, only when it holds less
+  than 0.2 SOL, and never retries. If it is refused, setup stops and asks a person to use
+  faucet.solana.com. Code never drives faucet.solana.com or faucet.circle.com.
+- The treasury sends the local facilitator's fee payer 0.05 SOL instead of a second airdrop, so
+  a run needs at most one airdrop request.
+- Devnet USDC comes only from a person at faucet.circle.com, for the treasury address. Setup checks
+  that the mint is an SPL Token mint with 6 decimals before it uses it.
+- Budget of one full run: scenes 1 to 5 pay 7.00 USDC to the vendors; setup gives the agent
+  0.10 USDC, of which a run spends 0.04. `pnpm demo:recycle` returns the vendors' and the shop's
+  USDC to the treasury.
+
+### D30. Setup accounts
+
+- The outsider's second USDC account and the durable-nonce account are created with
+  `CreateAccountWithSeed` from the treasury address, so their addresses follow from the keys and
+  no extra key is needed.
+- The lookup table holds the treasury's, both vendors' and the outsider's associated token
+  accounts and the USDC mint. Setup waits until the confirmed slot is past its last extension.
+- Setup is idempotent: it skips what exists, records what it sent in
+  `docs/devnet-run/setup.json` as "setup, not a scene", and tops the agent up to 0.10 USDC.
+
+### D31. Scene details
+
+- ComputeBudget instructions come after the token instruction, so the batch in scene 9 is
+  `ix[0]` and the reason path reads `ix[0].batch[1]` as in the brief.
+- Legacy and v0 scenes set 30,000 compute units at 1,000 micro-lamports. Version-1 scenes set
+  30,000 compute units, 1 MiB of loaded account data and a 10,000-lamport priority fee; scene 11
+  sets 5,000,000 lamports (0.005 SOL).
+- Amounts the brief leaves open: scene 7 moves 1.00 USDC, scene 9's Approve allows 1,000 USDC,
+  scene 11 moves 0.50 USDC.
+- Scene 5's approval is valid for 60 seconds (the policy allows 90). Scene 6 presents it through
+  an approval lookup that returns it for any message.
+- Each scene wraps the treasury's Keychain signer afresh, so it counts only its own inner signer
+  calls. Scene 15 counts the calls of the facilitator's key instead; the agent's guarded signer
+  plays no part in it.
+
+### D32. Run record
+
+- `docs/devnet-run/run.json` holds, per scene, one or more steps (scene 5: first attempt, then
+  after the approval; scene 14: second and third report), each with outcome, reasons, the reviewed
+  message digest, signer calls, and for sent steps the signature and slot. x402 steps also hold
+  every quote option with its digest; an option the SDK removed is marked as never seen by the
+  guard. The policies used are written next to it.
+- Each run starts a fresh budget file (`examples/x402-agent/.state/`, not committed), so every
+  recorded run starts from the same daily budget.
+- `pnpm demo:x402` writes `run-x402.json`, so it never replaces the full run.
+- `pnpm verify-run` checks every step that has a signature and a reviewed digest: seven in a full
+  run (scenes 1 to 5, 12 and 14).
+
+### D33. Rehearsal
+
+`pnpm demo:rehearse` and a test run the whole demo, setup to recycling, against a LiteSVM-backed
+RPC on 127.0.0.1, with throwaway keys in a temporary directory that is deleted afterwards. The local
+RPC ends a slot after each transaction, keeps SlotHashes current, and treats a request without a
+commitment as `finalized`, as a cluster does. Explorer links are printed only for devnet.
