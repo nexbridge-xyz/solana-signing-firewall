@@ -82,14 +82,27 @@ export function parseVerifierConfig(json: unknown): X402VerifierConfig {
   const messageVersions = list(c.messageVersions, 'messageVersions').map((v) =>
     v === 'v0' || v === 'v1' ? v : fail(`messageVersions: ${v} is not "v0" or "v1"`),
   );
-  if (typeof c.assets !== 'object' || c.assets === null) fail('assets must be an object');
+  if (typeof c.assets !== 'object' || c.assets === null || Array.isArray(c.assets)) {
+    fail('assets must be an object');
+  }
   const assets = new Map<Address, { decimals: number }>();
   for (const [mint, rule] of Object.entries(c.assets as Record<string, unknown>)) {
-    const decimals = (rule as { decimals?: unknown }).decimals;
-    if (!isAddress(mint) || typeof decimals !== 'number' || !Number.isInteger(decimals))
+    const decimals =
+      typeof rule === 'object' && rule !== null
+        ? (rule as { decimals?: unknown }).decimals
+        : undefined;
+    if (
+      !isAddress(mint) ||
+      typeof decimals !== 'number' ||
+      !Number.isInteger(decimals) ||
+      decimals < 0 ||
+      decimals > 255
+    ) {
       fail(`assets.${mint} is invalid`);
+    }
     assets.set(mint, { decimals });
   }
+  if (assets.size === 0) fail('assets must name at least one mint');
   const integer = (value: unknown, name: string) =>
     typeof value === 'number' && Number.isInteger(value) && value > 0
       ? value
