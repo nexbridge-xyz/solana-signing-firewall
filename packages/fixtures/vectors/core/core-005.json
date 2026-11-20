@@ -1,8 +1,10 @@
 {
   "id": "core-005",
   "title": "Legacy TransferChecked of 3.00 USDC to vendor B, above the approval threshold, no approval",
-  "category": "needs-approval",
+  "category": "approval",
   "messageVersion": "legacy",
+  "runtimeVerdict": "runtime_accepts",
+  "runtimeCheckedBy": "litesvm",
   "message": "AQADBuZ0qhnrJeJYc6MGePptV/lTyvx+PebuPpOOOwb5B5pLGwWpiWG2xzfCEih57b/o2hchyT0682o9dYYRQsdFTVnpsnQA1MhvZZECB4Lkt9syQuTxGLjytofneOv2FAVdYztELLORIVfxOpM9ATQoLQMrX/7NAaLb8bd5BgjfAC6nAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAAAG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqdDmjWHanOIhfmU++/zCs91p9XxUQURbaM7QZjsINsFFAwQABQIwdQAABAAJA+gDAAAAAAAABQQCAwEACgzAxi0AAAAAAAY=",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {
@@ -44,6 +46,11 @@
   "expect": {
     "outcome": "needs_approval",
     "reasons": [],
+    "approval": {
+      "reasons": [
+        "APPROVAL_REQUIRED"
+      ]
+    },
     "decoded": {
       "version": "legacy",
       "feePayer": "GWbx3rKHaJPX9iPESmiuXuL8UtEZjU2Bu8hYa5kQYLga",

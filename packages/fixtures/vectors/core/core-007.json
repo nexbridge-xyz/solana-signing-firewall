@@ -3,6 +3,9 @@
   "title": "Legacy message truncated inside its last instruction",
   "category": "malformed",
   "messageVersion": "legacy",
+  "runtimeVerdict": "runtime_rejects",
+  "runtimeCheckedBy": "not_checked",
+  "notes": "The message ends inside an instruction. Not checked in LiteSVM: LiteSVM 1.6.2 aborts on bytes it cannot deserialize. The runtime refuses them.",
   "message": "AQADBuZ0qhnrJeJYc6MGePptV/lTyvx+PebuPpOOOwb5B5pLlR6Khz3jEW2OYl08ltUxNHgD1LFQk0CD3jT02CwATDXpsnQA1MhvZZECB4Lkt9syQuTxGLjytofneOv2FAVdYztELLORIVfxOpM9ATQoLQMrX/7NAaLb8bd5BgjfAC6nAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAAAG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqdDmjWHanOIhfmU++/zCs91p9XxUQURbaM7QZjsINsFFAwQABQIwdQAABAAJA+gDAAAAAAAABQQCAwEACgxAQg==",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {

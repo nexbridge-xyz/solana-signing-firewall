@@ -3,6 +3,8 @@
   "title": "v1 TransferChecked of 0.50 USDC to vendor A, fees in transactionConfig",
   "category": "allow",
   "messageVersion": "v1",
+  "runtimeVerdict": "runtime_accepts",
+  "runtimeCheckedBy": "litesvm",
   "message": "gQEAAg8AAADQ5o1h2pziIX5lPvv8wrPdafV8VEFEW2jO0GY7CDbBRQEF5nSqGesl4lhzowZ4+m1X+VPK/H495u4+k447BvkHmkuVHoqHPeMRbY5iXTyW1TE0eAPUsVCTQIPeNPTYLABMNemydADUyG9lkQIHguS32zJC5PEYuPK2h+d46/YUBV1jO0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqRAnAAAAAAAAMHUAAAAAEAAEBAoAAgMBAAwgoQcAAAAAAAY=",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {

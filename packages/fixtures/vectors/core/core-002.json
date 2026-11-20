@@ -3,6 +3,8 @@
   "title": "v0 TransferChecked of 1.50 USDC to vendor B, mint and destination loaded from a lookup table",
   "category": "allow",
   "messageVersion": "v0",
+  "runtimeVerdict": "runtime_accepts",
+  "runtimeCheckedBy": "litesvm",
   "message": "gAEAAgTmdKoZ6yXiWHOjBnj6bVf5U8r8fj3m7j6TjjsG+QeaS+mydADUyG9lkQIHguS32zJC5PEYuPK2h+d46/YUBV1jAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAAAG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqdDmjWHanOIhfmU++/zCs91p9XxUQURbaM7QZjsINsFFAwIABQIwdQAAAgAJA+gDAAAAAAAAAwQBBQQACgxg4xYAAAAAAAYB6+9qaG46MuRg6BL+bHYFsZYrumXN7bMuXQNOKEvqZYYBAQEA",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {

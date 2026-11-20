@@ -3,7 +3,9 @@
   "title": "Batch with an extra account that no entry uses",
   "category": "malformed",
   "messageVersion": "legacy",
-  "notes": "Stricter than the program: P-Token ignores accounts that no batch entry consumes.",
+  "runtimeVerdict": "runtime_accepts",
+  "runtimeCheckedBy": "litesvm",
+  "notes": "Stricter than the runtime: P-Token ignores accounts that no batch entry consumes.",
   "message": "AQAECOZ0qhnrJeJYc6MGePptV/lTyvx+PebuPpOOOwb5B5pLGwWpiWG2xzfCEih57b/o2hchyT0682o9dYYRQsdFTVmVHoqHPeMRbY5iXTyW1TE0eAPUsVCTQIPeNPTYLABMNemydADUyG9lkQIHguS32zJC5PEYuPK2h+d46/YUBV1jO0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcDBkZv5SEXMv/srbpyw5vnvIzlu8X3EmssQ5s6QAAAAAbd9uHXZaGT2cvhRs7reawctIXtX1s3kTqM9YV+/wCpDZI6qfgA1ZjwITTiTRkV2jfToPsWT06YuSys2HKSyM7Q5o1h2pziIX5lPvv8wrPdafV8VEFEW2jO0GY7CDbBRQMFAAUCMHUAAAUACQPoAwAAAAAAAAYJAwQCAAMEAQAHGf8ECgyAGgYAAAAAAAYECgzAJwkAAAAAAAY=",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {

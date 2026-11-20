@@ -1,0 +1,47 @@
+{
+  "schema": "solana-signing-firewall.policy/v0",
+  "policyId": "fixtures-payouts-no-v1",
+  "network": "devnet",
+  "signer": "GWbx3rKHaJPX9iPESmiuXuL8UtEZjU2Bu8hYa5kQYLga",
+  "feePayers": [
+    "GWbx3rKHaJPX9iPESmiuXuL8UtEZjU2Bu8hYa5kQYLga"
+  ],
+  "messageVersions": [
+    "legacy",
+    "v0"
+  ],
+  "durableNonce": "deny",
+  "tokenBatch": "transfers-only",
+  "mints": {
+    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU": {
+      "decimals": 6,
+      "maxPerTransaction": "5000000",
+      "approvalAbove": "2000000"
+    }
+  },
+  "sources": [
+    "GjFpUE5BBZkY2oZAGE9RBM5QrBki6TPEtarD9JgszRV4"
+  ],
+  "recipients": {
+    "owners": [
+      "Fx3piSvmhzTHg6QYD3akFFdULsqjS4R87YRHJpgj8YCM",
+      "B8uxC64froMkgdDFC16BQSJXUtpFrYNxTW5D7ARBPHod"
+    ],
+    "requireAssociatedTokenAccount": true
+  },
+  "fees": {
+    "maxComputeUnitLimit": 200000,
+    "maxPriorityFeeLamports": "50000",
+    "requireExplicitComputeUnitLimit": true
+  },
+  "memo": {
+    "allowed": true,
+    "maxBytes": 64
+  },
+  "approval": {
+    "approvers": [
+      "DtTHLCV4udU6KkH82MK1XamsZuthUjFeKjkmbnyLuZCf"
+    ],
+    "ttlSeconds": 90
+  }
+}

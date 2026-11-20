@@ -3,6 +3,8 @@
   "title": "Batch whose last entry declares 10 data bytes but only 6 remain",
   "category": "malformed",
   "messageVersion": "legacy",
+  "runtimeVerdict": "runtime_rejects",
+  "runtimeCheckedBy": "litesvm",
   "message": "AQADB+Z0qhnrJeJYc6MGePptV/lTyvx+PebuPpOOOwb5B5pLGwWpiWG2xzfCEih57b/o2hchyT0682o9dYYRQsdFTVmVHoqHPeMRbY5iXTyW1TE0eAPUsVCTQIPeNPTYLABMNemydADUyG9lkQIHguS32zJC5PEYuPK2h+d46/YUBV1jO0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcDBkZv5SEXMv/srbpyw5vnvIzlu8X3EmssQ5s6QAAAAAbd9uHXZaGT2cvhRs7reawctIXtX1s3kTqM9YV+/wCp0OaNYdqc4iF+ZT77/MKz3Wn1fFRBRFtoztBmOwg2wUUDBQAFAjB1AAAFAAkD6AMAAAAAAAAGCAMEAgADBAEAFf8ECgyAGgYAAAAAAAYECgzAJwkAAA==",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {

@@ -9,30 +9,39 @@ import { snapshotToJson } from '@nexbridge/solana-signing-firewall';
 
 import { type CoreVector, stableJson } from './format.js';
 import { CORE_DIR } from './paths.js';
-import { CORE_VECTORS, NOW, POLICY_FILE, SLOT } from './vectors.js';
-import { createWorld, payoutsPolicy } from './world.js';
+import { CORE_VECTORS, NOW, SLOT } from './vectors.js';
+import { POLICY_FILES, type PolicyName, createWorld, policyJson } from './world.js';
 
 export async function buildCoreFiles(): Promise<Map<string, string>> {
   const ids = CORE_VECTORS.map((v) => v.id);
   if (new Set(ids).size !== ids.length) throw new Error('duplicate vector id');
 
   const world = await createWorld();
-  const files = new Map<string, string>([[POLICY_FILE, stableJson(payoutsPolicy(world))]]);
+  const files = new Map<string, string>();
+  for (const [name, file] of Object.entries(POLICY_FILES) as [PolicyName, string][]) {
+    files.set(file, stableJson(policyJson(world, name)));
+  }
   for (const definition of CORE_VECTORS) {
-    const built = definition.build(world);
+    const built = await definition.build(world);
     const vector: CoreVector = {
       id: definition.id,
       title: definition.title,
       category: definition.category,
       messageVersion: built.messageVersion,
+      runtimeVerdict: built.runtimeVerdict,
+      runtimeCheckedBy: built.runtimeCheckedBy,
       ...(built.notes === undefined ? {} : { notes: built.notes }),
       message: getBase64Decoder().decode(built.message),
-      policy: POLICY_FILE,
+      policy: POLICY_FILES[built.policy],
       snapshot: snapshotToJson({ slot: SLOT, accounts: new Map(built.accounts) }),
       now: NOW,
+      ...(built.approval === undefined ? {} : { approval: built.approval }),
       expect: {
         outcome: built.outcome,
         reasons: built.reasons,
+        ...(built.approvalReasons === undefined
+          ? {}
+          : { approval: { reasons: built.approvalReasons } }),
         ...(built.decoded === undefined ? {} : { decoded: built.decoded }),
       },
     };

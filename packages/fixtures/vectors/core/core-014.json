@@ -3,6 +3,9 @@
   "title": "v1 transactionConfig mask that sets only one of the two priority-fee bits",
   "category": "malformed",
   "messageVersion": "v1",
+  "runtimeVerdict": "runtime_rejects",
+  "runtimeCheckedBy": "not_checked",
+  "notes": "SIMD-0385: a transaction with only one priority-fee bit set is invalid. Not checked in LiteSVM: LiteSVM 1.6.2 aborts on bytes it cannot deserialize. The runtime refuses them.",
   "message": "gQEAAgUAAADQ5o1h2pziIX5lPvv8wrPdafV8VEFEW2jO0GY7CDbBRQEF5nSqGesl4lhzowZ4+m1X+VPK/H495u4+k447BvkHmkuVHoqHPeMRbY5iXTyW1TE0eAPUsVCTQIPeNPTYLABMNemydADUyG9lkQIHguS32zJC5PEYuPK2h+d46/YUBV1jO0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqTB1AAAAABAABAQKAAIDAQAMIKEHAAAAAAAG",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {

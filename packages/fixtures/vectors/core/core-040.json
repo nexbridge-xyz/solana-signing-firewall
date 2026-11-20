@@ -1,0 +1,52 @@
+{
+  "id": "core-040",
+  "title": "System Program transfer of 0.01 SOL to vendor A",
+  "category": "instructions",
+  "messageVersion": "legacy",
+  "runtimeVerdict": "runtime_accepts",
+  "runtimeCheckedBy": "litesvm",
+  "message": "AQACBOZ0qhnrJeJYc6MGePptV/lTyvx+PebuPpOOOwb5B5pL3h3AyPJ01+U08WvaFTsGef4KHLqECQn21WlLxmVtVUYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAA0OaNYdqc4iF+ZT77/MKz3Wn1fFRBRFtoztBmOwg2wUUDAwAFAjB1AAADAAkD6AMAAAAAAAACAgABDAIAAACAlpgAAAAAAA==",
+  "policy": "policies/fixtures-payouts.json",
+  "snapshot": {
+    "slot": "1000",
+    "accounts": {
+      "2pV1uMoQF1TwFvey6hGdHrf2RAYtQAsSNWMVJdyK1PCc": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqeWm861tC2qMpraHl+yrreAdh6MnnYaBtuPzGCQQtVlIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "1461600",
+        "data": "AQAAAIyBlaAukB+GP2vFUsq4TRMoJrhD/7T8Gxpdv+CiMa3fABCl1OgAAAAGAQEAAACMgZWgLpAfhj9rxVLKuE0TKCa4Q/+0/BsaXb/gojGt3w==",
+        "executable": false
+      },
+      "52iTAWfVh7JiUxw97uZo9tMmTLRH8poJeGDJXbpP9q11": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcNkjqp+ADVmPAhNOJNGRXaN9Og+xZPTpi5LKzYcpLIzgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "B36kwt326hcyQYfrwwoC1RXJihLTVX24hBBVME2Np7ye": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqfeHcDI8nTX5TTxa9oVOwZ5/gocuoQJCfbVaUvGZW1VRgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "GjFpUE5BBZkY2oZAGE9RBM5QrBki6TPEtarD9JgszRV4": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqfmdKoZ6yXiWHOjBnj6bVf5U8r8fj3m7j6TjjsG+QeaS4Dw+gIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      }
+    }
+  },
+  "now": "2026-11-20T00:00:00.000Z",
+  "expect": {
+    "outcome": "deny",
+    "reasons": [
+      "SYSTEM_INSTRUCTION_NOT_ALLOWED"
+    ]
+  }
+}

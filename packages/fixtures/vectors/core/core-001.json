@@ -3,6 +3,8 @@
   "title": "Legacy TransferChecked of 1.00 USDC to vendor A",
   "category": "allow",
   "messageVersion": "legacy",
+  "runtimeVerdict": "runtime_accepts",
+  "runtimeCheckedBy": "litesvm",
   "message": "AQADBuZ0qhnrJeJYc6MGePptV/lTyvx+PebuPpOOOwb5B5pLlR6Khz3jEW2OYl08ltUxNHgD1LFQk0CD3jT02CwATDXpsnQA1MhvZZECB4Lkt9syQuTxGLjytofneOv2FAVdYztELLORIVfxOpM9ATQoLQMrX/7NAaLb8bd5BgjfAC6nAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAAAG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqdDmjWHanOIhfmU++/zCs91p9XxUQURbaM7QZjsINsFFAwQABQIwdQAABAAJA+gDAAAAAAAABQQCAwEACgxAQg8AAAAAAAY=",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {

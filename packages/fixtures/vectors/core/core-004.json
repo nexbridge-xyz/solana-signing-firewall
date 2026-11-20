@@ -3,6 +3,8 @@
   "title": "P-Token batch: 0.40 USDC to vendor A and 0.60 USDC to vendor B in one instruction",
   "category": "allow",
   "messageVersion": "legacy",
+  "runtimeVerdict": "runtime_accepts",
+  "runtimeCheckedBy": "litesvm",
   "message": "AQADB+Z0qhnrJeJYc6MGePptV/lTyvx+PebuPpOOOwb5B5pLGwWpiWG2xzfCEih57b/o2hchyT0682o9dYYRQsdFTVmVHoqHPeMRbY5iXTyW1TE0eAPUsVCTQIPeNPTYLABMNemydADUyG9lkQIHguS32zJC5PEYuPK2h+d46/YUBV1jO0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcDBkZv5SEXMv/srbpyw5vnvIzlu8X3EmssQ5s6QAAAAAbd9uHXZaGT2cvhRs7reawctIXtX1s3kTqM9YV+/wCp0OaNYdqc4iF+ZT77/MKz3Wn1fFRBRFtoztBmOwg2wUUDBQAFAjB1AAAFAAkD6AMAAAAAAAAGCAMEAgADBAEAGf8ECgyAGgYAAAAAAAYECgzAJwkAAAAAAAY=",
   "policy": "policies/fixtures-payouts.json",
   "snapshot": {
