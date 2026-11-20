@@ -1,0 +1,15 @@
+# Gitleaks: the default rules, plus one narrow allowlist (docs/DECISIONS.md D38).
+[extend]
+useDefault = true
+
+# Recorded demo decisions name their lifetime as "token": a recent blockhash or a durable nonce,
+# 32 bytes in base58 (32 to 44 characters). That is public chain data. The allowlist applies only to
+# the generic-api-key rule, only in the run record, and only to that exact field; a 64-byte secret key
+# is 87 or 88 characters in base58 and is still reported.
+[[allowlists]]
+description = "Blockhash or durable nonce in a recorded decision's lifetime"
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "line"
+regexes = ['''"token": "[1-9A-HJ-NP-Za-km-z]{32,44}"''']
+paths = ['''^docs/devnet-run/''']

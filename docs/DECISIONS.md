@@ -410,3 +410,13 @@ processes a signature once. Kit's HTTP transport calls the global `fetch`, so th
 SDK's RPC clients too. Confirmation and lookup-table polling slowed from 0.5 s to 1 s. The run
 record is written after every scene, and a run that stops early keeps `complete: false` and the
 error. None of this changes a scene's checks or expected result.
+
+### D38. Secret scanning and the run record
+
+gitleaks' `generic-api-key` rule reported the 14 decisions in `docs/devnet-run/run.json`: each
+names its lifetime as `"token": "<blockhash>"`, and a blockhash is public chain data. `.gitleaks.toml`
+keeps the default rules and allows that one field, for that one rule, in the run record only; a
+64-byte secret key in base58 (87 or 88 characters) is still reported. Before the record was
+committed, a script checked that none of the eight demo keys appears in it or in the terminal logs.
+CI now runs gitleaks with `--verbose`, so a finding shows its rule and file, with the secret
+redacted.
