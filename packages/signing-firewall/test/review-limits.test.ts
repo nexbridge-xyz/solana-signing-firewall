@@ -1,15 +1,14 @@
 // Security review: limits of what review() and the x402 checks look at. Nothing here moves value
 // against the policy; each test pins a behaviour the documents do not mention, so that a later
-// change to it is deliberate. All of them pass at the reviewed commit.
+// change to it is deliberate. All of them pass at the reviewed commit. (That review() also
+// ignored the packet size is fixed on fix/decoder-strict-encoding, with its own tests.)
 import { describe, expect, it } from 'vitest';
 import {
   type Blockhash,
-  LEGACY_TRANSACTION_SIZE_LIMIT,
   appendTransactionMessageInstructions,
   compileTransaction,
   createTransactionMessage,
   getBase58Decoder,
-  isTransactionWithinSizeLimit,
   pipe,
   setTransactionMessageFeePayer,
   setTransactionMessageLifetimeUsingBlockhash,
@@ -20,14 +19,14 @@ import {
 } from '@solana-program/compute-budget';
 import { getTransferCheckedInstruction } from '@solana-program/token';
 
-import { SPL_MEMO_PROGRAM_ADDRESS, parseRequirements, review, sha256Hex } from '../src/index.js';
+import { parseRequirements, review, sha256Hex } from '../src/index.js';
 import { policyFor, snapshotFor, testWorld } from './world.js';
 
 const w = await testWorld();
 const snapshot = snapshotFor(w);
 const now = new Date('2026-11-20T00:00:00.000Z');
 
-function transferWith(blockhashBytes: Uint8Array, memoBytes = 0) {
+function transferWith(blockhashBytes: Uint8Array) {
   return compileTransaction(
     pipe(
       createTransactionMessage({ version: 'legacy' }),
@@ -53,14 +52,6 @@ function transferWith(blockhashBytes: Uint8Array, memoBytes = 0) {
               amount: 1_000_000n,
               decimals: 6,
             }),
-            ...(memoBytes === 0
-              ? []
-              : [
-                  {
-                    programAddress: SPL_MEMO_PROGRAM_ADDRESS,
-                    data: new TextEncoder().encode('m'.repeat(memoBytes)),
-                  },
-                ]),
           ],
           m,
         ),
@@ -81,20 +72,6 @@ describe('what review() does not look at', () => {
     }
     // Four different messages, each allowed: a blockhash of any cluster would be too.
     expect(digests.size).toBe(4);
-  });
-
-  it('the size: a message that cannot fit in one packet is still allowed', async () => {
-    const policy = policyFor(w, { memo: { allowed: true, maxBytes: 1024 } });
-    const transaction = transferWith(new Uint8Array(32).fill(9), 1024);
-    expect(1 + 64 + transaction.messageBytes.length).toBeGreaterThan(LEGACY_TRANSACTION_SIZE_LIMIT);
-    expect(isTransactionWithinSizeLimit(transaction)).toBe(false);
-    const decision = await review({
-      messageBytes: new Uint8Array(transaction.messageBytes),
-      policy,
-      snapshot,
-      now,
-    });
-    expect(decision.outcome).toBe('allow');
   });
 });
 
