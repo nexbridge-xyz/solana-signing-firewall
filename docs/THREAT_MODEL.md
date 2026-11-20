@@ -45,9 +45,22 @@ belongs to someone else, or hide that an account is frozen. Mitigations:
 - Your own node, or several providers compared, is the real mitigation. A loader is a small
   interface; a multi-provider loader is on the roadmap.
 
-The associated-token-account rule limits the damage: by default a destination must be the
-allowed owner's associated token account, an address derived from the owner and the mint, so the
-RPC cannot redirect a payment to an account of its choosing without the derivation failing.
+The associated-token-account rule limits the damage for a destination the message names itself:
+by default a destination must be the allowed owner's associated token account, an address derived
+from the owner and the mint, so the RPC cannot pass off another account as an allowed owner's
+without the derivation failing.
+
+The rule does not cover an account that a version-0 message loads from a lookup table. Such a
+message holds only the table's address and an index. `review()` learns the address behind the
+index from the snapshot, which is to say from the same RPC, and the rule then checks that
+address. An RPC that reports false table contents makes `review()` check one destination while
+the runtime, which reads the real table, pays another
+(`packages/fixtures/test/review-lookup-table-rpc.test.ts` shows it in LiteSVM, with an honest
+application that compressed its message from what the RPC told it). Each signature given this
+way loses at most the mint's `maxPerTransaction`; v0.1.0 has no limit across transactions outside
+x402. Unless the RPC is a node of your own, leave `v0` out of `messageVersions`, or send
+version-0 messages that use no lookup table. x402 payments already refuse lookup tables. A policy
+that pins the tables it accepts together with their entries would close this; v0.1.0 has none.
 
 ## State that changes between review and execution
 
