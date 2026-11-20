@@ -119,6 +119,10 @@ the bound signer checks that the bytes pay the chosen quote and nothing else. A 
 the agent itself as fee payer is refused (`X402_FEE_PAYER_NOT_ALLOWED`): the agent would pay the
 network fee and its SOL could be drained.
 
+A seller on the policy's list can still choose the Memo the agent signs: `extra.memo`, up to 256
+bytes of any text (see "A faulty or compromised payment SDK" below). Treat a Memo signed by an
+agent key as chosen by the seller, never as a statement by the agent.
+
 ### A faulty or compromised payment SDK
 
 The SDK builds the transaction the agent signs. A bug or a replaced package could build a different
@@ -127,10 +131,21 @@ of the quoted asset and amount into the payee's associated token account, the qu
 accepted layout, the price cap. A payment that approves a delegate instead of transferring
 (`ApproveChecked`) is refused.
 
-What remains: the Memo. The guard requires exactly 32 lower-case hex characters, the form the pinned
-SDK builds, so an altered SDK cannot use the Memo for arbitrary content. It can still choose the 16
-bytes of the nonce, and so carry 16 bytes of its choosing out in each payment. The rate limit and
-the daily budget bound how many payments, and so how many bytes, that is.
+What remains: the Memo, and the quote itself. The guard learns the quote from the SDK, so an
+altered SDK can present any quote the policy allows: any listed payee and asset, any amount up to
+the per-payment cap. The policy, the daily budget and the rate limit bound that; nothing ties the
+quote the guard checks to what the seller really sent.
+
+For the Memo the guard accepts two forms. Without `extra.memo` it requires exactly 32 lower-case
+hex characters, the form the pinned SDK builds; an altered SDK can still choose those 16 bytes.
+With `extra.memo` it requires exactly that text, up to 256 bytes of any valid UTF-8, control
+characters and invisible characters included. The seller chooses that text; and because the quote
+comes through the SDK, an altered SDK can add an `extra.memo` of its own to any quote. Either can
+so make the agent's key sign up to 256 bytes of its choosing in each payment, including text that
+reads like a statement or an approval (`packages/signing-firewall/test/review-x402-memo.test.ts`).
+The policy's `memo.maxBytes` lowers that bound (32 still admits the SDK's own nonce and refuses
+longer seller memos); v0.1.0 has no switch that refuses seller memos or limits their characters.
+The rate limit and the daily budget bound how many payments, and so how many bytes, that is.
 
 Use `@x402/svm` 2.23.0 or later. V12's x402 disclosure (2026-10-22) reported, among 25 findings, a
 facilitator that accepted `ApproveChecked` as a payment and a client with no default spending cap;

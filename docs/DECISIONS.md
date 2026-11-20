@@ -110,7 +110,10 @@ The Memo's content is checked, not only its size. The two sides differ on purpos
 - **Why the guard is strict:** if the SDK is replaced or has a bug, the Memo is where the agent's
   key would sign arbitrary content onto the chain. THREAT_MODEL records what remains: an altered
   SDK can still carry 16 bytes out in each payment's nonce; the rate limit and the daily budget
-  bound the total.
+  bound the total. (Corrected after the security review: that holds only for a quote without
+  `extra.memo`. The guard gets the quote from the SDK, so an altered SDK, like a seller, can set
+  `extra.memo` and have up to 256 bytes of its choosing signed in each payment; the policy's
+  `memo.maxBytes` is the only bound. THREAT_MODEL now says so.)
 - Vectors include at least: no Memo, two Memos, wrong content, wrong format. The transactions the
   SDK builds are `must_accept` vectors. If they ever disagree with the spec, work stops and the
   maintainers are told.
