@@ -496,3 +496,42 @@ the commits and the records from here on use those numbers.
   until a day after the time it names: that fails safe.
 - The existing test that expected the future to be left out (`x402-ledger.test.ts`) was changed.
   New tests: `packages/signing-firewall/test/review-ledger-clock.test.ts`.
+
+### D44. Approval times must be real instants (R-04)
+
+- `issuedAt` and `expiresAt` were checked against a pattern only. `2026-11-20T23:59:60Z` (how a
+  leap second is written), a 13th month or a 25th hour match it; `Date.parse()` answers NaN for
+  them, every comparison with NaN is false, and such an approval never expired and skipped the ttl
+  cap. `2026-02-30` was read as 2 March.
+- A record is now malformed (`APPROVAL_SIGNATURE_INVALID`) unless each time names an instant that
+  prints back as the same string, and the time checks are written so that NaN fails them, which
+  also covers a `now` that is not a time.
+- Such a record needs the approver's signature, so it is not a forgery, but any tool other than
+  `createApproval()` can produce one, and a requester may prepare the record an approver signs.
+- Tests: `packages/signing-firewall/test/review-approval-time.test.ts`.
+
+### D45. Only the encoding the runtime reads (R-05)
+
+- Kit's decoder reads an array whose length is missing at the end of the bytes as empty, and a
+  length written in more bytes than it needs (`0x83 0x00` for 3). So `review()` allowed a version-0
+  message without its lookup-table count, a legacy message without its instruction count, and
+  padded lengths. The runtime cannot deserialize any of them, so nothing could execute, but the key
+  signed bytes outside what the README calls supported.
+- The decoder now requires the bytes to equal Kit's encoding of what it decoded
+  (`MALFORMED_MESSAGE` otherwise).
+- Tests: `packages/signing-firewall/test/review-decoder-canonical.test.ts`.
+
+### D46. One packet (R-06)
+
+- A cluster takes a transaction in one packet: at most 1,232 bytes for legacy and version 0, and
+  4,096 for version 1, signatures included (Kit's `LEGACY_TRANSACTION_SIZE_LIMIT` and
+  `V1_TRANSACTION_SIZE_LIMIT`). The x402 exact scheme for Solana states the same limits as a MUST
+  (section 1.5). `review()` allowed larger messages, and `verifyX402Payment()` called larger
+  payments valid.
+- The decoder applies the limit with the other sanitization rules, counting one signature per
+  required signer, so `review()`, the guard and the verifier refuse such a message as
+  `MALFORMED_MESSAGE`.
+- LiteSVM does not enforce the packet limit, so the tests rest on Kit's constants and the spec.
+  What an RPC node answers for an oversized transaction was not tested.
+- Tests: `packages/signing-firewall/test/review-decoder-size.test.ts`,
+  `packages/signing-firewall-x402/test/review-verifier-size.test.ts`.

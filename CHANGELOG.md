@@ -36,6 +36,12 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
   redirecting a payment through a lookup table, and says what to do instead.
 - R-03: a reservation dated after now (a clock that moved back) still counts towards the daily
   budget and the rate limit.
+- R-04: an approval whose `issuedAt` or `expiresAt` is not a real instant (a 61st second, a 13th
+  month, 30 February) is refused as malformed; before, it never expired.
+- R-05: `review()` refuses message encodings the runtime cannot read: a length missing at the end,
+  or a length not written in its shortest form.
+- R-06: `review()`, the guard and `verifyX402Payment()` refuse a transaction too large for one
+  packet (1,232 bytes, or 4,096 for version 1, signatures included).
 
 ### Fixed before the first release
 
