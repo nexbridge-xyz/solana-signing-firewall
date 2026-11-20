@@ -1,0 +1,50 @@
+{
+  "id": "core-012",
+  "title": "Valid legacy message followed by one extra byte",
+  "category": "malformed",
+  "messageVersion": "legacy",
+  "message": "AQADBuZ0qhnrJeJYc6MGePptV/lTyvx+PebuPpOOOwb5B5pLlR6Khz3jEW2OYl08ltUxNHgD1LFQk0CD3jT02CwATDXpsnQA1MhvZZECB4Lkt9syQuTxGLjytofneOv2FAVdYztELLORIVfxOpM9ATQoLQMrX/7NAaLb8bd5BgjfAC6nAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAAAG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqdDmjWHanOIhfmU++/zCs91p9XxUQURbaM7QZjsINsFFAwQABQIwdQAABAAJA+gDAAAAAAAABQQCAwEACgxAQg8AAAAAAAYA",
+  "policy": "policies/fixtures-payouts.json",
+  "snapshot": {
+    "slot": "1000",
+    "accounts": {
+      "2pV1uMoQF1TwFvey6hGdHrf2RAYtQAsSNWMVJdyK1PCc": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqeWm861tC2qMpraHl+yrreAdh6MnnYaBtuPzGCQQtVlIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "1461600",
+        "data": "AQAAAIyBlaAukB+GP2vFUsq4TRMoJrhD/7T8Gxpdv+CiMa3fABCl1OgAAAAGAQEAAACMgZWgLpAfhj9rxVLKuE0TKCa4Q/+0/BsaXb/gojGt3w==",
+        "executable": false
+      },
+      "52iTAWfVh7JiUxw97uZo9tMmTLRH8poJeGDJXbpP9q11": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcNkjqp+ADVmPAhNOJNGRXaN9Og+xZPTpi5LKzYcpLIzgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "B36kwt326hcyQYfrwwoC1RXJihLTVX24hBBVME2Np7ye": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqfeHcDI8nTX5TTxa9oVOwZ5/gocuoQJCfbVaUvGZW1VRgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "GjFpUE5BBZkY2oZAGE9RBM5QrBki6TPEtarD9JgszRV4": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqfmdKoZ6yXiWHOjBnj6bVf5U8r8fj3m7j6TjjsG+QeaS4Dw+gIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      }
+    }
+  },
+  "now": "2026-11-20T00:00:00.000Z",
+  "expect": {
+    "outcome": "deny",
+    "reasons": [
+      "MALFORMED_MESSAGE"
+    ]
+  }
+}
