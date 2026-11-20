@@ -208,6 +208,7 @@ export async function verifyX402Payment(input: {
   reasons.push(
     ...(await bindingReasons(m, shape, r, {
       maxComputeUnitPriceMicroLamports: config.maxComputeUnitPriceMicroLamports,
+      feePayers: config.feePayers,
     })),
     ...verifierMemoReasons(shape, r),
   );

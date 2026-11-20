@@ -71,6 +71,7 @@ export async function reviewX402Payment(input: {
     reasons.push(
       ...(await bindingReasons(decoded.value, shape, requirements, {
         maxComputeUnitPriceMicroLamports: policy.x402.maxComputeUnitPriceMicroLamports,
+        feePayers: policy.feePayers,
       })),
       ...guardMemoReasons(shape, requirements),
     );

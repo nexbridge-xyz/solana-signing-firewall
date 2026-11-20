@@ -56,6 +56,10 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
   MUST that binds every facilitator (or, for a client-only vector, every client), with the
   sentence in `notes`; otherwise `stricter_than_spec`, with the decision. Thirteen labels changed.
   core-068 records `runtime_rejects` for its own snapshot, and LiteSVM checks it.
+- The guard and `verifyX402Payment()` require a payment's source to be the associated token
+  account of its authority for the asset (`X402_SOURCE_NOT_PAYER_ATA`), and keep every fee payer
+  the policy or the verifier config lists out of every instruction, not only the message's own
+  (I-11). `bindingReasons()` takes those fee payers.
 
 ### Fixed before the first release
 

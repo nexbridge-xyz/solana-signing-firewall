@@ -162,10 +162,14 @@ payment does not land, so a failure cannot be used to spend twice.
 ### A buyer who attacks the facilitator
 
 A facilitator signs as fee payer and submits the transaction. A buyer can send a payment that moves
-nothing (an `ApproveChecked`, a transfer to the wrong account, a smaller amount), one that makes the
-fee payer pay for something else or move its own funds, one with a forged buyer signature, or one
-that uses a durable nonce. `withX402Verifier()` runs `verifyX402Payment()` before the facilitator
-scheme is called at all, so a refused payment is neither signed nor simulated (scene 15).
+nothing (an `ApproveChecked`, a transfer to the wrong account, a smaller amount, a transfer out of
+the payee's own account into itself, made as its delegate), one that makes the fee payer pay for
+something else or move its own funds (as the transfer authority, as the delegate of a fee payer's
+token account, or through another fee payer of the same facilitator), one with a forged buyer
+signature, or one that uses a durable nonce. The verifier requires the source to be the buyer's
+associated token account for the asset and keeps every fee payer of its config out of every
+instruction (D54). `withX402Verifier()` runs `verifyX402Payment()` before the facilitator scheme
+is called at all, so a refused payment is neither signed nor simulated (scene 15).
 
 ### What v0.1.0 does not do for x402
 

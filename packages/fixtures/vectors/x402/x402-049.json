@@ -1,0 +1,94 @@
+{
+  "id": "x402-049",
+  "title": "The transfer authority is another fee payer of the verifier config",
+  "specRules": [
+    "§2.1.3"
+  ],
+  "specVerdict": "must_reject",
+  "notes": "§2.1.3: \"The sponsor MUST reject any transaction in which the sponsor's funds could be debited beyond the network fee — including SOL transfers from sponsor-controlled accounts, token transfers for which the sponsor is the authority, or account closures/reallocations that move the sponsor's lamports.\" The transfer authority is another fee payer of the same verifier config, so the sponsor is the authority. The vector carries that fee payer's signature, so only fee payer isolation refuses it (docs/DECISIONS.md D54).",
+  "requirements": {
+    "scheme": "exact",
+    "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+    "amount": "20000",
+    "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+    "payTo": "FhuoY6V6gJxq947TerX7FgYBJDmGN1axyQqAuKJ7rTJe",
+    "maxTimeoutSeconds": 60,
+    "extra": {
+      "feePayer": "4yrV9nwRcAjacE8EUSCPenXzBT16uLmAxgBijbcXtYV2",
+      "transactionVersions": [
+        0,
+        1
+      ]
+    }
+  },
+  "transaction": "AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACjDxW+L5zw78fsSZWMenh3COp+OI2BAxXkei2GLEFAuClkcGS+w4OQlieOCuhOhI7i/v8uAzCzz4IqbRr8g18LgAIBBAg7I4oUizpiZstbeny1YMrlSQGn8S2xOdIbGmr5BrwO7d1taweF7ZxH2LbJKeH84JBfI+vA/jbEwQQUqTK+xh45bT108zg7xu44BQkmKhcxWfFHQ7wsNdrJqH8IyRI9PrSqjkp5B+YXiMdhgGLX5GZc4HJOmzC+9dMdzKZEPdEg4ztELLORIVfxOpM9ATQoLQMrX/7NAaLb8bd5BgjfAC6nAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAAAFSlNamSkhBk0k6HFg2jh8fDW13bySu4HkH6hAQQVEjQbd9uHXZaGT2cvhRs7reawctIXtX1s3kTqM9YV+/wCp0OaNYdqc4iF+ZT77/MKz3Wn1fFRBRFtoztBmOwg2wUUEBQAFAiBOAAAFAAkDAQAAAAAAAAAHBAMEAgEKDCBOAAAAAAAABgYAIGFmYjIwNTg4OGQwZTRkYTAzYjhkMjI5ZWI1YWQ5Y2Q2AA==",
+  "verifierConfig": "verifier/fixtures-facilitator.json",
+  "snapshot": {
+    "slot": "1000",
+    "accounts": {
+      "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "1461600",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABCl1OgAAAAGAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "executable": false
+      },
+      "52iTAWfVh7JiUxw97uZo9tMmTLRH8poJeGDJXbpP9q11": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcNkjqp+ADVmPAhNOJNGRXaN9Og+xZPTpi5LKzYcpLIzgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "5iZjhJRGHfmipMfTsJ16RoP2yEgT7eKP2ti9Nw87Xkwu": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqc7I4oUizpiZstbeny1YMrlSQGn8S2xOdIbGmr5BrwO7aCGAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "8MRnvbQthxX8Z9zWMmHyKceqAJkCZhEWZ3mCrwf5SneP": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqfafo2aTmADUFiqLAaW6KiKoL6vI3sw+NpUlHXXVE/AzwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "AKw2GK367wxVoAPKTUHzQExad3coeiwgft1rzy14Z3Hg": {
+        "owner": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+        "lamports": "2039280",
+        "data": "8pUtNSzVO/WpqqKVYxbDUmtdiOxrKUzPIUCQNoN0VAwTuhJaLMtM8XPwHuqQ4iJB/w5gLANfb6jHjDwBdWVTUaCGAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "CUn9nP382MCPMbtBQxxB6pu8zs26VBfWnwttHdqDx3FQ": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqfdbWsHhe2cR9i2ySnh/OCQXyPrwP42xMEEFKkyvsYeOaCGAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "DXoSPJXt3MQ7eZGauQjXqXavQcMKJ7wtSVNRAN5z9KbP": {
+        "owner": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+        "lamports": "2039280",
+        "data": "8pUtNSzVO/WpqqKVYxbDUmtdiOxrKUzPIUCQNoN0VAzafo2aTmADUFiqLAaW6KiKoL6vI3sw+NpUlHXXVE/AzwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "FiTyfG36AhUG68J46q5U8SxUysGrHeki67BY5ppQry96": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "lamports": "2039280",
+        "data": "O0Qss5EhV/E6kz0BNCgtAytf/s0Botvxt3kGCN8ALqcTuhJaLMtM8XPwHuqQ4iJB/w5gLANfb6jHjDwBdWVTUaCGAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "executable": false
+      },
+      "HKwbXuKKfkzoZLiVQoWspBJnEz5wsgh61ZcXnRs92wcX": {
+        "owner": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+        "lamports": "1461600",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABCl1OgAAAAGAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "executable": false
+      }
+    }
+  },
+  "now": "2026-11-20T00:00:00.000Z",
+  "expect": {
+    "facilitator": {
+      "outcome": "invalid",
+      "reasons": [
+        "X402_FEE_PAYER_IN_INSTRUCTION"
+      ]
+    }
+  }
+}

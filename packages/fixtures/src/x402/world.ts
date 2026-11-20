@@ -23,6 +23,7 @@ export async function createX402World() {
   const agent = await fixtureSigner('x402-agent');
   const shop = await fixtureSigner('x402-shop');
   const feePayer = await fixtureSigner('x402-facilitator-fee-payer');
+  const secondFeePayer = await fixtureSigner('x402-facilitator-second-fee-payer');
   const outsider = await fixtureSigner('outsider');
   const token2022Mint = (await fixtureSigner('x402-token-2022-mint')).address;
   const otherMint = (await fixtureSigner('x402-other-spl-mint')).address;
@@ -43,7 +44,8 @@ export async function createX402World() {
     shop,
     feePayer,
     outsider,
-    signers: new Map([agent, shop, feePayer, outsider].map((s) => [s.address, s])),
+    secondFeePayer,
+    signers: new Map([agent, shop, feePayer, secondFeePayer, outsider].map((s) => [s.address, s])),
     mint: DEVNET_USDC_MINT,
     token2022Mint,
     otherMint,
@@ -51,6 +53,9 @@ export async function createX402World() {
     shopAta: await ata(shop.address),
     outsiderAta: await ata(outsider.address),
     feePayerAta: await ata(feePayer.address),
+    secondFeePayerAta: await ata(secondFeePayer.address),
+    /** A token account of the agent at an address that is not its associated token account. */
+    agentOtherAccount: (await fixtureSigner('x402-agent-other-token-account')).address,
     agentAta2022: await ata2022(agent.address),
     shopAta2022: await ata2022(shop.address),
     lookupTable: (await fixtureSigner('x402-lookup-table')).address,
@@ -69,6 +74,34 @@ export function mint(owner: Address): SnapshotAccount {
     }),
   );
   return { owner, lamports: rentExempt(data.length), data, executable: false };
+}
+
+/** An SPL Token account that names a delegate. */
+export function delegatedTokenAccount(
+  mintAddress: Address,
+  owner: Address,
+  amount: bigint,
+  delegate: Address,
+  delegatedAmount: bigint,
+): SnapshotAccount {
+  const data = new Uint8Array(
+    getTokenEncoder().encode({
+      mint: mintAddress,
+      owner,
+      amount,
+      delegate,
+      state: AccountState.Initialized,
+      isNative: null,
+      delegatedAmount,
+      closeAuthority: null,
+    }),
+  );
+  return {
+    owner: TOKEN_PROGRAM_ADDRESS,
+    lamports: rentExempt(data.length),
+    data,
+    executable: false,
+  };
 }
 
 function token2022Account(mintAddress: Address, owner: Address, amount: bigint): SnapshotAccount {
@@ -144,7 +177,7 @@ export function facilitatorConfig(w: X402World) {
   return {
     schema: 'solana-signing-firewall.x402-verifier/v0',
     networks: [DEVNET],
-    feePayers: [w.feePayer.address],
+    feePayers: [w.feePayer.address, w.secondFeePayer.address],
     messageVersions: ['v0', 'v1'],
     assets: { [w.mint]: { decimals: 6 } },
     maxComputeUnitLimit: 200000,

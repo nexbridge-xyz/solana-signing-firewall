@@ -84,14 +84,20 @@ export function paymentShape(message: DecodedTransactionMessage): PaymentShape {
 }
 
 /**
- * Checks shared by the guard and the verifier: the token instruction, amount,
- * mint, destination, fee payer, compute-unit price, account creation and lookup tables.
+ * Checks shared by the guard and the verifier: the token instruction, amount, mint, source,
+ * destination, fee payer, compute-unit price, account creation and lookup tables.
+ *
+ * `feePayers` are the fee payers the caller knows of (the policy's, or the verifier config's).
+ * None of them, and not the message's own fee payer, may appear in any instruction.
  */
 export async function bindingReasons(
   message: DecodedTransactionMessage,
   shape: PaymentShape,
   requirements: X402Requirements,
-  limits: { readonly maxComputeUnitPriceMicroLamports: bigint },
+  limits: {
+    readonly maxComputeUnitPriceMicroLamports: bigint;
+    readonly feePayers: readonly Address[];
+  },
 ): Promise<Reason[]> {
   const reasons: Reason[] = [];
   if (shape.layoutProblems.length > 0) {
@@ -127,15 +133,30 @@ export async function bindingReasons(
         account: t.destination,
       });
     }
+    // The payer pays from its own associated token account for the asset, as the destination
+    // is the payee's. This keeps out a source the payer may only be a delegate of: the payee's
+    // own account (the payee would receive nothing) or a fee payer's (the spec, sections 2.1.1
+    // and 2.1.3).
+    const [payerAta] = await findAssociatedTokenPda({
+      owner: t.authority,
+      mint: requirements.asset,
+      tokenProgram: TOKEN_PROGRAM_ADDRESS,
+    });
+    if (t.source !== payerAta) {
+      reasons.push({ code: 'X402_SOURCE_NOT_PAYER_ATA', path: t.path, account: t.source });
+    }
   }
 
   if (requirements.feePayer !== undefined && message.feePayer !== requirements.feePayer) {
     reasons.push({ code: 'X402_FEE_PAYER_MISMATCH', account: message.feePayer });
   }
-  const feePayer: Address = message.feePayer;
+  const isolated = new Set<Address>([message.feePayer, ...limits.feePayers]);
   for (const ix of message.instructions) {
-    if (ix.programAddress === feePayer || ix.accounts.some((a) => a.address === feePayer)) {
-      reasons.push({ code: 'X402_FEE_PAYER_IN_INSTRUCTION', path: ix.path, account: feePayer });
+    const found = [ix.programAddress, ...ix.accounts.map((a) => a.address)].filter((a) =>
+      isolated.has(a),
+    );
+    for (const account of new Set(found)) {
+      reasons.push({ code: 'X402_FEE_PAYER_IN_INSTRUCTION', path: ix.path, account });
     }
   }
 

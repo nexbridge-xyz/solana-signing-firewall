@@ -646,9 +646,35 @@ Each has a `stricter_than_spec` vector:
   (x402-015);
 - no lookup table (x402-018);
 - a buyer signature that verifies (x402-019);
-- an existing source account (x402-020);
+- an existing source account (x402-020), which is the associated token account of the transfer
+  authority for the asset (x402-046, x402-048, D54);
 - an amount in the quote that is a decimal string of base units, and not zero (x402-022, x402-039);
 - without `extra.memo`, a Memo that holds a hex nonce of at least 32 characters; with it, exactly
   one Memo that equals it (x402-023, x402-025, x402-026; D7);
 - a version-1 config that sets `computeUnitLimit` and `loadedAccountsDataSizeLimit` (x402-044,
   D26).
+
+### D54. The source of an x402 payment, and every fee payer
+
+- What the spec requires, §2.1.3: "The sponsor MUST reject any transaction in which the sponsor's
+  funds could be debited beyond the network fee — including SOL transfers from sponsor-controlled
+  accounts, token transfers for which the sponsor is the authority, or account closures/
+  reallocations that move the sponsor's lamports." §2.1.1: "The `feePayer` MUST NOT be used as an
+  authority, source, or delegate for any transfer." The spec says nothing else of the source
+  account.
+- What we check, in the guard and in the verifier (`bindingReasons()`):
+  - The transfer's source is the associated token account of its authority for the quoted asset
+    (`X402_SOURCE_NOT_PAYER_ATA`), as the destination must be that of `payTo`. This keeps out
+    every source the buyer could only be a delegate of: the payee's own account, from which a
+    transfer into itself pays the payee nothing (x402-046, `stricter_than_spec`), and a fee
+    payer's account, which moves the sponsor's tokens (x402-047, `must_reject`). A token account
+    of the buyer at another address is refused too (x402-048, `stricter_than_spec`).
+  - No fee payer appears in an instruction's accounts or as its program: the message's own, and
+    every other fee payer the verifier config or, in the guard, the policy lists
+    (`X402_FEE_PAYER_IN_INSTRUCTION`; x402-049, `must_reject`). Before, only the message's fee
+    payer was checked (I-11).
+- In the guard, `review()` already required the source to be in the policy's `sources` and, by the
+  snapshot, a token account of the policy signer for the mint. The guard now also requires it to be
+  the signer's associated token account.
+- `bindingReasons()`, which is exported, takes the fee payers to keep out of instructions.
+- Tests: `packages/signing-firewall/test/x402-source-account.test.ts`.

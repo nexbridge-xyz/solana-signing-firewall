@@ -18,7 +18,7 @@ import {
 } from '@nexbridge/solana-signing-firewall';
 
 import { FIXED_BLOCKHASH } from '../messages.js';
-import { lookupTableAccount, nonceAccount } from '../world.js';
+import { lookupTableAccount, nonceAccount, tokenAccount } from '../world.js';
 import {
   SDK_V1_CONFIG,
   budgetInstructions,
@@ -31,7 +31,15 @@ import {
   signerMeta,
   transferInstruction,
 } from './payments.js';
-import { DEVNET, MAINNET, type X402World, mint, quote, x402Accounts } from './world.js';
+import {
+  DEVNET,
+  MAINNET,
+  type X402World,
+  delegatedTokenAccount,
+  mint,
+  quote,
+  x402Accounts,
+} from './world.js';
 
 type Codes = ReasonCode[];
 
@@ -404,6 +412,104 @@ export const X402_VECTORS: X402Definition[] = [
           client: deny('FEE_PAYER_NOT_ALLOWED', 'UNEXPECTED_SIGNER', 'X402_FEE_PAYER_MISMATCH'),
           facilitator: invalid('X402_FEE_PAYER_MISMATCH'),
         },
+      ),
+  },
+
+  // ---- the source account, and every fee payer of the verifier config (docs/DECISIONS.md D54)
+  {
+    id: 'x402-046',
+    title: "Pays from the payee's own token account into itself, the buyer being its delegate",
+    build: (w) =>
+      payment(
+        w,
+        {
+          version: 0,
+          instructions: sdkLayout(w, 0, 'x402-046', transferInstruction(w, { source: w.shopAta })),
+        },
+        { facilitator: invalid('X402_SOURCE_NOT_PAYER_ATA') },
+        quote(w),
+        [
+          ...x402Accounts(w).filter(([a]) => a !== w.shopAta),
+          [
+            w.shopAta,
+            delegatedTokenAccount(w.mint, w.shop.address, 20_000n, w.agent.address, 20_000n),
+          ],
+        ],
+      ),
+  },
+  {
+    id: 'x402-047',
+    title: "Pays from the fee payer's token account, the buyer being its delegate",
+    build: (w) =>
+      payment(
+        w,
+        {
+          version: 0,
+          instructions: sdkLayout(
+            w,
+            0,
+            'x402-047',
+            transferInstruction(w, { source: w.feePayerAta }),
+          ),
+        },
+        { facilitator: invalid('X402_SOURCE_NOT_PAYER_ATA') },
+        quote(w),
+        [
+          ...x402Accounts(w).filter(([a]) => a !== w.feePayerAta),
+          [
+            w.feePayerAta,
+            delegatedTokenAccount(w.mint, w.feePayer.address, 100_000n, w.agent.address, 20_000n),
+          ],
+        ],
+      ),
+  },
+  {
+    id: 'x402-048',
+    title: 'Pays from a token account of the buyer that is not its associated token account',
+    build: (w) =>
+      payment(
+        w,
+        {
+          version: 0,
+          instructions: sdkLayout(
+            w,
+            0,
+            'x402-048',
+            transferInstruction(w, { source: w.agentOtherAccount }),
+          ),
+        },
+        {
+          client: deny('SOURCE_NOT_ALLOWED', 'X402_SOURCE_NOT_PAYER_ATA'),
+          facilitator: invalid('X402_SOURCE_NOT_PAYER_ATA'),
+        },
+        quote(w),
+        [
+          ...x402Accounts(w),
+          [w.agentOtherAccount, tokenAccount(w.mint, w.agent.address, 100_000n)],
+        ],
+      ),
+  },
+  {
+    id: 'x402-049',
+    title: 'The transfer authority is another fee payer of the verifier config',
+    build: (w) =>
+      payment(
+        w,
+        {
+          version: 0,
+          instructions: sdkLayout(
+            w,
+            0,
+            'x402-049',
+            transferInstruction(w, { source: w.secondFeePayerAta, authority: w.secondFeePayer }),
+          ),
+        },
+        { facilitator: invalid('X402_FEE_PAYER_IN_INSTRUCTION') },
+        quote(w),
+        [
+          ...x402Accounts(w),
+          [w.secondFeePayerAta, tokenAccount(w.mint, w.secondFeePayer.address, 100_000n)],
+        ],
       ),
   },
 

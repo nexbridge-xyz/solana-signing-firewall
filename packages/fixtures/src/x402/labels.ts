@@ -274,4 +274,28 @@ export const X402_SPEC_LABELS: Readonly<Record<string, SpecLabel>> = {
     notes:
       '§1.4: "MUST reject if zero matching transfers are found." A matching transfer has the "correct mint" (§1.4).',
   },
+  'x402-046': {
+    specRules: ['§1.1', '§1.4'],
+    specVerdict: 'stricter_than_spec',
+    notes:
+      'A matching transfer goes to "the Associated Token Account derived from `payTo` and `asset`" (§1.1), and no sentence of the spec is about the source account. Here the source is that same account, so the payee receives nothing. The guard and the verifier require the source to be the associated token account of the transfer authority for the asset (docs/DECISIONS.md D54).',
+  },
+  'x402-047': {
+    specRules: ['§2.1.1', '§2.1.3'],
+    specVerdict: 'must_reject',
+    notes:
+      '§2.1.3: "The sponsor MUST reject any transaction in which the sponsor\'s funds could be debited beyond the network fee — including SOL transfers from sponsor-controlled accounts, token transfers for which the sponsor is the authority, or account closures/reallocations that move the sponsor\'s lamports." The transfer moves the fee payer\'s tokens, the buyer being the delegate of its account. §2.1.1: "The `feePayer` MUST NOT be used as an authority, source, or delegate for any transfer."',
+  },
+  'x402-048': {
+    specRules: ['§1.1'],
+    specVerdict: 'stricter_than_spec',
+    notes:
+      'No sentence of the spec requires the source to be an associated token account; this one is a token account of the buyer at another address. The guard and the verifier require the associated token account of the transfer authority for the asset (docs/DECISIONS.md D54).',
+  },
+  'x402-049': {
+    specRules: ['§2.1.3'],
+    specVerdict: 'must_reject',
+    notes:
+      "§2.1.3: \"The sponsor MUST reject any transaction in which the sponsor's funds could be debited beyond the network fee — including SOL transfers from sponsor-controlled accounts, token transfers for which the sponsor is the authority, or account closures/reallocations that move the sponsor's lamports.\" The transfer authority is another fee payer of the same verifier config, so the sponsor is the authority. The vector carries that fee payer's signature, so only fee payer isolation refuses it (docs/DECISIONS.md D54).",
+  },
 };
