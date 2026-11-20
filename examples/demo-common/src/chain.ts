@@ -39,6 +39,39 @@ const sleep = (ms: number) =>
     setTimeout(resolve, ms);
   });
 
+/**
+ * Public RPC endpoints answer HTTP 429 under load. For requests to `rpcUrl` only, this waits and
+ * sends the same request again, at most 5 times (after 1, 2, 4, 8 and 16 seconds). It never
+ * repeats `requestAirdrop`. Repeating `sendTransaction` is safe: the bytes and so the signature
+ * are the same, and the cluster processes a signature once. Kit's HTTP transport calls the global
+ * `fetch`, so this covers every RPC client in the process, the x402 SDK's included. Returns a
+ * function that restores the original `fetch`. The URL is never printed.
+ */
+export function retryRpcOnRateLimit(rpcUrl: string, log?: (line: string) => void): () => void {
+  const original = globalThis.fetch;
+  const target = new URL(rpcUrl);
+  globalThis.fetch = async (input, init) => {
+    const url = new URL(input instanceof Request ? input.url : input.toString());
+    const body = typeof init?.body === 'string' ? init.body : '';
+    const repeatable =
+      url.origin === target.origin &&
+      url.pathname === target.pathname &&
+      !/"method"\s*:\s*"requestAirdrop"/.test(body);
+    for (let attempt = 0; ; attempt += 1) {
+      const response = await original(input, init);
+      if (!repeatable || response.status !== 429 || attempt >= 5) return response;
+      const seconds = 2 ** attempt;
+      log?.(
+        `  (the RPC answered 429 Too Many Requests; sending the same request again in ${String(seconds)} s)`,
+      );
+      await sleep(seconds * 1000);
+    }
+  };
+  return () => {
+    globalThis.fetch = original;
+  };
+}
+
 export const jsonWithBigInts = (value: unknown) =>
   JSON.stringify(value, (_key, v: unknown) => (typeof v === 'bigint' ? v.toString() : v));
 
@@ -62,7 +95,7 @@ export async function waitForConfirmation(
       }
       return status.slot;
     }
-    await sleep(500);
+    await sleep(1000);
   }
   throw new Error(
     `transaction ${signature} was not confirmed within ${String(timeoutMs / 1000)} s`,

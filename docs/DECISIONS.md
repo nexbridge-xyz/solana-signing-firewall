@@ -399,3 +399,14 @@ Setup, `pnpm demo`, `pnpm verify-run`, `pnpm demo:record`, then `pnpm demo:recyc
 our own test USDC back to the treasury), then the commit of `docs/devnet-run/`. If a scene's result
 on devnet differs from the local rehearsal, it is recorded as it happened, the run stops, and the
 maintainers decide; the code is not changed to match a result.
+
+### D37. Public RPC rate limits
+
+The public devnet endpoint answered HTTP 429 during the first setup (after the facilitator's SOL
+transfer had landed). From then on the demo commands repeat a request that got 429, to the RPC
+URL only, at most 5 times after 1, 2, 4, 8 and 16 seconds; `requestAirdrop` is never repeated.
+Repeating `sendTransaction` is safe: the same bytes carry the same signature, and the cluster
+processes a signature once. Kit's HTTP transport calls the global `fetch`, so this covers the x402
+SDK's RPC clients too. Confirmation and lookup-table polling slowed from 0.5 s to 1 s. The run
+record is written after every scene, and a run that stops early keeps `complete: false` and the
+error. None of this changes a scene's checks or expected result.

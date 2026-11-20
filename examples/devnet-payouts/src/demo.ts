@@ -143,45 +143,11 @@ export async function runDemo(ctx: DemoContext): Promise<RunRecord> {
   );
 
   const scenes: SceneRecord[] = [];
-  if (ctx.which === 'all') {
-    scenes.push(
-      ...(await runPayoutScenes({
-        rpc,
-        network,
-        cast,
-        policy: payouts,
-        lookupTable: setup.lookupTable as Address,
-        lookupTableEntries: setup.lookupTableEntries as Address[],
-        log,
-        ...(ctx.now === undefined ? {} : { now: ctx.now }),
-      })),
-    );
-  }
-  const runId = startedAt.replace(/[:.]/g, '-');
-  mkdirSync(paths.ledgerDir, { recursive: true });
-  scenes.push(
-    ...(await runX402Scenes({
-      rpc,
-      rpcUrl: ctx.rpcUrl,
-      cast,
-      network,
-      agentPolicy: agent,
-      verifierConfig: verifier,
-      // A fresh budget file per run, so every recorded run starts from the same budget.
-      ledgerPath: join(paths.ledgerDir, `budget-${runId}.json`),
-      log,
-      ...(ctx.ports === undefined ? {} : { ports: ctx.ports }),
-      ...(ctx.now === undefined ? {} : { now: ctx.now }),
-    })),
-  );
-
-  const after = await balances(rpc, tracked);
-  const record: RunRecord = {
+  const base = {
     schema: RUN_SCHEMA,
     network,
     code,
     startedAt,
-    finishedAt: (ctx.now?.() ?? new Date()).toISOString(),
     signer: SIGNER_LABEL,
     cast: castTable(cast),
     policies: [
@@ -197,15 +163,82 @@ export async function runDemo(ctx: DemoContext): Promise<RunRecord> {
         file: 'policies/demo-facilitator-verifier.json',
       },
     ],
-    scenes,
-    balances: tracked.map((t, i) => ({
+  } as const;
+  const recordPath = runRecordPath(paths, ctx.which);
+  const balanceRows = (after: bigint[] | undefined) =>
+    tracked.map((t, i) => ({
       account: t.account,
       asset: t.asset,
       before: (before[i] ?? 0n).toString(),
-      after: (after[i] ?? 0n).toString(),
-    })),
+      after: after === undefined ? '' : (after[i] ?? 0n).toString(),
+    }));
+  // Written after every scene, so a run that stops early still records what it did.
+  const partial = (error?: string) => {
+    const record: RunRecord = {
+      ...base,
+      policies: [...base.policies],
+      complete: false,
+      ...(error === undefined ? {} : { error }),
+      scenes: [...scenes],
+      balances: balanceRows(undefined),
+    };
+    writeJson(recordPath, record);
   };
-  writeJson(runRecordPath(paths, ctx.which), record);
+  const onScene = (scene: SceneRecord) => {
+    scenes.push(scene);
+    partial();
+  };
+
+  try {
+    if (ctx.which === 'all') {
+      await runPayoutScenes({
+        rpc,
+        network,
+        cast,
+        policy: payouts,
+        lookupTable: setup.lookupTable as Address,
+        lookupTableEntries: setup.lookupTableEntries as Address[],
+        log,
+        onScene,
+        ...(ctx.now === undefined ? {} : { now: ctx.now }),
+      });
+    }
+    const runId = startedAt.replace(/[:.]/g, '-');
+    mkdirSync(paths.ledgerDir, { recursive: true });
+    await runX402Scenes({
+      rpc,
+      rpcUrl: ctx.rpcUrl,
+      cast,
+      network,
+      agentPolicy: agent,
+      verifierConfig: verifier,
+      // A fresh budget file per run, so every recorded run starts from the same budget.
+      ledgerPath: join(paths.ledgerDir, `budget-${runId}.json`),
+      log,
+      onScene,
+      ...(ctx.ports === undefined ? {} : { ports: ctx.ports }),
+      ...(ctx.now === undefined ? {} : { now: ctx.now }),
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    partial(message);
+    log('');
+    log(
+      `The run stopped after ${String(scenes.length)} scenes: ${message}. What happened so far is in ${recordPath}.`,
+    );
+    throw error;
+  }
+
+  const after = await balances(rpc, tracked);
+  const record: RunRecord = {
+    ...base,
+    policies: [...base.policies],
+    finishedAt: (ctx.now?.() ?? new Date()).toISOString(),
+    complete: true,
+    scenes,
+    balances: balanceRows(after),
+  };
+  writeJson(recordPath, record);
 
   const sent = scenes.flatMap((s) => s.steps).filter((s) => s.sent).length;
   log('');

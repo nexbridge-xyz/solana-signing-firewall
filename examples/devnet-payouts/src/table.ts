@@ -33,6 +33,9 @@ export function renderTable(run: RunRecord): string {
       `| ${String(scene.scene)} | ${cell(scene.title)} | ${cell(results)} | ${reasons.length === 0 ? '-' : reasons.join(', ')} | ${calls} | ${scene.vectors.join(', ')} | ${links.length === 0 ? 'not sent' : links.join(', ')} |`,
     );
   }
+  if (!run.complete) {
+    lines.push('', `The run stopped early: ${run.error ?? 'no reason recorded'}.`);
+  }
   lines.push(
     '',
     "Scene 15 counts the calls of the facilitator's key; every other scene counts the calls of the wrapped Keychain signer.",

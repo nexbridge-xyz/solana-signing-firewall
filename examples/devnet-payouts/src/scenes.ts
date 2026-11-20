@@ -72,6 +72,8 @@ export type PayoutsContext = {
   readonly lookupTableEntries: readonly Address[];
   readonly log: Log;
   readonly now?: () => Date;
+  /** Called after each scene, so the run record can be written as the run goes. */
+  readonly onScene?: (scene: SceneRecord) => void;
 };
 
 export const toReasonRecord = (reason: {
@@ -223,6 +225,7 @@ export async function runPayoutScenes(ctx: PayoutsContext): Promise<SceneRecord[
   const done = (scene: SceneRecord) => {
     scenes.push(scene);
     printScene(log, scene);
+    ctx.onScene?.(scene);
   };
   const tables = { [ctx.lookupTable]: [...ctx.lookupTableEntries] };
 

@@ -360,7 +360,7 @@ async function waitUntilUsable(rpc: DemoRpc, table: Address, log: Log): Promise<
       log(`   The lookup table is usable (${String(account.data.addresses.length)} entries).`);
       return;
     }
-    await sleep(500);
+    await sleep(1000);
   }
   throw new SetupStopped(`The lookup table ${table} did not become usable within 60 s.`);
 }

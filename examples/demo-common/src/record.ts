@@ -57,7 +57,11 @@ export type RunRecord = {
   /** The code that produced the run. `dirty` ignores docs/devnet-run, which the run itself writes. */
   code: { commit: string; dirty: boolean };
   startedAt: string;
-  finishedAt: string;
+  /** Absent while the run is in progress, or when it stopped early. */
+  finishedAt?: string;
+  /** False while the run is in progress, or when it stopped early; then `error` says why. */
+  complete: boolean;
+  error?: string;
   signer: string;
   cast: { role: string; name: string; address: string }[];
   policies: { policyId: string; digest: string; file: string }[];

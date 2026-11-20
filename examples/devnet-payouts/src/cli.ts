@@ -13,6 +13,7 @@ import {
   ensureKeys,
   loadKeyPairs,
   readRunRecord,
+  retryRpcOnRateLimit,
   rpcUrlFrom,
 } from '@nexbridge/example-demo-common';
 
@@ -31,6 +32,8 @@ const paths = devnetPaths();
 async function devnet() {
   const cast = await createCast(await loadKeyPairs(paths.env), DEVNET_USDC_MINT);
   const rpcUrl = rpcUrlFrom(paths.env);
+  // The public devnet endpoint rate-limits (HTTP 429); see retryRpcOnRateLimit.
+  retryRpcOnRateLimit(rpcUrl, log);
   return { cast, rpcUrl, rpc: createDemoRpc(rpcUrl) };
 }
 

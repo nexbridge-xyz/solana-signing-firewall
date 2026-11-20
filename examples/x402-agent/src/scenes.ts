@@ -61,6 +61,8 @@ export type X402Context = {
   };
   readonly log: Log;
   readonly now?: () => Date;
+  /** Called after each scene, so the run record can be written as the run goes. */
+  readonly onScene?: (scene: SceneRecord) => void;
 };
 
 const reasonRecords = (reasons: readonly Reason[]): ReasonRecord[] =>
@@ -226,6 +228,7 @@ export async function runX402Scenes(ctx: X402Context): Promise<SceneRecord[]> {
     const done = (scene: SceneRecord) => {
       scenes.push(scene);
       printScene(log, scene);
+      ctx.onScene?.(scene);
     };
 
     done({
