@@ -1,0 +1,184 @@
+# Terminal output of the devnet run, 2026-11-20 (pnpm demo, then pnpm verify-run).
+# Lines starting with '(the RPC answered 429' are the rate-limit retries of D37.
+
+Signing Firewall for Solana: scenes 1 to 15 on devnet
+Signer: Solana Keychain (memory backend), wrapped by Signing Firewall
+Code: commit 81dc0300018c
+Policy demo-payouts c1b0b306b00c..., policy demo-agent ba8f62e5113d...
+
+Scene 1. Legacy transfer: 1.00 USDC to Thistledown Print (vendor A)
+  expected      allow, signed, sent
+  outcome       allow
+  reasons       none
+  message       sha256 f2364288b9c1...
+  signer calls  1
+  sent          https://explorer.solana.com/tx/3ahhXcUaTqBU3QK6gDAbnDp9TYcaHSQBUbjYe2dN4dhLksBD7VbS5gxBCoU4JCPmJQffFrgswiHEY6AMsnys9jeX?cluster=devnet
+
+Scene 2. v0 transfer through the lookup table: 1.50 USDC to Cobbleway Freight (vendor B)
+  expected      allow, sent; the lookup-table entries appear in the decision
+  outcome       allow
+  reasons       none
+  message       sha256 18919d7baacd...
+  signer calls  1
+  sent          https://explorer.solana.com/tx/L8sd4nHz9KvASakaQmiUrxU5ojyHntCnfFAJ8PgPVKDuwFacQ5MpCJGXPvbmMa9oyYAxi5qpRKwpjFgMAyeGFF1?cluster=devnet
+  note          3 accounts loaded from lookup table FVtxNdpVUmnXoVKg3CuWTL1vvVfCCbcCasjNmPzaSvk1
+
+Scene 3. v1 transfer: 0.50 USDC to Thistledown Print (vendor A), priority fee within the cap
+  expected      allow, sent; fees read from transactionConfig
+  outcome       allow
+  reasons       none
+  message       sha256 278bb23cb0a1...
+  signer calls  1
+  sent          https://explorer.solana.com/tx/3NKBhAJBEHjsecX82nCrZpap1FUB4gsMXFQxAAGqsvc1CT4m7VdZGtJyG591zYLYFSes6kWKvE6KARUvTGqLRGnJ?cluster=devnet
+  note          priority fee 10000 lamports and compute-unit limit 30000, read from transactionConfig
+
+Scene 4. P-Token batch: 0.40 USDC to Thistledown Print (vendor A) and 0.60 USDC to Cobbleway Freight (vendor B) in one instruction
+  expected      allow, sent
+  outcome       allow
+  reasons       none
+  message       sha256 b6a57f421178...
+  signer calls  1
+  sent          https://explorer.solana.com/tx/5pYsBboAsCby6FtUydxLhvM4mA4xEAuiYVadRG8hP5Vf7AmLLZesxMxTkmDhUWKyjAcu7bYoN5KcVqocnRgwejcf?cluster=devnet
+
+Scene 5. 3.00 USDC to Cobbleway Freight (vendor B)
+  expected      needs approval; the approver signs; the wrapper signs; sent
+  first attempt
+    outcome       needs_approval
+    reasons       APPROVAL_REQUIRED
+    message       sha256 28d7864a17bb...
+    signer calls  0
+    sent          no
+  after the approver signs
+    outcome       allow with approval
+    reasons       none
+    message       sha256 28d7864a17bb...
+    signer calls  1
+    sent          https://explorer.solana.com/tx/3BwLLDQS4LK65BWn6r27Rszp3NcfUNDmUtRYMHbG3qut8N3Yw7PUi1TsWSLPqkdQ3gnHZyrzmfSh5az9aB85kbuY?cluster=devnet
+    note          approved by 2JqCdsSuzJddHxjdMThsNQCufqgDWX7wQfSgnByYtXHY, valid for 60 seconds, for message 28d7864a17bb...
+
+Scene 6. A new message for 4.50 USDC to Cobbleway Freight (vendor B), presented with scene 5's approval
+  expected      APPROVAL_MESSAGE_MISMATCH; signer calls 0
+  outcome       needs_approval
+  reasons       APPROVAL_MESSAGE_MISMATCH
+  message       sha256 5cacc7664a2d...
+  signer calls  0
+  sent          no
+
+Scene 7. 1.00 USDC into the outsider's USDC account that is not an associated token account
+  expected      RECIPIENT_NOT_ALLOWED, DESTINATION_NOT_ASSOCIATED_TOKEN_ACCOUNT; signer calls 0
+  outcome       deny
+  reasons       RECIPIENT_NOT_ALLOWED at ix[0], DESTINATION_NOT_ASSOCIATED_TOKEN_ACCOUNT at ix[0]
+  message       sha256 49b393c87122...
+  signer calls  0
+  sent          no
+
+Scene 8. Three transfers of 2.00 USDC in one transaction (cap 5.00)
+  expected      PER_TRANSACTION_LIMIT_EXCEEDED; signer calls 0
+  outcome       deny
+  reasons       PER_TRANSACTION_LIMIT_EXCEEDED
+  message       sha256 43d2e7076754...
+  signer calls  0
+  sent          no
+
+Scene 9. A batch with 0.50 USDC to Thistledown Print (vendor A) plus an Approve that makes the outsider a delegate for 1,000 USDC
+  expected      TOKEN_INSTRUCTION_NOT_ALLOWED at ix[0].batch[1]; signer calls 0
+  outcome       deny
+  reasons       TOKEN_INSTRUCTION_NOT_ALLOWED at ix[0].batch[1]
+  message       sha256 31e2f0e8ea86...
+  signer calls  0
+  sent          no
+
+Scene 10. 1.00 USDC to Thistledown Print (vendor A) using the durable nonce
+  expected      DURABLE_NONCE_NOT_ALLOWED; signer calls 0
+  outcome       deny
+  reasons       DURABLE_NONCE_NOT_ALLOWED at ix[0]
+  message       sha256 88898a0e3b61...
+  signer calls  0
+  sent          no
+
+Scene 11. v1 transfer with a 0.005 SOL priority fee in transactionConfig, plus a no-op SetComputeUnitPrice of 1 micro-lamport
+  expected      FEE_CAP_EXCEEDED, COMPUTE_BUDGET_INSTRUCTION_IN_V1; signer calls 0
+  outcome       deny
+  reasons       COMPUTE_BUDGET_INSTRUCTION_IN_V1 at ix[1], FEE_CAP_EXCEEDED
+  message       sha256 5abf8f51de75...
+  signer calls  0
+  sent          no
+
+Local x402 services on 127.0.0.1: facilitator http://127.0.0.1:4020, shop http://127.0.0.1:4021, second shop http://127.0.0.1:4022
+  (the RPC answered 429 Too Many Requests; sending the same request again in 1 s)
+  (the RPC answered 429 Too Many Requests; sending the same request again in 1 s)
+  (the RPC answered 429 Too Many Requests; sending the same request again in 1 s)
+
+Scene 12. x402: the agent buys one report from Lantern Row (report shop) for 0.02 USDC
+  expected      allow; the local facilitator verifies and settles; the agent receives the report
+  outcome       allow
+  reasons       none
+  option 1      0.02 of 4zMMC9sr... to CZcNunzw..., fee payer 8wpoP1xJ...
+                digest ddef7af74e4e...  allow
+  message       sha256 21a0d2e551e6...
+  signer calls  1
+  sent          https://explorer.solana.com/tx/4qVJW9UkZvnk7Zd7C2hjL3JijJjyG9LsF8UFv5VK8sPYdnwi6odaPcQk4AHpbyihDs7LHprfcWV9S2eBtdxrEeDf?cluster=devnet
+  note          Paid 0.02 USDC; the local facilitator verified and settled it. Reserved in the last 24 h before this purchase: 0.00 USDC. Report: "Lantern Row market note (fictional): orders for small hardware rose this week. Nothing here is real data."
+
+Scene 13. x402: the second shop offers four options, each with one fault
+  expected      options 1 to 3 denied by the guard (X402_PAYTO_NOT_ALLOWED, X402_FEE_PAYER_NOT_ALLOWED, X402_ASSET_NOT_ALLOWED); option 4 removed by the SDK per-payment cap; no payment header sent; signer calls 0
+  outcome       deny
+  reasons       X402_PAYTO_NOT_ALLOWED, X402_FEE_PAYER_NOT_ALLOWED, X402_ASSET_NOT_ALLOWED
+  option 1      0.01 of 4zMMC9sr... to hPJVmdDZ..., fee payer 8wpoP1xJ...
+                digest 2b9818c28ce0...  deny: X402_PAYTO_NOT_ALLOWED
+  option 2      0.01 of 4zMMC9sr... to CZcNunzw..., fee payer HG71pA1M...
+                digest 470b92ec9ed4...  deny: X402_FEE_PAYER_NOT_ALLOWED
+  option 3      0.01 of CXk2AMBf... to CZcNunzw..., fee payer 8wpoP1xJ...
+                digest cd6c36991b79...  deny: X402_ASSET_NOT_ALLOWED
+  option 4      2.00 of 4zMMC9sr... to hPJVmdDZ..., fee payer 8wpoP1xJ...
+                digest 20fd8c461fd3...  removed by the SDK spend controls; the guard never saw it
+  signer calls  0
+  sent          no
+  note          No payment header was sent. Reserved in the last 24 h before this purchase: 0.02 USDC. Client: Failed to create payment payload: All payment requirements were filtered out by policies for x402 version: 2
+  (the RPC answered 429 Too Many Requests; sending the same request again in 1 s)
+  (the RPC answered 429 Too Many Requests; sending the same request again in 1 s)
+  (the RPC answered 429 Too Many Requests; sending the same request again in 2 s)
+  (the RPC answered 429 Too Many Requests; sending the same request again in 4 s)
+
+Scene 14. x402: a second report (0.04 USDC spent today), then a third against a 0.05 USDC daily budget
+  expected      second purchase allowed and settled; third X402_BUDGET_EXCEEDED; signer calls 0 for the third
+  second report
+    outcome       allow
+    reasons       none
+    option 1      0.02 of 4zMMC9sr... to CZcNunzw..., fee payer 8wpoP1xJ...
+                  digest ddef7af74e4e...  allow
+    message       sha256 130e831b133a...
+    signer calls  1
+    sent          https://explorer.solana.com/tx/5bcNRTvdzDcGuCWuUK9FV5k26tGPAoTdhxwiRuoLqNy3urisqF1xAebCx2aw3PHJxniTHJ7vGcJ8W2V1Q3Fkx7Pq?cluster=devnet
+    note          Paid 0.02 USDC; the local facilitator verified and settled it. Reserved in the last 24 h before this purchase: 0.02 USDC. Report: "Lantern Row market note (fictional): orders for small hardware rose this week. Nothing here is real data."
+  third report
+    outcome       deny
+    reasons       X402_BUDGET_EXCEEDED
+    option 1      0.02 of 4zMMC9sr... to CZcNunzw..., fee payer 8wpoP1xJ...
+                  digest ddef7af74e4e...  deny: X402_BUDGET_EXCEEDED
+    signer calls  0
+    sent          no
+    note          No payment header was sent. Reserved in the last 24 h before this purchase: 0.04 USDC. Client: Failed to create payment payload: All payment requirements were filtered out by policies for x402 version: 2
+
+Scene 15. x402, facilitator side: a payment signed with the agent key outside the guard, whose token instruction is ApproveChecked, posted to the facilitator's /verify
+  expected      the verifier returns X402_NOT_TRANSFER_CHECKED; the facilitator does not sign or settle; nothing is sent
+  outcome       invalid
+  reasons       X402_NOT_TRANSFER_CHECKED at ix[2]
+  message       sha256 354d7a034f21...
+  signer calls  0
+  sent          no
+  note          invalidReason solana-signing-firewall:X402_NOT_TRANSFER_CHECKED. Signer calls here count the facilitator's key. /settle was never called.
+
+15 scenes, 7 transactions sent. Blocked scenes were never sent.
+Treasury: 7.00 USDC paid out, 35030 lamports in fees.
+Next: pnpm verify-run
+
+$ pnpm verify-run
+  scene 1, review, sign and send: match (slot 524375232, sha256 f2364288b9c1...)
+  scene 2, review, sign and send: match (slot 524375241, sha256 18919d7baacd...)
+  scene 3, review, sign and send: match (slot 524375247, sha256 278bb23cb0a1...)
+  scene 4, review, sign and send: match (slot 524375252, sha256 b6a57f421178...)
+  scene 5, after the approver signs: match (slot 524375259, sha256 28d7864a17bb...)
+  scene 12, buy one report: match (slot 524375290, sha256 21a0d2e551e6...)
+  scene 14, second report: match (slot 524375303, sha256 130e831b133a...)
+7 of 7 on-chain messages match the reviewed bytes
