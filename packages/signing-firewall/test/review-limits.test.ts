@@ -76,7 +76,7 @@ describe('what review() does not look at', () => {
 });
 
 describe('x402 quote fields', () => {
-  it('an empty extra.memo is read as a seller memo of zero bytes, not as "no memo"', () => {
+  it('an empty extra.memo is read as "no memo", as the pinned client reads it', () => {
     const quote = {
       scheme: 'exact',
       network: 'solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1',
@@ -87,9 +87,10 @@ describe('x402 quote fields', () => {
       extra: { feePayer: w.outsider.address, memo: '' },
     };
     const parsed = parseRequirements(quote);
-    // The pinned @x402/svm client and facilitator treat '' as absent and use a hex nonce, so
-    // the guard and the verifier refuse what they build for such a quote (X402_MEMO_MISMATCH).
-    expect(parsed.ok && parsed.value.memo).toBe('');
+    // The pinned @x402/svm client treats '' as absent and sends a hex nonce; the guard and the
+    // verifier read the quote the same way, so they accept what it builds.
+    expect(parsed.ok).toBe(true);
+    expect(parsed.ok && parsed.value.memo).toBeUndefined();
   });
 
   it('extra.recentBlockhash and other unknown extra fields are kept and ignored', () => {

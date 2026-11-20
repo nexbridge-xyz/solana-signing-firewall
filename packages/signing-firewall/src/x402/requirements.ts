@@ -101,7 +101,8 @@ export function parseRequirements(json: unknown): Parsed {
       payTo,
       maxTimeoutSeconds: timeout,
       feePayer: e.feePayer,
-      memo: e.memo,
+      // An empty extra.memo names no seller memo: the client then sends a nonce.
+      memo: e.memo === '' ? undefined : e.memo,
       splitCount: Array.isArray(e.splits) ? e.splits.length : 0,
       ataCreationRequired: e.ataCreationRequired === true,
       transactionVersions,
