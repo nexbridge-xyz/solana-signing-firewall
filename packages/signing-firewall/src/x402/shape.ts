@@ -57,6 +57,9 @@ export function paymentShape(message: DecodedTransactionMessage): PaymentShape {
   if (memoBeforeTransfer) problems.push('a Memo comes before the token instruction');
   if (message.version === 'v1') {
     const fees = message.fees;
+    if (fees.source === 'transactionConfig' && fees.computeUnitLimit === undefined) {
+      problems.push('transactionConfig must set computeUnitLimit');
+    }
     if (fees.source === 'transactionConfig' && fees.loadedAccountsDataSizeLimit === undefined) {
       problems.push('transactionConfig must set loadedAccountsDataSizeLimit');
     }
