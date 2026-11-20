@@ -30,6 +30,9 @@ export type X402PaymentDecision = ReviewDecision & {
 
 type X402Policy = Policy & { readonly x402: X402PolicyBlock };
 
+/** How `extra.transactionVersions` numbers the versions. A legacy message has no number. */
+const QUOTE_VERSION = { v0: 0, v1: 1 } as const;
+
 /**
  * Reviews the bytes the bound signer is asked to sign for one accepted option:
  * everything review() checks, the quote checks again, then the binding checks.
@@ -51,6 +54,19 @@ export async function reviewX402Payment(input: {
   const requirements = quote.requirements;
   const decoded = decodeTransactionMessage(messageBytes, snapshot);
   if (requirements !== undefined && decoded.ok) {
+    // The payment's version must be one the quote advertises ([0] when it advertises none), and
+    // never legacy: the scheme says so of what a client sends. The quote checks only compare the
+    // quote with the policy, and review() only compares the message with the policy.
+    const version = decoded.value.version;
+    if (
+      version === 'legacy' ||
+      !requirements.transactionVersions.includes(QUOTE_VERSION[version])
+    ) {
+      reasons.push({
+        code: 'VERSION_NOT_ALLOWED',
+        detail: `the message is ${version}; the quote advertises ${JSON.stringify(requirements.transactionVersions)}`,
+      });
+    }
     const shape = paymentShape(decoded.value);
     reasons.push(
       ...(await bindingReasons(decoded.value, shape, requirements, {
