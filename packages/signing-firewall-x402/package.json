@@ -1,0 +1,22 @@
+{
+  "name": "@nexbridge/solana-signing-firewall-x402",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Adapters between Signing Firewall for Solana and the @x402 packages.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "probe:sdk-layout": "tsx scripts/probe-sdk-layout.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nexbridge/solana-signing-firewall": "workspace:*",
+    "@solana-program/token": "0.18.0",
+    "@solana/kit": "8.6.0",
+    "@x402/core": "2.31.0",
+    "@x402/svm": "2.31.0"
+  }
+}

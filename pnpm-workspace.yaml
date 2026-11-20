@@ -1,0 +1,12 @@
+packages:
+  - packages/*
+  - examples/*
+
+# Supply-chain guard: do not resolve any package version published less than
+# 7 days ago (value in minutes). Applies to direct and transitive dependencies.
+minimumReleaseAge: 10080
+
+# Do not run dependency install scripts. esbuild works from its platform
+# binary package without its postinstall step.
+allowBuilds:
+  esbuild: false

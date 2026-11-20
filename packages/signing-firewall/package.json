@@ -1,0 +1,24 @@
+{
+  "name": "@nexbridge/solana-signing-firewall",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Signing Firewall for Solana: checks a Solana transaction before your signer signs it.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@solana-program/address-lookup-table": "0.16.0",
+    "@solana-program/compute-budget": "0.20.0",
+    "@solana-program/memo": "0.16.0",
+    "@solana-program/system": "0.16.0",
+    "@solana-program/token": "0.18.0",
+    "@solana-program/token-2022": "0.20.1",
+    "@solana/kit": "8.6.0",
+    "@solana/sysvars": "8.6.0"
+  }
+}
