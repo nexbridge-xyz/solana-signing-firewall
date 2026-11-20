@@ -143,6 +143,11 @@ and the bound signer. Each option has exactly one fault:
    run shows that; otherwise the guard rejects it with `X402_ASSET_NOT_ALLOWED`.
 4. 2.00 USDC to the outsider: shown as removed by the SDK's per-payment cap.
 
+Option 3 uses the SDK's own devnet PYUSD default asset (read with `getDefaultAsset`, not typed
+by hand). It is a default asset, so the SDK's spend controls let 0.01 through and the guard refuses
+it. An offline test confirms the whole picture: options 1 to 3 reach the guard and fail with one
+reason each; option 4 is removed by the SDK before the guard sees it.
+
 Printing each raw `PAYMENT-REQUIRED` option with our decision is explanation only; the blocking
 happens on the real path. Narration: the SDK's default cap only limits the amount of each payment;
 the payee, the asset, the fee payer and the cumulative budget are the guard's job.
@@ -255,3 +260,41 @@ On every push: install with the frozen lockfile, typecheck, lint, format check, 
 (including the LiteSVM tests), the vector diff, secret scanning and a dependency audit. Mutation
 testing runs locally or by manual trigger only. Standard GitHub-hosted runners only, never larger
 runners.
+
+### D23. Synchronous digests
+
+`x402Client.registerPolicy()` takes a synchronous function, so the quote checks that run inside it
+cannot await. SHA-256 comes from `@noble/hashes` (synchronous); `policyDigest`, `requirementsDigest`
+and `BudgetLedger.usage` are synchronous.
+
+### D24. x402 vector format
+
+- `specRules` cite sections of the official `scheme_exact_svm.md` (commit `4f64aba41`).
+- `specVerdict`: `must_accept` meets every MUST of the spec; `must_reject` breaks one;
+  `stricter_than_spec` meets the spec, but our guard or verifier refuses it.
+- `expect.client` is the guard: quote checks alone for vectors without a transaction, otherwise the
+  full review of the bytes. `expect.facilitator` is the verifier. Attacks aimed at a facilitator
+  (the fee payer as payer, a forged buyer signature) carry only the facilitator part.
+
+### D25. Guard details
+
+- The bound signer runs `review()`, the quote checks again, the binding checks and the Memo rule,
+  then reserves the budget in one atomic step, and only then calls the key.
+- x402 payments never wait for a person: an amount above `approvalAbove` is `APPROVAL_REQUIRED`.
+- The daily budget is checked only for an allowed asset; an asset without a budget is refused.
+- A quote whose `transactionVersions` share none with the policy's versions is
+  `VERSION_NOT_ALLOWED`.
+
+### D26. Verifier details
+
+- The buyer is the transfer authority. Signers other than the buyer and the fee payer are checked
+  only when a transfer was found; a payment without one is already refused.
+- A Token-2022 payment is `TOKEN_PROGRAM_NOT_ALLOWED` in v0.1.0.
+- A version-1 payment without `loadedAccountsDataSizeLimit` is `X402_LAYOUT_INVALID`; without a
+  compute-unit limit, `COMPUTE_UNIT_LIMIT_MISSING`.
+
+### D27. Budget ledger
+
+- Per mint, a rolling 24-hour window; the rate limit counts all mints over 60 seconds.
+- The file ledger is for Node.js and one process. Its lock file is never removed automatically:
+  after a crash, a person deletes it. Anyone who can edit the file can reset the budget.
