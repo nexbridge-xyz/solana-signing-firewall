@@ -98,7 +98,13 @@ describe('private keys in the repository and its history', () => {
   it('holds no key pair and no seed of a known address, in any commit', () => {
     const git = (args: string[]) =>
       execFileSync('git', args, { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 1 << 30 });
+    // A shallow clone holds only part of the history, and the scan would pass on what is left.
+    // CI checks out every commit (fetch-depth: 0); anywhere else, fetch the history first.
+    expect(git(['rev-parse', '--is-shallow-repository']).trim()).toBe('false');
     const history = git(['log', '--all', '-p', '--format=commit %H']);
+    const commits = Number(git(['rev-list', '--all', '--count']).trim());
+    expect(commits).toBeGreaterThan(1);
+    expect(history.match(/^commit [0-9a-f]{40}$/gm)?.length).toBe(commits);
     const found = scan(history);
     // The history does hold 64-byte and 32-byte values (signatures, addresses, blockhashes):
     // the scan had something to look at.
