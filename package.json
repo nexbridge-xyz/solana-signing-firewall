@@ -18,7 +18,15 @@
     "test:coverage": "vitest run --coverage",
     "fixtures": "pnpm --filter @nexbridge/solana-signing-firewall-fixtures run fixtures",
     "fixtures:generate": "pnpm --filter @nexbridge/solana-signing-firewall-fixtures run generate",
-    "fixtures:check": "pnpm --filter @nexbridge/solana-signing-firewall-fixtures run check"
+    "fixtures:check": "pnpm --filter @nexbridge/solana-signing-firewall-fixtures run check",
+    "demo:keys": "pnpm --filter @nexbridge/example-devnet-payouts run keys",
+    "demo:setup": "pnpm --filter @nexbridge/example-devnet-payouts run setup",
+    "demo": "pnpm --filter @nexbridge/example-devnet-payouts run demo",
+    "demo:x402": "pnpm --filter @nexbridge/example-devnet-payouts run demo:x402",
+    "demo:record": "pnpm --filter @nexbridge/example-devnet-payouts run record",
+    "verify-run": "pnpm --filter @nexbridge/example-devnet-payouts run verify-run",
+    "demo:recycle": "pnpm --filter @nexbridge/example-devnet-payouts run recycle",
+    "demo:rehearse": "pnpm --filter @nexbridge/example-devnet-payouts run rehearse"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -197,8 +197,63 @@ importers:
         specifier: 5.1.0
         version: 5.1.0(@types/node@22.20.5)(@vitest/coverage-v8@5.1.0)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(tsx@4.23.15))
 
+  examples/demo-common:
+    dependencies:
+      '@nexbridge/solana-signing-firewall':
+        specifier: workspace:*
+        version: link:../../packages/signing-firewall
+      '@solana-program/token':
+        specifier: 0.18.0
+        version: 0.18.0(@solana/kit@8.6.0(typescript@6.0.3))
+      '@solana/keychain':
+        specifier: 2.0.0
+        version: 2.0.0(@solana/addresses@8.6.0(typescript@6.0.3))(@solana/codecs-core@8.6.0(typescript@6.0.3))(@solana/codecs-strings@8.6.0(typescript@6.0.3))(@solana/keys@8.6.0(typescript@6.0.3))(@solana/signers@8.6.0(typescript@6.0.3))(@solana/transaction-messages@8.6.0(typescript@6.0.3))(@solana/transactions@8.6.0(typescript@6.0.3))
+      '@solana/kit':
+        specifier: 8.6.0
+        version: 8.6.0(typescript@6.0.3)
+      litesvm:
+        specifier: 1.6.2
+        version: 1.6.2(typescript@6.0.3)
+
+  examples/devnet-payouts:
+    dependencies:
+      '@nexbridge/example-demo-common':
+        specifier: workspace:*
+        version: link:../demo-common
+      '@nexbridge/example-x402-agent':
+        specifier: workspace:*
+        version: link:../x402-agent
+      '@nexbridge/solana-signing-firewall':
+        specifier: workspace:*
+        version: link:../../packages/signing-firewall
+      '@solana-program/address-lookup-table':
+        specifier: 0.16.0
+        version: 0.16.0(@solana/kit@8.6.0(typescript@6.0.3))
+      '@solana-program/compute-budget':
+        specifier: 0.20.0
+        version: 0.20.0(@solana/kit@8.6.0(typescript@6.0.3))
+      '@solana-program/system':
+        specifier: 0.16.0
+        version: 0.16.0(@solana/kit@8.6.0(typescript@6.0.3))
+      '@solana-program/token':
+        specifier: 0.18.0
+        version: 0.18.0(@solana/kit@8.6.0(typescript@6.0.3))
+      '@solana/kit':
+        specifier: 8.6.0
+        version: 8.6.0(typescript@6.0.3)
+    devDependencies:
+      '@nexbridge/solana-signing-firewall-fixtures':
+        specifier: workspace:*
+        version: link:../../packages/fixtures
+      litesvm:
+        specifier: 1.6.2
+        version: 1.6.2(typescript@6.0.3)
+
   examples/x402-agent:
     dependencies:
+      '@nexbridge/example-demo-common':
+        specifier: workspace:*
+        version: link:../demo-common
       '@nexbridge/solana-signing-firewall':
         specifier: workspace:*
         version: link:../../packages/signing-firewall
@@ -211,9 +266,9 @@ importers:
       '@solana-program/token':
         specifier: 0.18.0
         version: 0.18.0(@solana/kit@8.6.0(typescript@6.0.3))
-      '@solana/keychain-memory':
+      '@solana/keychain':
         specifier: 2.0.0
-        version: 2.0.0(@solana/addresses@8.6.0(typescript@6.0.3))(@solana/codecs-core@8.6.0(typescript@6.0.3))(@solana/codecs-strings@8.6.0(typescript@6.0.3))(@solana/keys@8.6.0(typescript@6.0.3))(@solana/signers@8.6.0(typescript@6.0.3))(@solana/transactions@8.6.0(typescript@6.0.3))
+        version: 2.0.0(@solana/addresses@8.6.0(typescript@6.0.3))(@solana/codecs-core@8.6.0(typescript@6.0.3))(@solana/codecs-strings@8.6.0(typescript@6.0.3))(@solana/keys@8.6.0(typescript@6.0.3))(@solana/signers@8.6.0(typescript@6.0.3))(@solana/transaction-messages@8.6.0(typescript@6.0.3))(@solana/transactions@8.6.0(typescript@6.0.3))
       '@solana/kit':
         specifier: 8.6.0
         version: 8.6.0(typescript@6.0.3)
