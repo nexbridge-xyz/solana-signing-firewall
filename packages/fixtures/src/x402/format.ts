@@ -1,6 +1,6 @@
 import type { ReasonCode, SnapshotJson } from '@nexbridge/solana-signing-firewall';
 
-import type { SpecVerdict } from './vectors.js';
+import type { SpecVerdict } from './labels.js';
 
 /** One file in vectors/x402/. docs/FIXTURES.md documents the format. */
 export type X402Vector = {

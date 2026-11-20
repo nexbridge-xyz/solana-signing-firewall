@@ -1,6 +1,5 @@
-// x402 vector definitions. `specVerdict` says what the official `exact` scheme
-// for Solana (x402-foundation/x402, scheme_exact_svm.md at 4f64aba41) requires,
-// independent of our reason codes. `specRules` cite its sections.
+// x402 vector definitions: how each payment or quote is built and what the guard and the verifier
+// answer. What the spec says about each vector is in labels.ts.
 import type { Address, Instruction } from '@solana/kit';
 import {
   getApproveCheckedInstruction,
@@ -34,12 +33,9 @@ import {
 } from './payments.js';
 import { DEVNET, MAINNET, type X402World, mint, quote, x402Accounts } from './world.js';
 
-export type SpecVerdict = 'must_accept' | 'must_reject' | 'stricter_than_spec';
 type Codes = ReasonCode[];
 
 export type X402Built = {
-  specRules: string[];
-  specVerdict: SpecVerdict;
   requirements: unknown;
   transaction?: string;
   accounts: [Address, SnapshotAccount | null][];
@@ -53,7 +49,6 @@ export type X402Built = {
   }[];
   client?: { outcome: 'allow' | 'deny'; reasons: Codes };
   facilitator?: { outcome: 'valid' | 'invalid'; reasons: Codes };
-  notes?: string;
 };
 
 export type X402Definition = {
@@ -74,7 +69,7 @@ const invalid = (...reasons: Codes) => ({ outcome: 'invalid' as const, reasons }
 async function payment(
   w: X402World,
   spec: Parameters<typeof handBuilt>[1],
-  expectation: Pick<X402Built, 'specRules' | 'specVerdict' | 'client' | 'facilitator' | 'notes'>,
+  expectation: Pick<X402Built, 'client' | 'facilitator'>,
   requirements: unknown = quote(w),
   accounts = x402Accounts(w),
 ): Promise<X402Built> {
@@ -86,12 +81,9 @@ function quoteOnly(
   w: X402World,
   requirements: unknown,
   reasons: Codes,
-  specVerdict: SpecVerdict = 'stricter_than_spec',
   extra: Partial<X402Built> = {},
 ): Promise<X402Built> {
   return Promise.resolve({
-    specRules: ['§2.3'],
-    specVerdict,
     requirements,
     accounts: x402Accounts(w),
     client: deny(...reasons),
@@ -121,8 +113,6 @@ export const X402_VECTORS: X402Definition[] = [
     build: async (w) => {
       const requirements = sdkQuote(w, [0]);
       return {
-        specRules: ['§1.1', '§1.4', '§3.1'],
-        specVerdict: 'must_accept',
         requirements,
         transaction: await sdkBuilt(
           w,
@@ -143,8 +133,6 @@ export const X402_VECTORS: X402Definition[] = [
     build: async (w) => {
       const requirements = sdkQuote(w, [0, 1]);
       return {
-        specRules: ['§1.5', '§3.1'],
-        specVerdict: 'must_accept',
         requirements,
         transaction: await sdkBuilt(
           w,
@@ -164,8 +152,6 @@ export const X402_VECTORS: X402Definition[] = [
     build: async (w) => {
       const requirements = sdkQuote(w, [0, 1], { memo: 'invoice-0001' });
       return {
-        specRules: ['§3.1'],
-        specVerdict: 'must_accept',
         requirements,
         transaction: await sdkBuilt(
           w,
@@ -203,8 +189,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§1.1', '§3.1'],
-          specVerdict: 'must_reject',
           client: deny('TOKEN_INSTRUCTION_NOT_ALLOWED', 'X402_NOT_TRANSFER_CHECKED'),
           facilitator: invalid('X402_NOT_TRANSFER_CHECKED'),
         },
@@ -221,8 +205,6 @@ export const X402_VECTORS: X402Definition[] = [
           instructions: [...budgetInstructions(), memoInstruction(nonceFor('x402-005'))],
         },
         {
-          specRules: ['§1.1', '§3.1'],
-          specVerdict: 'must_reject',
           client: deny('SIGNER_NOT_REQUIRED', 'X402_LAYOUT_INVALID', 'X402_NOT_TRANSFER_CHECKED'),
           facilitator: invalid('X402_LAYOUT_INVALID', 'X402_NOT_TRANSFER_CHECKED'),
         },
@@ -244,8 +226,6 @@ export const X402_VECTORS: X402Definition[] = [
           ),
         },
         {
-          specRules: ['§1.2', '§3.1'],
-          specVerdict: 'must_reject',
           client: deny('RECIPIENT_NOT_ALLOWED', 'X402_DESTINATION_NOT_PAYTO_ATA'),
           facilitator: invalid('X402_DESTINATION_NOT_PAYTO_ATA'),
         },
@@ -262,8 +242,6 @@ export const X402_VECTORS: X402Definition[] = [
           instructions: sdkLayout(w, 0, 'x402-007', transferInstruction(w, { amount: 19_999n })),
         },
         {
-          specRules: ['§1.4'],
-          specVerdict: 'must_reject',
           client: deny('X402_AMOUNT_MISMATCH'),
           facilitator: invalid('X402_AMOUNT_MISMATCH'),
         },
@@ -280,12 +258,8 @@ export const X402_VECTORS: X402Definition[] = [
           instructions: sdkLayout(w, 0, 'x402-008', transferInstruction(w, { amount: 10_001n })),
         },
         {
-          specRules: ['§1.4'],
-          specVerdict: 'stricter_than_spec',
           client: deny('X402_AMOUNT_MISMATCH'),
           facilitator: invalid('X402_AMOUNT_MISMATCH'),
-          notes:
-            'The spec tolerates overpayment; we require the quoted amount exactly (docs/DECISIONS.md D8).',
         },
         quote(w, { amount: '10000' }),
       ),
@@ -312,8 +286,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§1.1'],
-          specVerdict: 'stricter_than_spec',
           client: deny(
             'X402_ASSET_NOT_ALLOWED',
             'TOKEN_PROGRAM_NOT_ALLOWED',
@@ -324,7 +296,6 @@ export const X402_VECTORS: X402Definition[] = [
             'TOKEN_PROGRAM_NOT_ALLOWED',
             'X402_NOT_TRANSFER_CHECKED',
           ),
-          notes: 'The spec allows Token-2022 assets; v0.1.0 does not.',
         },
         quote(w, { asset: w.token2022Mint }),
       ),
@@ -350,8 +321,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'must_reject',
           client: deny('TOKEN_INSTRUCTION_NOT_ALLOWED', 'X402_LAYOUT_INVALID'),
           facilitator: invalid('X402_LAYOUT_INVALID'),
         },
@@ -372,8 +341,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'must_reject',
           client: deny('TOKEN_BATCH_NOT_ALLOWED', 'X402_NOT_TRANSFER_CHECKED'),
           facilitator: invalid('X402_NOT_TRANSFER_CHECKED'),
         },
@@ -391,8 +358,6 @@ export const X402_VECTORS: X402Definition[] = [
           instructions: sdkLayout(w, 0, 'x402-045', transferInstruction(w, { mint: w.otherMint })),
         },
         {
-          specRules: ['§1.2'],
-          specVerdict: 'must_reject',
           client: deny(
             'MINT_NOT_ALLOWED',
             'SOURCE_ACCOUNT_INVALID',
@@ -424,8 +389,6 @@ export const X402_VECTORS: X402Definition[] = [
           ),
         },
         {
-          specRules: ['§2.1.1', '§2.1.3'],
-          specVerdict: 'must_reject',
           facilitator: invalid('X402_FEE_PAYER_IN_INSTRUCTION'),
         },
       ),
@@ -438,8 +401,6 @@ export const X402_VECTORS: X402Definition[] = [
         w,
         { version: 0, feePayer: w.outsider.address, instructions: sdkLayout(w, 0, 'x402-013') },
         {
-          specRules: ['§2.1.1'],
-          specVerdict: 'must_reject',
           client: deny('FEE_PAYER_NOT_ALLOWED', 'UNEXPECTED_SIGNER', 'X402_FEE_PAYER_MISMATCH'),
           facilitator: invalid('X402_FEE_PAYER_MISMATCH'),
         },
@@ -459,8 +420,6 @@ export const X402_VECTORS: X402Definition[] = [
           instructions: sdkLayout(w, 0, 'x402-014'),
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'must_reject',
           client: deny('DURABLE_NONCE_NOT_ALLOWED', 'X402_LAYOUT_INVALID'),
           facilitator: invalid('DURABLE_NONCE_NOT_ALLOWED', 'X402_LAYOUT_INVALID'),
         },
@@ -483,8 +442,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§2.2.1', '§3.1'],
-          specVerdict: 'must_reject',
           client: deny('FEE_CAP_EXCEEDED', 'X402_COMPUTE_UNIT_PRICE_EXCEEDED'),
           facilitator: invalid('FEE_CAP_EXCEEDED', 'X402_COMPUTE_UNIT_PRICE_EXCEEDED'),
         },
@@ -507,8 +464,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§1.5', '§2.2.1'],
-          specVerdict: 'must_reject',
           client: deny(
             'COMPUTE_BUDGET_INSTRUCTION_IN_V1',
             'FEE_CAP_EXCEEDED',
@@ -541,8 +496,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§5.4'],
-          specVerdict: 'must_reject',
           client: deny(
             'PROGRAM_NOT_ALLOWED',
             'X402_LAYOUT_INVALID',
@@ -569,11 +522,8 @@ export const X402_VECTORS: X402Definition[] = [
           lookupTables: { [w.lookupTable]: [w.mint, w.shopAta] },
         },
         {
-          specRules: ['§2.1.2'],
-          specVerdict: 'stricter_than_spec',
           client: deny('X402_LOOKUP_TABLE_NOT_ALLOWED'),
           facilitator: invalid('X402_LOOKUP_TABLE_NOT_ALLOWED'),
-          notes: 'The spec allows lookup tables a sponsor can resolve; v0.1.0 does not.',
         },
         quote(w),
         [...x402Accounts(w), [w.lookupTable, lookupTableAccount([w.mint, w.shopAta])]],
@@ -590,8 +540,6 @@ export const X402_VECTORS: X402Definition[] = [
       // v0 wire layout: signature count, fee payer signature (empty), buyer signature, message.
       wire[70] = (wire[70] ?? 0) ^ 0xff;
       return {
-        specRules: ['§2.1.4'],
-        specVerdict: 'must_reject',
         requirements: quote(w),
         transaction: wire.toString('base64'),
         accounts: x402Accounts(w),
@@ -607,8 +555,6 @@ export const X402_VECTORS: X402Definition[] = [
         w,
         { version: 0, instructions: sdkLayout(w, 0, 'x402-020') },
         {
-          specRules: ['§1.1'],
-          specVerdict: 'must_reject',
           client: deny('SOURCE_ACCOUNT_INVALID'),
           facilitator: invalid('X402_SOURCE_ACCOUNT_MISSING'),
         },
@@ -633,8 +579,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§2.1.4'],
-          specVerdict: 'must_reject',
           client: deny('UNEXPECTED_SIGNER'),
           facilitator: invalid('UNEXPECTED_SIGNER'),
         },
@@ -649,8 +593,6 @@ export const X402_VECTORS: X402Definition[] = [
         w,
         { version: 0, instructions: sdkLayout(w, 0, 'x402-022') },
         {
-          specRules: ['§1.1'],
-          specVerdict: 'must_reject',
           client: deny('X402_REQUIREMENTS_MALFORMED'),
           facilitator: invalid('X402_REQUIREMENTS_MALFORMED'),
         },
@@ -667,12 +609,8 @@ export const X402_VECTORS: X402Definition[] = [
         w,
         { version: 0, instructions: [...budgetInstructions(), transferInstruction(w)] },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'must_reject',
           client: deny('X402_MEMO_MISMATCH'),
           facilitator: invalid('X402_MEMO_MISMATCH'),
-          notes:
-            'Clients MUST include a Memo (§3.1). Whether a sponsor must refuse a payment without one is not stated.',
         },
       ),
   },
@@ -687,11 +625,8 @@ export const X402_VECTORS: X402Definition[] = [
           instructions: [...sdkLayout(w, 0, 'x402-024'), memoInstruction(nonceFor('x402-024b'))],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'stricter_than_spec',
           client: deny('X402_MEMO_MISMATCH'),
           facilitator: valid,
-          notes: 'Without extra.memo the spec lets Memos after the transfer repeat.',
         },
       ),
   },
@@ -710,8 +645,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'must_reject',
           client: deny('X402_MEMO_MISMATCH'),
           facilitator: invalid('X402_MEMO_MISMATCH'),
         },
@@ -733,8 +666,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'must_reject',
           client: deny('X402_MEMO_MISMATCH'),
           facilitator: invalid('X402_MEMO_MISMATCH'),
         },
@@ -755,12 +686,8 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'stricter_than_spec',
           client: deny('X402_MEMO_MISMATCH'),
           facilitator: valid,
-          notes:
-            'The spec asks for at least 16 bytes; the guard accepts exactly what the pinned SDK builds.',
         },
       ),
   },
@@ -779,12 +706,8 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'stricter_than_spec',
           client: deny('X402_MEMO_MISMATCH'),
           facilitator: valid,
-          notes:
-            'The spec does not state the letter case of the hex nonce (docs/FIXTURES.md, open questions).',
         },
       ),
   },
@@ -803,8 +726,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'must_reject',
           client: deny('X402_LAYOUT_INVALID'),
           facilitator: invalid('X402_LAYOUT_INVALID'),
         },
@@ -825,8 +746,6 @@ export const X402_VECTORS: X402Definition[] = [
           ],
         },
         {
-          specRules: ['§3.1'],
-          specVerdict: 'stricter_than_spec',
           client: deny('X402_MEMO_MISMATCH'),
           facilitator: valid,
         },
@@ -844,8 +763,6 @@ export const X402_VECTORS: X402Definition[] = [
           instructions: sdkLayout(w, 1, 'x402-044'),
         },
         {
-          specRules: ['§1.5', '§2.2.1'],
-          specVerdict: 'must_reject',
           client: deny('X402_LAYOUT_INVALID'),
           facilitator: invalid('X402_LAYOUT_INVALID'),
         },
@@ -857,25 +774,15 @@ export const X402_VECTORS: X402Definition[] = [
     id: 'x402-031',
     title: 'Quote with a split to the outsider',
     build: (w) =>
-      quoteOnly(
-        w,
-        quote(w, {}, { splits: [{ payTo: w.outsider.address, amount: '1000' }] }),
-        ['X402_SPLITS_NOT_ALLOWED'],
-        'stricter_than_spec',
-        { specRules: ['§5'] },
-      ),
+      quoteOnly(w, quote(w, {}, { splits: [{ payTo: w.outsider.address, amount: '1000' }] }), [
+        'X402_SPLITS_NOT_ALLOWED',
+      ]),
   },
   {
     id: 'x402-032',
     title: "Quote that marks the shop's token account for creation",
     build: (w) =>
-      quoteOnly(
-        w,
-        quote(w, {}, { ataCreationRequired: true }),
-        ['X402_CREATE_ATA_NOT_ALLOWED'],
-        'stricter_than_spec',
-        { specRules: ['§5.4'] },
-      ),
+      quoteOnly(w, quote(w, {}, { ataCreationRequired: true }), ['X402_CREATE_ATA_NOT_ALLOWED']),
   },
   {
     id: 'x402-033',
@@ -925,7 +832,7 @@ export const X402_VECTORS: X402Definition[] = [
     id: 'x402-041',
     title: 'Daily budget exhausted: 0.04 USDC spent today, 0.02 more against a 0.05 budget',
     build: (w) =>
-      quoteOnly(w, quote(w), ['X402_BUDGET_EXCEEDED'], 'stricter_than_spec', {
+      quoteOnly(w, quote(w), ['X402_BUDGET_EXCEEDED'], {
         ledger: reservations(w, 2, '20000', 3600),
       }),
   },
@@ -933,7 +840,7 @@ export const X402_VECTORS: X402Definition[] = [
     id: 'x402-042',
     title: 'Ten payments in the last minute (the policy allows ten per minute)',
     build: (w) =>
-      quoteOnly(w, quote(w), ['X402_RATE_LIMIT_EXCEEDED'], 'stricter_than_spec', {
+      quoteOnly(w, quote(w), ['X402_RATE_LIMIT_EXCEEDED'], {
         ledger: reservations(w, 10, '1', 10),
       }),
   },
