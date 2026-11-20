@@ -42,20 +42,15 @@ export function parseRequirements(json: unknown): Parsed {
   if (typeof json !== 'object' || json === null || Array.isArray(json))
     return malformed('not an object');
   const r = json as Record<string, unknown>;
+  const fields = { scheme: '', network: '', asset: '', amount: '', payTo: '' };
   for (const key of ['scheme', 'network', 'asset', 'amount', 'payTo'] as const) {
-    if (typeof r[key] !== 'string' || r[key] === '')
+    const value = r[key];
+    if (typeof value !== 'string' || value === '') {
       return malformed(`${key} must be a non-empty string`);
+    }
+    fields[key] = value;
   }
-  const { scheme, network, asset, amount, payTo } = r as Record<string, string>;
-  if (
-    scheme === undefined ||
-    network === undefined ||
-    asset === undefined ||
-    amount === undefined ||
-    payTo === undefined
-  ) {
-    return malformed('missing field');
-  }
+  const { scheme, network, asset, amount, payTo } = fields;
   if (!/^(0|[1-9][0-9]*)$/.test(amount) || BigInt(amount) > U64_MAX) {
     return malformed('amount must be a decimal string of base units within u64');
   }
