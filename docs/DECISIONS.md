@@ -160,8 +160,10 @@ the payee, the asset, the fee payer and the cumulative budget are the guard's jo
 - SUPPORT_MATRIX marks every Keychain backend as tested, documented to work but not tested, or not
   supported, with the reason.
 - A test shows that an inner signer returning a signature over different bytes is rejected with
-  `SIGNATURE_INVALID`. This is how backends that rewrite the transaction (such as Fordefi native
-  mode) are caught.
+  `SIGNATURE_INVALID`. (Corrected on 2026-11-20: Fordefi's native modes are not caught this way.
+  They expose only `modifyAndSignTransactions` or `signAndSendTransactions`, so `withPolicy()`
+  refuses them when it is created, as it refuses Crossmint. `SIGNATURE_INVALID` catches a
+  transaction signer that returns a signature over other bytes.)
 - `withPolicy()` refuses at construction an inner signer without `signTransactions`, such as a
   sending signer (Crossmint): `UNSUPPORTED_INNER_SIGNER`. Such signers broadcast the transaction
   themselves, so a signature check afterwards would be too late. A signer that cannot be
