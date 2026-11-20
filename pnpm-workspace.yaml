@@ -10,3 +10,16 @@ minimumReleaseAge: 10080
 # binary package without its postinstall step.
 allowBuilds:
   esbuild: false
+
+# GHSA-g3hv-75wg-m249 (minimatch, moderate: denial of service through glob
+# parts amplification) affects minimatch >=7.0.0 <11.0.1, which reaches us only
+# through dev tooling (ESLint, typescript-eslint, coverage). 11.0.8 is the newest
+# patched release older than 7 days.
+#
+# GHSA-q8mj-m7cp-5q26, GHSA-x5fp-wj9c-mxmx, GHSA-4mjr-xmp4-gh2g, GHSA-6pq8-jhm2-2vcw (qs,
+# moderate, denial of service) affect the qs that Stryker pulls in through
+# typed-rest-client, which only its dashboard reporter uses (we do not). 6.17.1 is
+# patched and older than 7 days, and already in the lockfile for Express.
+overrides:
+  'minimatch@>=7.0.0 <11.0.1': 11.0.8
+  'qs@<6.16.1': 6.17.1
