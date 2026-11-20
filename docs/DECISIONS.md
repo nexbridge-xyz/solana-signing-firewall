@@ -386,3 +386,16 @@ commitment as `finalized`, as a cluster does. Explorer links are printed only fo
   a `VerifierConfigError` for an asset rule that is not an object, and accepted an empty or array
   `assets`; it now refuses both and checks decimals are 0 to 255. A dead branch in the requirements
   parser was removed.
+
+### D35. History stays as it is
+
+The commit history is not rewritten and nothing is force-pushed, including the two early commits of
+2026-11-20 that do not build on their own (`3cca400`, `6127227`, fixed by `49cf1d3`). The devnet
+run record names the commit that produced it, and a rewrite would break that link.
+
+### D36. Devnet run order
+
+Setup, `pnpm demo`, `pnpm verify-run`, `pnpm demo:record`, then `pnpm demo:recycle` (it moves only
+our own test USDC back to the treasury), then the commit of `docs/devnet-run/`. If a scene's result
+on devnet differs from the local rehearsal, it is recorded as it happened, the run stops, and the
+maintainers decide; the code is not changed to match a result.

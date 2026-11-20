@@ -1,7 +1,10 @@
 // The recorded run (docs/devnet-run/run.json) and the setup record. Both are
 // public: they hold addresses, digests, signatures and slots, never keys.
+import { execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
+
+import { REPO_ROOT } from './paths.js';
 
 export const RUN_SCHEMA = 'solana-signing-firewall.demo-run/v0';
 export const SETUP_SCHEMA = 'solana-signing-firewall.demo-setup/v0';
@@ -51,6 +54,8 @@ export type SceneRecord = {
 export type RunRecord = {
   schema: typeof RUN_SCHEMA;
   network: string;
+  /** The code that produced the run. `dirty` ignores docs/devnet-run, which the run itself writes. */
+  code: { commit: string; dirty: boolean };
   startedAt: string;
   finishedAt: string;
   signer: string;
@@ -108,4 +113,22 @@ export function readSetupRecord(path: string): SetupRecord {
     throw new Error(`${path} is not a ${SETUP_SCHEMA} record`);
   }
   return value as SetupRecord;
+}
+
+/** The commit the repository is at, and whether anything outside docs/devnet-run is uncommitted. */
+export function codeVersion(): { commit: string; dirty: boolean } {
+  try {
+    const git = (args: string[]) =>
+      execFileSync('git', args, {
+        cwd: REPO_ROOT,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
+    return {
+      commit: git(['rev-parse', 'HEAD']),
+      dirty: git(['status', '--porcelain', '--', '.', ':(exclude)docs/devnet-run']) !== '',
+    };
+  } catch {
+    return { commit: 'unknown', dirty: true };
+  }
 }

@@ -25,6 +25,7 @@ import {
   type SetupRecord,
   agentPolicyJson,
   castTable,
+  codeVersion,
   payoutsPolicyJson,
   readSetupRecord,
   shortDigest,
@@ -130,11 +131,13 @@ export async function runDemo(ctx: DemoContext): Promise<RunRecord> {
   ];
   const before = await balances(rpc, tracked);
   const startedAt = (ctx.now?.() ?? new Date()).toISOString();
+  const code = codeVersion();
 
   log(
     `Signing Firewall for Solana: ${ctx.which === 'all' ? 'scenes 1 to 15' : 'scenes 12 to 15'} on ${network}`,
   );
   log(`Signer: ${SIGNER_LABEL}`);
+  log(`Code: commit ${code.commit.slice(0, 12)}${code.dirty ? ', with uncommitted changes' : ''}`);
   log(
     `Policy ${payouts.policyId} ${shortDigest(policyDigest(payouts))}, policy ${agent.policyId} ${shortDigest(policyDigest(agent))}`,
   );
@@ -176,6 +179,7 @@ export async function runDemo(ctx: DemoContext): Promise<RunRecord> {
   const record: RunRecord = {
     schema: RUN_SCHEMA,
     network,
+    code,
     startedAt,
     finishedAt: (ctx.now?.() ?? new Date()).toISOString(),
     signer: SIGNER_LABEL,

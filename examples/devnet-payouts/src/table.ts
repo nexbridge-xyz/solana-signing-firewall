@@ -5,7 +5,7 @@ const cell = (text: string) => text.replace(/\|/g, '\\|');
 
 export function renderTable(run: RunRecord): string {
   const lines = [
-    `Recorded on ${run.network}, ${run.startedAt}. Signer: ${run.signer}.`,
+    `Recorded on ${run.network}, ${run.startedAt}, from commit ${run.code.commit.slice(0, 12)}${run.code.dirty ? ' (with uncommitted changes)' : ''}. Signer: ${run.signer}.`,
     '',
     '| # | Scene | Result | Reasons | Inner signer calls | Vectors | Transaction |',
     '|---|---|---|---|---|---|---|',

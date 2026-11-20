@@ -107,6 +107,7 @@ describe('devnet demo rehearsal on a local RPC', () => {
       which: 'all',
       ports: { facilitator: 0, shop: 0, secondShop: 0 },
     });
+    expect(run.code.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(run.scenes.map((s) => s.scene)).toEqual([
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
     ]);
