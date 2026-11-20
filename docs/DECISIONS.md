@@ -123,8 +123,9 @@ The Memo's content is checked, not only its size. The two sides differ on purpos
 - Transaction structure follows the spec (§1.3, §3.1). We accept a strict subset: version 0
   `SetComputeUnitLimit, SetComputeUnitPrice, TransferChecked, Memo`; version 1
   `TransferChecked, Memo` with `computeUnitLimit` and `loadedAccountsDataSizeLimit` set. Lighthouse
-  guard instructions, allowlisted instruction tuples and `CreateIdempotent` are rejected, and their
-  vectors are marked `stricter_than_spec`.
+  guard instructions, allowlisted instruction tuples and `CreateIdempotent` are rejected. No vector
+  holds a Lighthouse instruction or an allowlisted tuple; the `CreateIdempotent` vector, x402-017,
+  is `must_reject`, because §5.4 makes a sponsor refuse a creation nothing authorizes (D52).
 - The amount must equal the quote. The spec tolerates overpayment (§1.4), so the overpayment vector
   is `stricter_than_spec`. The reference TypeScript facilitator's static path also requires equality.
 
@@ -243,8 +244,9 @@ made them synchronous.)
   verdict; for each vector review() lets through, it also checks that token balances change by
   exactly the reviewed transfers.
 - LiteSVM 1.6.2 aborts the process on bytes it cannot deserialize, so such vectors are
-  `not_checked`, with a note. So are vectors whose program LiteSVM does not load, or whose state the
-  snapshot omits on purpose.
+  `not_checked`, with a note. So is a vector whose program LiteSVM does not load (core-041). A
+  vector whose snapshot leaves an account out on purpose is checked against that snapshot, which is
+  what `runtimeVerdict` describes (core-068, D52).
 - LiteSVM showed one expectation wrong: the token program does not check who owns the mint account
   (it matches the mint by address). `MINT_ACCOUNT_INVALID` for a mint with the wrong owner is
   therefore stricter than the runtime (core-045).
@@ -276,8 +278,9 @@ and `BudgetLedger.usage` are synchronous.
 ### D24. x402 vector format
 
 - `specRules` cite sections of the official `scheme_exact_svm.md` (commit `4f64aba41`).
-- `specVerdict`: `must_accept` meets every MUST of the spec; `must_reject` breaks one;
-  `stricter_than_spec` meets the spec, but our guard or verifier refuses it.
+- `specVerdict`: `must_accept` meets every MUST of the spec; `must_reject` breaks a MUST that binds
+  every facilitator (for a vector with only `expect.client`, every client); `stricter_than_spec`
+  breaks none of those, and our guard or verifier refuses it. D52 gives the rule.
 - `expect.client` is the guard: quote checks alone for vectors without a transaction, otherwise the
   full review of the bytes. `expect.facilitator` is the verifier. Attacks aimed at a facilitator
   (the fee payer as payer, a forged buyer signature) carry only the facilitator part.
@@ -598,3 +601,54 @@ the commits and the records from here on use those numbers.
 - Such an account is now `SOURCE_ACCOUNT_INVALID`, `DESTINATION_ACCOUNT_INVALID` or
   `MINT_ACCOUNT_INVALID`.
 - Tests: `packages/signing-firewall/test/review-snapshot-bytes.test.ts`.
+
+### D52. Labels of the x402 vectors (R-12)
+
+- Several x402 vectors were `must_reject` although the pinned spec has no MUST that binds every
+  facilitator for them: the rule was stated only for the reference implementation's static path,
+  held only under its default settings, or was not in the spec. A label now follows one rule:
+  - `must_reject` only when the spec at `4f64aba41` has a sentence with MUST or MUST NOT that binds
+    every facilitator (§2.1 binds every sponsor, and §2.1.5 brings in §1), or, for a vector with
+    only `expect.client`, every client. `notes` give the section and the sentence.
+  - `stricter_than_spec` for a rule stated only for the reference implementation's paths (§3), one
+    that holds only under a default setting (`notes` name the setting), and one the spec does not
+    state. `notes` name the decision.
+  - Where the reading is not certain, the weaker label.
+- Changed to `stricter_than_spec`: x402-010, 011, 013, 014, 015, 019, 020, 022, 023, 025, 026, 029
+  and 044. Changed to `must_reject`: x402-031, under the client rule of §5.6. The quote-level vectors
+  no longer cite §2.3, which is about sponsors; they cite the section of the field they test, or
+  none.
+- A client's own limits are not in the spec: the schemes, networks, assets, payees and fee payers it
+  accepts, the cap per payment, the timeout, the daily budget and the rate limit. Their vectors
+  (x402-033 to x402-043) are `stricter_than_spec` and cite this record.
+- The labels and notes are in `packages/fixtures/src/x402/labels.ts`, one entry per vector. The
+  runner checks reason codes, not labels.
+- Also corrected: D8 said the Lighthouse, allow-list and `CreateIdempotent` vectors are
+  `stricter_than_spec`; no vector holds the first two, and x402-017 is `must_reject`. `docs/X402.md`
+  and `docs/FIXTURES.md` said the verifier enforces only what the spec states; D53 lists where it
+  enforces more. core-068 recorded `runtime_accepts` for a snapshot against which the runtime
+  rejects the transfer; it is now `runtime_rejects`, and LiteSVM checks it.
+
+### D53. Where the verifier checks more than the spec
+
+The verifier refuses some payments that no MUST binding every facilitator requires it to refuse.
+Each has a `stricter_than_spec` vector:
+
+- the quoted amount exactly (x402-008, D8);
+- SPL Token only (x402-009, D26);
+- the layouts of D8: no other token instruction beside the transfer, no P-Token `batch`, no Memo
+  before the transfer (x402-010, x402-011, x402-029);
+- the transaction's fee payer is `extra.feePayer` (x402-013);
+- no durable nonce (x402-014);
+- the compute-unit price within `maxComputeUnitPriceMicroLamports`, a cap the spec gives only as a
+  setting of the reference implementation's static path (default 5,000,000 micro-lamports per
+  unit), and the total priority fee within `maxPriorityFeeLamports`, a cap the spec does not have
+  (x402-015);
+- no lookup table (x402-018);
+- a buyer signature that verifies (x402-019);
+- an existing source account (x402-020);
+- an amount in the quote that is a decimal string of base units, and not zero (x402-022, x402-039);
+- without `extra.memo`, a Memo that holds a hex nonce of at least 32 characters; with it, exactly
+  one Memo that equals it (x402-023, x402-025, x402-026; D7);
+- a version-1 config that sets `computeUnitLimit` and `loadedAccountsDataSizeLimit` (x402-044,
+  D26).

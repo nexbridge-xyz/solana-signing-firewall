@@ -5,6 +5,7 @@
     "§2.1.4"
   ],
   "specVerdict": "must_reject",
+  "notes": "§2.1.4: \"The transaction MUST NOT require any signatures beyond the client and the sponsor (`feePayer`).\"",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

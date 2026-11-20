@@ -52,6 +52,10 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
   failed on chain, and needs no key. `verifyRun()` takes a `network`.
 - R-11: `review()` returns `*_ACCOUNT_INVALID` for token account or mint bytes that do not decode,
   instead of throwing.
+- R-12: the x402 vectors are labelled by one rule: `must_reject` only where the pinned spec has a
+  MUST that binds every facilitator (or, for a client-only vector, every client), with the
+  sentence in `notes`; otherwise `stricter_than_spec`, with the decision. Thirteen labels changed.
+  core-068 records `runtime_rejects` for its own snapshot, and LiteSVM checks it.
 
 ### Fixed before the first release
 

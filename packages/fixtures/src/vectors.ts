@@ -1447,12 +1447,12 @@ export const CORE_VECTORS: VectorDefinition[] = [
         w,
         [...budget(), pay(w, w.vendorAAta, 1_000_000n)],
         deny('ACCOUNT_STATE_MISSING'),
-        'runtime_accepts',
+        'runtime_rejects',
       ),
       accounts: withoutAccount(baseAccounts(w), w.vendorAAta),
-      runtimeCheckedBy: 'not_checked',
+      runtimeCheckedBy: 'litesvm',
       notes:
-        'The runtime outcome depends on state the snapshot does not contain; review() never assumes it.',
+        "The snapshot leaves vendor A's token account out on purpose, so against it the runtime rejects the transfer. With the account in place the transfer would execute; review() never assumes state it was not given.",
     }),
   },
 ];

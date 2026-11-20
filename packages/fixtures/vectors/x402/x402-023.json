@@ -4,8 +4,8 @@
   "specRules": [
     "§3.1"
   ],
-  "specVerdict": "must_reject",
-  "notes": "Clients MUST include a Memo (§3.1). Whether a sponsor must refuse a payment without one is not stated.",
+  "specVerdict": "stricter_than_spec",
+  "notes": "For the client: \"Clients MUST include a Memo instruction containing either the value of `extra.memo` (when present) or a random nonce (at least 16 bytes, hex-encoded for UTF-8 compliance).\" (§3.1) For a facilitator: \"Memo instructions after the transfer MAY repeat; their count is constrained only when `extra.memo` is present.\" (§3.1) The verifier requires a nonce Memo (docs/DECISIONS.md D7, D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

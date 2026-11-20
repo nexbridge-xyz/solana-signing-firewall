@@ -2,9 +2,10 @@
   "id": "x402-013",
   "title": "A fee payer other than the one the quote names",
   "specRules": [
-    "§2.1.1"
+    "PaymentRequirements for exact"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "No sentence requires the transaction's fee payer to be the one the quote names (\"`extra.feePayer`: The sponsor's public key.\"). The guard and the verifier require it (docs/DECISIONS.md D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

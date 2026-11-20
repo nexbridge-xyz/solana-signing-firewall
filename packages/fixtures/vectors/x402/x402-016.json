@@ -6,6 +6,7 @@
     "§2.2.1"
   ],
   "specVerdict": "must_reject",
+  "notes": "§1.5: \"As an x402 sponsor rule, a client-built version-1 transaction MUST NOT contain them, and the sponsor MUST reject one that does.\" (\"them\": Compute Budget program instructions.) The other codes come from caps that are settings or our own (docs/DECISIONS.md D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

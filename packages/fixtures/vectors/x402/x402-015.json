@@ -5,7 +5,8 @@
     "§2.2.1",
     "§3.1"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "The cap is a setting of the reference implementation's static path: \"The legacy/version-0 Compute Budget price and the version-1 total priority fee MUST each be no greater than `maxPriorityFeeMicroLamports` (default 5 lamports/CU) on this path, using the normalization in §1.5 for version 1.\" (§3.1), listed under \"Reference defaults (operator-configurable):\" (§2.2.1). The vector breaks that default, 5,000,000 micro-lamports per unit, which the agent policy (`x402.maxComputeUnitPriceMicroLamports`) and the verifier config (`maxComputeUnitPriceMicroLamports`) both use. `FEE_CAP_EXCEEDED` is a cap of our own (docs/DECISIONS.md D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

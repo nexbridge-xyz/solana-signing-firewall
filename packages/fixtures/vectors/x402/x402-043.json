@@ -2,9 +2,10 @@
   "id": "x402-043",
   "title": "No fee payer in the quote",
   "specRules": [
-    "§2.3"
+    "PaymentRequirements for exact"
   ],
   "specVerdict": "stricter_than_spec",
+  "notes": "The spec lists `extra.feePayer` after \"In addition to the standard x402 `PaymentRequirements` fields, the `exact` scheme on Solana requires the following inside the `extra` field:\", with no MUST for a client given a quote without it. The guard refuses it (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

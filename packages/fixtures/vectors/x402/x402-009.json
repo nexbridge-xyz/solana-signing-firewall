@@ -5,7 +5,7 @@
     "§1.1"
   ],
   "specVerdict": "stricter_than_spec",
-  "notes": "The spec allows Token-2022 assets; v0.1.0 does not.",
+  "notes": "The spec accepts a `token-2022` `TransferChecked` (§1.1); v0.1.0 refuses Token-2022 payments (docs/DECISIONS.md D26). The Token-2022 mint is also missing from the agent policy and the verifier config, so this vector does not isolate that rule.",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

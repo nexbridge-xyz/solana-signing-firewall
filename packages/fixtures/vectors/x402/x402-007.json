@@ -5,6 +5,7 @@
     "§1.4"
   ],
   "specVerdict": "must_reject",
+  "notes": "§1.4: \"A matching transfer MAY exceed `PaymentRequirements.amount` (overpayment is tolerated to accommodate smart wallets with internal fee rounding); it MUST NOT be less.\"",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

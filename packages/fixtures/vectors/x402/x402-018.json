@@ -5,7 +5,7 @@
     "§2.1.2"
   ],
   "specVerdict": "stricter_than_spec",
-  "notes": "The spec allows lookup tables a sponsor can resolve; v0.1.0 does not.",
+  "notes": "The spec lets a sponsor accept lookup tables it can resolve: \"If the transaction uses Address Lookup Tables (ALTs), the sponsor MUST resolve them so that every account the transaction can touch is visible before the isolation check in §2.1.1 runs.\" (§2.1.2). v0.1.0 refuses them (`lookupTables: \"deny\"`; docs/DECISIONS.md D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

@@ -2,10 +2,12 @@
   "id": "x402-006",
   "title": "Pays the associated token account of another owner (the outsider's)",
   "specRules": [
+    "§1.1",
     "§1.2",
-    "§3.1"
+    "§1.4"
   ],
   "specVerdict": "must_reject",
+  "notes": "§1.4: \"MUST reject if zero matching transfers are found.\" A matching transfer goes to \"the Associated Token Account derived from `payTo` and `asset`\" (§1.1).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

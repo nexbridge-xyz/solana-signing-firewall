@@ -1,10 +1,9 @@
 {
   "id": "x402-035",
   "title": "A token the policy does not list (the SDK default devnet PYUSD)",
-  "specRules": [
-    "§2.3"
-  ],
+  "specRules": [],
   "specVerdict": "stricter_than_spec",
+  "notes": "The spec leaves this to the client; the agent policy sets it: the assets it pays with, `mints` (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

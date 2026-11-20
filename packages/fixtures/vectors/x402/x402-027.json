@@ -5,7 +5,7 @@
     "§3.1"
   ],
   "specVerdict": "stricter_than_spec",
-  "notes": "The spec asks for at least 16 bytes; the guard accepts exactly what the pinned SDK builds.",
+  "notes": "The client rule asks for a nonce of \"at least 16 bytes\" (§3.1), so the verifier accepts it; the guard accepts only the 32 lower-case hex characters of a 16-byte nonce (docs/DECISIONS.md D7).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

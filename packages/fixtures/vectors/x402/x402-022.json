@@ -2,9 +2,10 @@
   "id": "x402-022",
   "title": "Requirements whose amount is not a decimal string of base units",
   "specRules": [
-    "§1.1"
+    "§5.2"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "The spec says \"All amounts are integers in base units.\" (§5.2), with no MUST about a quote whose amount is not one. The guard and the verifier refuse it as malformed (docs/DECISIONS.md D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

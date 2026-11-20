@@ -1,10 +1,9 @@
 {
   "id": "x402-042",
   "title": "Ten payments in the last minute (the policy allows ten per minute)",
-  "specRules": [
-    "§2.3"
-  ],
+  "specRules": [],
   "specVerdict": "stricter_than_spec",
+  "notes": "The spec leaves this to the client; the agent policy sets it: the rate limit, `x402.maxPaymentsPerMinute` (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

@@ -5,7 +5,7 @@
     "§3.1"
   ],
   "specVerdict": "stricter_than_spec",
-  "notes": "Without extra.memo the spec lets Memos after the transfer repeat.",
+  "notes": "\"Memo instructions after the transfer MAY repeat; their count is constrained only when `extra.memo` is present.\" (§3.1) The verifier accepts it; the guard accepts only one Memo (docs/DECISIONS.md D7).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

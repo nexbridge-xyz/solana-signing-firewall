@@ -5,6 +5,7 @@
     "§3.1"
   ],
   "specVerdict": "stricter_than_spec",
+  "notes": "No sentence of the spec is about accounts on a Memo instruction. The verifier accepts it; the guard accepts only a Memo without accounts (docs/DECISIONS.md D7).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

@@ -191,7 +191,7 @@ export function guardMemoReasons(shape: PaymentShape, requirements: X402Requirem
     : [{ code: 'X402_MEMO_MISMATCH', ...at, detail: 'not 32 lower-case hex characters' }];
 }
 
-/** What the verifier (facilitator side) requires of Memos: only what the spec states (D7). */
+/** What the verifier (facilitator side) requires of Memos (docs/DECISIONS.md D7, D53). */
 export function verifierMemoReasons(shape: PaymentShape, requirements: X402Requirements): Reason[] {
   if (requirements.memo !== undefined) {
     if (shape.memos.length !== 1) {

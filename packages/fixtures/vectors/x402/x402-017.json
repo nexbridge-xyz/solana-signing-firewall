@@ -2,9 +2,11 @@
   "id": "x402-017",
   "title": "Creates the shop's token account, funded by the fee payer, though nothing authorizes it",
   "specRules": [
+    "§2.1.1",
     "§5.4"
   ],
   "specVerdict": "must_reject",
+  "notes": "§5.4: \"A Sponsor MUST reject any transaction in which the fee payer funds ATA creation for an unmarked recipient, for an owner outside the declared recipient set (`payTo` and every `splits[].payTo`), or when it has not advertised ATA sponsorship (`split_ata_creation_not_authorized`).\"",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

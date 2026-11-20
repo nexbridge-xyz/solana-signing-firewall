@@ -4,7 +4,8 @@
   "specRules": [
     "§2.1.4"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "No sentence asks a sponsor to verify the client's signature (\"sigVerify\" does not occur); §2.1.4 is about which signatures are required. The verifier checks it (docs/DECISIONS.md D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

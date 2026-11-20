@@ -5,7 +5,7 @@
     "§1.4"
   ],
   "specVerdict": "stricter_than_spec",
-  "notes": "The spec tolerates overpayment; we require the quoted amount exactly (docs/DECISIONS.md D8).",
+  "notes": "The spec tolerates overpayment: \"A matching transfer MAY exceed `PaymentRequirements.amount`\" (§1.4). The guard and the verifier require the quoted amount exactly (docs/DECISIONS.md D8).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

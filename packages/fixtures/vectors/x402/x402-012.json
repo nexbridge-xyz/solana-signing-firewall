@@ -6,6 +6,7 @@
     "§2.1.3"
   ],
   "specVerdict": "must_reject",
+  "notes": "§2.1.1: \"The `feePayer` MUST NOT be used as an authority, source, or delegate for any transfer.\"",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

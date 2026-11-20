@@ -1,10 +1,9 @@
 {
   "id": "x402-041",
   "title": "Daily budget exhausted: 0.04 USDC spent today, 0.02 more against a 0.05 budget",
-  "specRules": [
-    "§2.3"
-  ],
+  "specRules": [],
   "specVerdict": "stricter_than_spec",
+  "notes": "The spec leaves this to the client; the agent policy sets it: the daily budget, `x402.budgets` (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

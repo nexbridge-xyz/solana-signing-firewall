@@ -2,9 +2,11 @@
   "id": "x402-045",
   "title": "Transfers another SPL token than the quoted asset, into the quoted destination",
   "specRules": [
-    "§1.2"
+    "§1.2",
+    "§1.4"
   ],
   "specVerdict": "must_reject",
+  "notes": "§1.4: \"MUST reject if zero matching transfers are found.\" A matching transfer has the \"correct mint\" (§1.4).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

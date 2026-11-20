@@ -5,7 +5,7 @@
     "§3.1"
   ],
   "specVerdict": "stricter_than_spec",
-  "notes": "The spec does not state the letter case of the hex nonce (docs/FIXTURES.md, open questions).",
+  "notes": "The spec does not state the letter case of the hex nonce (docs/FIXTURES.md, open questions). The verifier accepts it; the guard accepts lower case only (docs/DECISIONS.md D7).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

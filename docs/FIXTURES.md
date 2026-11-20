@@ -93,7 +93,8 @@ is present, it also verifies the approval and returns the same set of approval c
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `id`, `title`        | Stable ID and description.                                                                                                                                               |
 | `specRules`          | Sections of the official `scheme_exact_svm.md` (x402-foundation/x402, commit `4f64aba41`) the vector exercises.                                                          |
-| `specVerdict`        | What the spec requires, independent of our codes (below).                                                                                                                |
+| `specVerdict`        | What the pinned spec says of the vector, independent of our codes (below).                                                                                               |
+| `notes`              | The section and the sentence of the spec that back `specVerdict`, and the decision (`docs/DECISIONS.md`) behind a stricter rule.                                         |
 | `requirements`       | One payment option, as a server sends it in `PAYMENT-REQUIRED`.                                                                                                          |
 | `transaction`        | The partially signed wire transaction, base64, as a client sends it. Absent when the vector is about the quote alone.                                                    |
 | `policy`             | The agent policy, relative to `vectors/x402/`. Present when `expect.client` is.                                                                                          |
@@ -108,11 +109,17 @@ only `expect.facilitator`: no honest agent would build them.
 
 ### `specVerdict`
 
-| Value                | Meaning                                                                                                            |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `must_accept`        | Meets every MUST of the spec.                                                                                      |
-| `must_reject`        | Breaks a MUST of the spec, so a compliant facilitator refuses it.                                                  |
-| `stricter_than_spec` | Meets the spec, but our guard or verifier refuses it. Another implementation may accept it and still be compliant. |
+| Value                | Meaning                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `must_accept`        | Meets every MUST of the spec.                                                                                                                                                                                                                                                                                                                                |
+| `must_reject`        | Breaks a sentence of the spec with MUST or MUST NOT that binds every facilitator; for a vector with only `expect.client`, one that binds every client. `notes` give the section and the sentence.                                                                                                                                                            |
+| `stricter_than_spec` | No such sentence requires refusing it, and our guard or verifier refuses it anyway: the rule is stated only for the reference implementation's paths (§3), holds only under a default setting (named in `notes`), or is not in the spec. `notes` name the decision. Another facilitator may accept it and still meet every MUST that binds all facilitators. |
+
+Section 2.1 binds every sponsor ("A sponsor that signs a transaction as `feePayer` MUST enforce all
+of the following **before signing**."), and §2.1.5 brings in the payment outcome of §1. Section 3
+describes the reference implementation ("The reference TypeScript facilitator (`@x402/svm`)
+implements §2 as two verification paths."), so a rule found only there does not make a vector
+`must_reject`. Where the reading is not certain, the vector gets the weaker label (D52).
 
 The three payments built by the pinned `@x402/svm` 2.31.0 client (x402-001 to x402-003: version 0,
 version 1, and version 1 with a seller memo) are `must_accept`, and both our guard and our verifier
@@ -120,13 +127,13 @@ accept them. If the SDK's output and the spec ever disagree, that is reported to
 first (CONTRIBUTING.md).
 
 Where we are stricter than the spec, and why, is in `docs/X402.md` and `docs/DECISIONS.md`
-(D7 to D9).
+(D7 to D9, D52, D53).
 
 ## Open questions in the x402 spec
 
-The verifier enforces only what the spec states. These points are open in
-`scheme_exact_svm.md` at commit `4f64aba41`; the vectors pin our current reading and the verifier
-does not enforce more:
+The verifier enforces more than the spec states in the points `docs/DECISIONS.md` D53 lists. The
+points below are open in `scheme_exact_svm.md` at commit `4f64aba41`; the vectors pin our current
+reading, and on these points the verifier does not enforce more:
 
 1. **Letter case of the memo nonce.** The spec asks for a hex-encoded nonce of at least 16 random
    bytes. It does not say whether upper-case hex is allowed. The verifier accepts either case

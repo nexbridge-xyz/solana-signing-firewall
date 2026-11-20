@@ -1,10 +1,9 @@
 {
   "id": "x402-038",
   "title": "Amount one base unit over the per-payment cap",
-  "specRules": [
-    "§2.3"
-  ],
+  "specRules": [],
   "specVerdict": "stricter_than_spec",
+  "notes": "The spec leaves this to the client; the agent policy sets it: the cap per payment, `mints.<mint>.maxPerTransaction` (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

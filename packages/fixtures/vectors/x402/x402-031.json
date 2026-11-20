@@ -2,9 +2,10 @@
   "id": "x402-031",
   "title": "Quote with a split to the outsider",
   "specRules": [
-    "§5"
+    "§5.6"
   ],
-  "specVerdict": "stricter_than_spec",
+  "specVerdict": "must_reject",
+  "notes": "§5.6: \"Before signing, the client MUST verify that `extra.splits` — when present — contains only the recipients and amounts it expects.\" The agent policy expects no split; the guard refuses every split (docs/DECISIONS.md D9).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

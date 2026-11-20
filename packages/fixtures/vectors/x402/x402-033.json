@@ -1,10 +1,9 @@
 {
   "id": "x402-033",
   "title": "Scheme upto",
-  "specRules": [
-    "§2.3"
-  ],
+  "specRules": [],
   "specVerdict": "stricter_than_spec",
+  "notes": "This spec covers the `exact` scheme only, so it says nothing about an `upto` quote. The agent policy accepts the schemes in `x402.schemes` (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "upto",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

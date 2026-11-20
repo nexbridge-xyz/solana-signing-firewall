@@ -1,10 +1,9 @@
 {
   "id": "x402-034",
   "title": "Mainnet",
-  "specRules": [
-    "§2.3"
-  ],
+  "specRules": [],
   "specVerdict": "stricter_than_spec",
+  "notes": "The spec leaves this to the client; the agent policy sets it: the networks it pays on, `x402.networks` (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",

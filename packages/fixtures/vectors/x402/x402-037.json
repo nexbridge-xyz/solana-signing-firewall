@@ -2,9 +2,11 @@
   "id": "x402-037",
   "title": "Names the agent itself as fee payer",
   "specRules": [
-    "§2.3"
+    "PaymentRequirements for exact",
+    "§2.1.1"
   ],
   "specVerdict": "stricter_than_spec",
+  "notes": "No sentence binds a client here. A payment under this quote would make the fee payer the transfer authority, which a sponsor must refuse: §2.1.1: \"The `feePayer` MUST NOT be used as an authority, source, or delegate for any transfer.\" The agent policy lists the fee payers it accepts, `feePayers` (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

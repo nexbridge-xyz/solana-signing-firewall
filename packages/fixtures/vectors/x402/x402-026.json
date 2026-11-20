@@ -4,7 +4,8 @@
   "specRules": [
     "§3.1"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "For the client: \"Clients MUST include a Memo instruction containing either the value of `extra.memo` (when present) or a random nonce (at least 16 bytes, hex-encoded for UTF-8 compliance).\" (§3.1) No sentence tells a facilitator to refuse a payment whose Memo is not one. The verifier requires a hex nonce of at least 32 characters (docs/DECISIONS.md D7, D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

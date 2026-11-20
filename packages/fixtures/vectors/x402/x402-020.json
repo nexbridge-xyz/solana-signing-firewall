@@ -4,7 +4,8 @@
   "specRules": [
     "§1.1"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "No sentence requires the buyer's token account to exist; such a transfer fails on chain. The guard and the verifier require it (docs/DECISIONS.md D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

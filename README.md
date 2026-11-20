@@ -153,7 +153,11 @@ on every push.
 69 core vectors and 45 x402 vectors in `packages/fixtures/vectors`, one JSON file each: the bytes,
 the policy, the account state and the expected answer, so another wallet, signer or x402
 implementation can run them without this code. Each core vector also records what the Solana runtime
-does with the transaction, checked in LiteSVM; each x402 vector records what the x402 spec requires.
+does with the transaction against its snapshot; LiteSVM confirms it for 64 of them, and the other
+five are bytes LiteSVM 1.6.2 cannot read or a program it does not load. Each x402 vector records
+whether the pinned x402 spec has a MUST that makes every facilitator (for a quote, every client)
+refuse it, or whether our guard or verifier is stricter than the spec, with the sentence or the
+decision it rests on.
 Format and open questions: [docs/FIXTURES.md](docs/FIXTURES.md).
 
 ## Support

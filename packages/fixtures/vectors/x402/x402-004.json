@@ -3,9 +3,10 @@
   "title": "ApproveChecked in place of TransferChecked (same data layout, one byte apart)",
   "specRules": [
     "§1.1",
-    "§3.1"
+    "§1.4"
   ],
   "specVerdict": "must_reject",
+  "notes": "§1.4: \"MUST reject if zero matching transfers are found.\" An `ApproveChecked` moves no tokens.",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

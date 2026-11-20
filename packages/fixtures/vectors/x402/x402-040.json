@@ -1,10 +1,9 @@
 {
   "id": "x402-040",
   "title": "Timeout of 300 seconds (the policy allows 120)",
-  "specRules": [
-    "§2.3"
-  ],
+  "specRules": [],
   "specVerdict": "stricter_than_spec",
+  "notes": "The spec leaves this to the client; the agent policy sets it: the longest timeout it accepts, `x402.maxTimeoutSeconds` (docs/DECISIONS.md D52).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

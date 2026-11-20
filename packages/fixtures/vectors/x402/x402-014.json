@@ -4,7 +4,8 @@
   "specRules": [
     "§3.1"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "The words \"durable\" and \"AdvanceNonce\" do not occur in the spec. On the reference implementation's static path the System Program instruction falls under \"**Any other program**, anywhere in the sequence, MUST be rejected\" (§3.1). The guard and the verifier refuse a durable nonce (docs/DECISIONS.md D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

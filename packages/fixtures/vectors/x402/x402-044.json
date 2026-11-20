@@ -5,7 +5,8 @@
     "§1.5",
     "§2.2.1"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "For the client: \"A transaction that leaves bit 2 or bit 3 unset therefore cannot execute its instructions, so a client-built version-1 transaction MUST set both.\" (§1.5). For a sponsor, \"`loadedAccountsDataSizeLimit` (bit 3) MUST be set\" is part of §2.2.1, \"Compute Budget Controls (SHOULD)\". The guard and the verifier require it (docs/DECISIONS.md D26).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

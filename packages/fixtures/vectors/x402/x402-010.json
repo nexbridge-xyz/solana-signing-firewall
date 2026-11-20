@@ -4,7 +4,8 @@
   "specRules": [
     "§3.1"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "No sentence of the spec is about another SPL Token instruction beside the transfer. The catch-all of the reference implementation's static path is about other programs: \"**Any other program**, anywhere in the sequence, MUST be rejected (`invalid_exact_svm_payload_unknown_instruction`).\" (§3.1). The guard and the verifier accept only the layout of docs/DECISIONS.md D8.",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

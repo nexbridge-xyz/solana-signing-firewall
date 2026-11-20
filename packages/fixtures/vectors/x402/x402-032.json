@@ -2,9 +2,11 @@
   "id": "x402-032",
   "title": "Quote that marks the shop's token account for creation",
   "specRules": [
-    "§5.4"
+    "§5.4",
+    "§5.6"
   ],
   "specVerdict": "stricter_than_spec",
+  "notes": "The client chooses: among the steps the client MUST take, §5.6 lists \"Reject requirements whose split recipients or amounts it did not agree to, and reject any `ataCreationRequired: true` it is unwilling to fund.\" The guard refuses every such quote (docs/DECISIONS.md D9).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

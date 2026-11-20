@@ -1,10 +1,9 @@
 {
   "id": "x402-039",
   "title": "Zero amount",
-  "specRules": [
-    "§2.3"
-  ],
+  "specRules": [],
   "specVerdict": "stricter_than_spec",
+  "notes": "No sentence of the spec forbids a zero amount. The guard and the verifier refuse it (docs/DECISIONS.md D52, D53).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

@@ -2,9 +2,11 @@
   "id": "x402-025",
   "title": "Memo text differs from the seller memo",
   "specRules": [
+    "PaymentRequirements for exact",
     "§3.1"
   ],
-  "specVerdict": "must_reject",
+  "specVerdict": "stricter_than_spec",
+  "notes": "For the client: \"When present, the client MUST use this value as the Memo instruction data instead of a random nonce.\" (`extra.memo`, section \"`PaymentRequirements` for `exact`\"). For a facilitator the rule is on the reference implementation's static path: \"If `extra.memo` is present, the facilitator MUST verify that exactly one Memo instruction exists (`invalid_exact_svm_payload_memo_count` otherwise) and that its data matches `extra.memo` encoded as UTF-8.\" (§3.1). The guard and the verifier apply it (docs/DECISIONS.md D7).",
   "requirements": {
     "scheme": "exact",
     "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",

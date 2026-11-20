@@ -9,9 +9,10 @@ export type X402Vector = {
   /** Sections of the official scheme_exact_svm.md this vector exercises. */
   specRules: string[];
   /**
-   * What the spec requires, independent of our reason codes: `must_accept` (meets
-   * every MUST), `must_reject` (breaks a MUST), or `stricter_than_spec` (meets the
-   * spec, but our guard or verifier refuses it).
+   * What the pinned spec says of the vector, independent of our reason codes: `must_accept`
+   * (meets every MUST), `must_reject` (breaks a MUST that binds every facilitator, or for a
+   * client-only vector every client), or `stricter_than_spec` (breaks none of those, and our
+   * guard or verifier refuses it). docs/FIXTURES.md and labels.ts.
    */
   specVerdict: SpecVerdict;
   notes?: string;
