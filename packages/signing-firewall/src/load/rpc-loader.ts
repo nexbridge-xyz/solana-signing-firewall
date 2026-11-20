@@ -36,6 +36,21 @@ export class NetworkMismatchError extends Error {
 }
 
 /**
+ * Throws `NetworkMismatchError` unless the RPC's genesis hash belongs to `network`.
+ * `localnet` is not checked. Call it before sending anything.
+ */
+export async function assertRpcNetwork(
+  rpc: Rpc<GetGenesisHashApi>,
+  network: PolicyNetwork,
+): Promise<void> {
+  if (network === 'localnet') return;
+  const genesisHash = await rpc.getGenesisHash().send();
+  if (!genesisHash.startsWith(GENESIS_PREFIX[network])) {
+    throw new NetworkMismatchError(network, genesisHash);
+  }
+}
+
+/**
  * Fetches, in two rounds, the accounts an evaluation needs: first the lookup
  * tables, then each transfer's mint, source and destination. Accounts that do
  * not exist are recorded as `null`. Refuses to run against an RPC whose genesis
@@ -80,11 +95,8 @@ export function createRpcSnapshotLoader(
 
   return {
     async load(messageBytes, { network }) {
-      if (network !== 'localnet' && !checkedNetworks.has(network)) {
-        const genesisHash = await rpc.getGenesisHash().send();
-        if (!genesisHash.startsWith(GENESIS_PREFIX[network])) {
-          throw new NetworkMismatchError(network, genesisHash);
-        }
+      if (!checkedNetworks.has(network)) {
+        await assertRpcNetwork(rpc, network);
         checkedNetworks.add(network);
       }
 
