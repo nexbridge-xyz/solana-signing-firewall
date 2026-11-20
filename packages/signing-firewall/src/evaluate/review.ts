@@ -33,7 +33,13 @@ type TokenAccountState = { mint: Address; owner: Address; state: AccountState };
 function tokenAccount(account: SnapshotAccount): TokenAccountState | string {
   if (account.owner !== TOKEN_PROGRAM_ADDRESS) return `owned by ${account.owner}`;
   if (account.data.length !== getTokenSize()) return `data is ${account.data.length} bytes`;
-  const token = getTokenDecoder().decode(account.data);
+  let token;
+  try {
+    token = getTokenDecoder().decode(account.data);
+  } catch {
+    // Bytes the token program never writes (an unknown state byte, for example).
+    return 'data is not a token account';
+  }
   if (token.state === AccountState.Uninitialized) return 'not initialized';
   return { mint: token.mint, owner: token.owner, state: token.state };
 }
@@ -41,7 +47,12 @@ function tokenAccount(account: SnapshotAccount): TokenAccountState | string {
 function mintDecimals(account: SnapshotAccount): number | string {
   if (account.owner !== TOKEN_PROGRAM_ADDRESS) return `owned by ${account.owner}`;
   if (account.data.length !== getMintSize()) return `data is ${account.data.length} bytes`;
-  const mint = getMintDecoder().decode(account.data);
+  let mint;
+  try {
+    mint = getMintDecoder().decode(account.data);
+  } catch {
+    return 'data is not a mint';
+  }
   if (!mint.isInitialized) return 'not initialized';
   return mint.decimals;
 }
