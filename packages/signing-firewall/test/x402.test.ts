@@ -218,8 +218,12 @@ describe('budget ledgers', () => {
   it('persists, takes a lock, refuses a malformed file, and leaves no temporary file', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'ledger-'));
     const path = join(dir, 'budget.json');
+    await expect(openFileLedger(join(dir, 'missing', 'budget.json'))).rejects.toThrow(
+      /cannot create .*\(ENOENT\)/,
+    );
     const ledger = await openFileLedger(path);
     await expect(openFileLedger(path)).rejects.toThrow(LedgerError);
+    await expect(openFileLedger(path)).rejects.toThrow(/exists: another process holds the ledger/);
     await ledger.reserve(reservation(20_000n, now), limits, now);
     await ledger.close();
     const reopened = await openFileLedger(path);

@@ -150,9 +150,12 @@ export async function openFileLedger(
   let lock;
   try {
     lock = await open(lockPath, 'wx');
-  } catch {
+  } catch (error) {
+    const code = (error as { code?: unknown }).code;
     throw new LedgerError(
-      `${lockPath} exists: another process holds the ledger, or one crashed. Refusing to start.`,
+      code === 'EEXIST'
+        ? `${lockPath} exists: another process holds the ledger, or one crashed. Refusing to start.`
+        : `cannot create ${lockPath} (${String(code)}). Refusing to start.`,
     );
   }
   await lock.writeFile(`${process.pid}\n`);
