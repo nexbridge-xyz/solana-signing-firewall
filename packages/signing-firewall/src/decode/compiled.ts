@@ -5,6 +5,7 @@ import {
   TRANSACTION_CONFIG_PRIORITY_FEE_LAMPORTS_BIT_MASK,
   decompileTransactionConfig,
   getCompiledTransactionMessageDecoder,
+  getCompiledTransactionMessageEncoder,
   getU32Decoder,
 } from '@solana/kit';
 
@@ -88,6 +89,17 @@ export function decodeCompiledMessage(bytes: Uint8Array): DecodeResult<CompiledM
     const [compiled, offset] = getCompiledTransactionMessageDecoder().read(bytes, 0);
     if (offset !== bytes.length) {
       return failure(version, 'MALFORMED_MESSAGE', `${bytes.length - offset} trailing bytes`);
+    }
+    // The runtime reads exactly one encoding of a message. Kit's decoder also reads others: an
+    // array whose length is missing at the end of the bytes (as empty), and a length written
+    // in more bytes than it needs. So the bytes must be the ones Kit writes for what it read.
+    const canonical = getCompiledTransactionMessageEncoder().encode(compiled);
+    if (canonical.length !== bytes.length || !canonical.every((byte, i) => byte === bytes[i])) {
+      return failure(
+        version,
+        'MALFORMED_MESSAGE',
+        'not the encoding the runtime reads: a length is missing or not in its shortest form',
+      );
     }
     if (compiled.version === 1) {
       if (compiled.instructionHeaders.length !== compiled.instructionPayloads.length) {
