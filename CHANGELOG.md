@@ -3,7 +3,7 @@
 All notable changes are listed here. The format follows Keep a Changelog; versions follow
 Semantic Versioning. No version has been published to npm.
 
-## Unreleased (0.1.0)
+## [0.1.0] - 2026-11-21
 
 ### Added
 
@@ -78,3 +78,5 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
   accepted an empty `assets`.
 - The demo commands now survive HTTP 429 from public RPC endpoints, and write the run record after
   every scene.
+
+[0.1.0]: https://github.com/nexbridge-xyz/solana-signing-firewall/releases/tag/v0.1.0
