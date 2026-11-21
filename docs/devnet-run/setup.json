@@ -51,6 +51,20 @@
       "signature": "4sxZJMFpWLNbdf2kzfY1FFb6JCyM9ZhEo56jv42k7f8uzXemuAtTVVSEju37JUm7dkwd4t4tyK96rEgUpmkQQt7S",
       "slot": "524375470",
       "explorer": "https://explorer.solana.com/tx/4sxZJMFpWLNbdf2kzfY1FFb6JCyM9ZhEo56jv42k7f8uzXemuAtTVVSEju37JUm7dkwd4t4tyK96rEgUpmkQQt7S?cluster=devnet"
+    },
+    {
+      "step": "0.04 USDC from the treasury to the agent",
+      "label": "setup, not a scene",
+      "signature": "5SFbQCsPt6y6hBEtQzDqCX3vaWTBYMdsaUeyqW6u5LY5GxvFQotiSBpnGVqzKMBc8K9kv7WnGZNrRJxkVNBq6fZn",
+      "slot": "524612023",
+      "explorer": "https://explorer.solana.com/tx/5SFbQCsPt6y6hBEtQzDqCX3vaWTBYMdsaUeyqW6u5LY5GxvFQotiSBpnGVqzKMBc8K9kv7WnGZNrRJxkVNBq6fZn?cluster=devnet"
+    },
+    {
+      "step": "recycled 7.08 USDC from the vendors and the shop to the treasury",
+      "label": "recycle, not a scene",
+      "signature": "3xAJ5vyjLYpwX39hxvM58sQ9uJBnopKBqwWuEsE2KgXkbD7rf7o8Z7vk61Ue7AWajEFtRDd3zAbzrTVVdXJ7ecba",
+      "slot": "524612480",
+      "explorer": "https://explorer.solana.com/tx/3xAJ5vyjLYpwX39hxvM58sQ9uJBnopKBqwWuEsE2KgXkbD7rf7o8Z7vk61Ue7AWajEFtRDd3zAbzrTVVdXJ7ecba?cluster=devnet"
     }
   ],
   "lookupTable": "FVtxNdpVUmnXoVKg3CuWTL1vvVfCCbcCasjNmPzaSvk1",

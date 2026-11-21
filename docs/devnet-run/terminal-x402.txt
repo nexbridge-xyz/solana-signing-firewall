@@ -1,0 +1,78 @@
+# Terminal output of the second x402 run, 2026-11-21 (pnpm demo:x402, then pnpm verify-run --x402).
+# Lines starting with '(the RPC answered 429' are the rate-limit retries of D37.
+
+Signing Firewall for Solana: scenes 12 to 15 on devnet
+Signer: Solana Keychain (memory backend), wrapped by Signing Firewall
+Code: commit 8d92d862ed5f
+Policy demo-payouts c1b0b306b00c..., policy demo-agent ba8f62e5113d...
+
+Local x402 services on 127.0.0.1: facilitator http://127.0.0.1:4020, shop http://127.0.0.1:4021, second shop http://127.0.0.1:4022
+
+Scene 12. x402: the agent buys one report from Lantern Row (report shop) for 0.02 USDC
+  expected      allow; the local facilitator verifies and settles; the agent receives the report
+  outcome       allow
+  reasons       none
+  option 1      0.02 of 4zMMC9sr... to CZcNunzw..., fee payer 8wpoP1xJ...
+                digest ddef7af74e4e...  allow
+  message       sha256 c9811d32644d...
+  signer calls  1
+  sent          https://explorer.solana.com/tx/58Ya8cFGKi5S29NF7WC5hWZk26s7u2WqreLbQLFaSEUgC5fAuczJSLvUmC5SsuWKfZHPd5R6fhq6AKBRKeJBwUUq?cluster=devnet
+  note          Paid 0.02 USDC; the local facilitator verified and settled it. Reserved in the last 24 h before this purchase: 0.00 USDC. Report: "Lantern Row market note (fictional): orders for small hardware rose this week. Nothing here is real data."
+
+Scene 13. x402: the second shop offers four options, each outside the policy
+  expected      options 1 to 3 denied by the guard (X402_PAYTO_NOT_ALLOWED, X402_FEE_PAYER_NOT_ALLOWED, X402_ASSET_NOT_ALLOWED); option 4 removed by the SDK per-payment cap; no payment header sent; signer calls 0
+  outcome       deny
+  reasons       X402_PAYTO_NOT_ALLOWED, X402_FEE_PAYER_NOT_ALLOWED, X402_ASSET_NOT_ALLOWED
+  option 1      0.01 of 4zMMC9sr... to hPJVmdDZ..., fee payer 8wpoP1xJ...
+                digest 2b9818c28ce0...  deny: X402_PAYTO_NOT_ALLOWED
+  option 2      0.01 of 4zMMC9sr... to CZcNunzw..., fee payer HG71pA1M...
+                digest 470b92ec9ed4...  deny: X402_FEE_PAYER_NOT_ALLOWED
+  option 3      0.01 of CXk2AMBf... to CZcNunzw..., fee payer 8wpoP1xJ...
+                digest cd6c36991b79...  deny: X402_ASSET_NOT_ALLOWED
+  option 4      2.00 of 4zMMC9sr... to hPJVmdDZ..., fee payer 8wpoP1xJ...
+                digest 20fd8c461fd3...  removed by the SDK spend controls; the guard never saw it
+  signer calls  0
+  sent          no
+  note          No payment header was sent. Reserved in the last 24 h before this purchase: 0.02 USDC. Client: Failed to create payment payload: All payment requirements were filtered out by policies for x402 version: 2
+  (the RPC answered 429 Too Many Requests; sending the same request again in 1 s)
+  (the RPC answered 429 Too Many Requests; sending the same request again in 2 s)
+  (the RPC answered 429 Too Many Requests; sending the same request again in 4 s)
+  (the RPC answered 429 Too Many Requests; sending the same request again in 8 s)
+
+Scene 14. x402: a second report (0.04 USDC spent today), then a third against a 0.05 USDC daily budget
+  expected      second purchase allowed and settled; third X402_BUDGET_EXCEEDED; signer calls 0 for the third
+  second report
+    outcome       allow
+    reasons       none
+    option 1      0.02 of 4zMMC9sr... to CZcNunzw..., fee payer 8wpoP1xJ...
+                  digest ddef7af74e4e...  allow
+    message       sha256 fc62fc629246...
+    signer calls  1
+    sent          https://explorer.solana.com/tx/3QADSkJgnZLUtijREWo9gLdJivJmhNEwBSDkK77U9U4Hk6HAFrfMvVRjfPvW1YhkUQPfZ9YNDzrV5c32v4m3rkLa?cluster=devnet
+    note          Paid 0.02 USDC; the local facilitator verified and settled it. Reserved in the last 24 h before this purchase: 0.02 USDC. Report: "Lantern Row market note (fictional): orders for small hardware rose this week. Nothing here is real data."
+  third report
+    outcome       deny
+    reasons       X402_BUDGET_EXCEEDED
+    option 1      0.02 of 4zMMC9sr... to CZcNunzw..., fee payer 8wpoP1xJ...
+                  digest ddef7af74e4e...  deny: X402_BUDGET_EXCEEDED
+    signer calls  0
+    sent          no
+    note          No payment header was sent. Reserved in the last 24 h before this purchase: 0.04 USDC. Client: Failed to create payment payload: All payment requirements were filtered out by policies for x402 version: 2
+
+Scene 15. x402, facilitator side: a payment signed with the agent key outside the guard, whose token instruction is ApproveChecked, posted to the facilitator's /verify
+  expected      the verifier returns X402_NOT_TRANSFER_CHECKED; the facilitator does not sign or settle; nothing is sent
+  outcome       invalid
+  reasons       X402_NOT_TRANSFER_CHECKED at ix[2]
+  message       sha256 1a441ca71201...
+  signer calls  0
+  sent          no
+  note          invalidReason solana-signing-firewall:X402_NOT_TRANSFER_CHECKED. Signer calls here count the facilitator's key. /settle was never called.
+
+4 scenes, 2 transactions sent. Blocked scenes were never sent.
+Treasury: 0.00 USDC paid out, 0 lamports in fees.
+Next: pnpm verify-run
+
+$ pnpm verify-run --x402
+  scene 12, buy one report: match (slot 524612298, sha256 c9811d32644d...)
+  scene 14, second report: match (slot 524612305, sha256 fc62fc629246...)
+2 of 2 on-chain messages match the reviewed bytes

@@ -1,0 +1,458 @@
+{
+  "schema": "solana-signing-firewall.demo-run/v0",
+  "network": "devnet",
+  "code": {
+    "commit": "8d92d862ed5f320b636713cc1ce4cfa86bff2e4d",
+    "dirty": false
+  },
+  "startedAt": "2026-11-21T05:48:05.902Z",
+  "signer": "Solana Keychain (memory backend), wrapped by Signing Firewall",
+  "cast": [
+    {
+      "role": "treasury",
+      "name": "Orrin & Vale (treasury)",
+      "address": "5ku5Dqh1QZoTigeoAwManHffyTK9TdSgPvTHptVpxWsc"
+    },
+    {
+      "role": "approver",
+      "name": "Orrin & Vale (finance approver)",
+      "address": "2JqCdsSuzJddHxjdMThsNQCufqgDWX7wQfSgnByYtXHY"
+    },
+    {
+      "role": "vendorA",
+      "name": "Thistledown Print (vendor A)",
+      "address": "HVcSVwy4BW5UaNLgJdsybEmyw9zXupwj1mnWcZFr9Lck"
+    },
+    {
+      "role": "vendorB",
+      "name": "Cobbleway Freight (vendor B)",
+      "address": "4PLoVMdaoH7nYgCVisNmrFGwAmmNhjZWgaCe6vgZR7VH"
+    },
+    {
+      "role": "outsider",
+      "name": "an unknown address (outsider)",
+      "address": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs"
+    },
+    {
+      "role": "agent",
+      "name": "Orrin & Vale research agent",
+      "address": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+    },
+    {
+      "role": "shop",
+      "name": "Lantern Row (report shop)",
+      "address": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM"
+    },
+    {
+      "role": "facilitatorFeePayer",
+      "name": "local facilitator fee payer",
+      "address": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ"
+    }
+  ],
+  "policies": [
+    {
+      "policyId": "demo-payouts",
+      "digest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
+      "file": "policies/demo-payouts.json"
+    },
+    {
+      "policyId": "demo-agent",
+      "digest": "ba8f62e5113d9f5e0356b08e7151be9f5e302fa31d73e2ad51105e113c30ee0c",
+      "file": "policies/demo-agent.json"
+    },
+    {
+      "policyId": "demo-facilitator-verifier",
+      "digest": "6a9d1b4e05017ef9670bc2957e44acd1e1c5e2a4def86ba1917322223ae85dbd",
+      "file": "policies/demo-facilitator-verifier.json"
+    }
+  ],
+  "finishedAt": "2026-11-21T05:48:26.045Z",
+  "complete": true,
+  "scenes": [
+    {
+      "scene": 12,
+      "title": "x402: the agent buys one report from Lantern Row (report shop) for 0.02 USDC",
+      "expected": "allow; the local facilitator verifies and settles; the agent receives the report",
+      "vectors": [
+        "x402-001",
+        "x402-002"
+      ],
+      "steps": [
+        {
+          "label": "buy one report",
+          "outcome": "allow",
+          "reasons": [],
+          "messageDigest": "c9811d32644ddcb0fcb4ad08fd1e6a215849dff41b30c6f56cc2164adb32312c",
+          "policyId": "demo-agent",
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "58Ya8cFGKi5S29NF7WC5hWZk26s7u2WqreLbQLFaSEUgC5fAuczJSLvUmC5SsuWKfZHPd5R6fhq6AKBRKeJBwUUq",
+          "slot": "524612298",
+          "explorer": "https://explorer.solana.com/tx/58Ya8cFGKi5S29NF7WC5hWZk26s7u2WqreLbQLFaSEUgC5fAuczJSLvUmC5SsuWKfZHPd5R6fhq6AKBRKeJBwUUq?cluster=devnet",
+          "decision": {
+            "outcome": "allow",
+            "reasons": [],
+            "messageDigest": "c9811d32644ddcb0fcb4ad08fd1e6a215849dff41b30c6f56cc2164adb32312c",
+            "policyDigest": "ba8f62e5113d9f5e0356b08e7151be9f5e302fa31d73e2ad51105e113c30ee0c",
+            "policyId": "demo-agent",
+            "version": "v1",
+            "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+            "requiredSigners": [
+              "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "4GfCzyAhJW65dPMCvRnnnsJCcQDuC4o74ZiHyypo1TtC"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "20000",
+                "decimals": 6,
+                "source": "65kegUBN4j6vG73sXLbCn9oF8ngcrunpUaJV8Sr4iuJH",
+                "destination": "4AsnBYugAXBB4fvh2ufkJstjsurg7bTjkkSeH7ySRkta",
+                "destinationOwner": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+                "authority": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "20000"
+              }
+            ],
+            "fees": {
+              "source": "transactionConfig",
+              "computeUnitLimit": 20000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "1",
+              "loadedAccountsDataSizeLimit": 4194304,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524612292",
+            "x402": {
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+              "payee": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "ledger": {
+                "reservedLast24h": "0",
+                "paymentsLastMinute": 0
+              }
+            }
+          },
+          "quotes": [
+            {
+              "option": 0,
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "allow",
+              "reasons": []
+            }
+          ],
+          "note": "Paid 0.02 USDC; the local facilitator verified and settled it. Reserved in the last 24 h before this purchase: 0.00 USDC. Report: \"Lantern Row market note (fictional): orders for small hardware rose this week. Nothing here is real data.\""
+        }
+      ]
+    },
+    {
+      "scene": 13,
+      "title": "x402: the second shop offers four options, each outside the policy",
+      "expected": "options 1 to 3 denied by the guard (X402_PAYTO_NOT_ALLOWED, X402_FEE_PAYER_NOT_ALLOWED, X402_ASSET_NOT_ALLOWED); option 4 removed by the SDK per-payment cap; no payment header sent; signer calls 0",
+      "vectors": [
+        "x402-036",
+        "x402-037",
+        "x402-035"
+      ],
+      "steps": [
+        {
+          "label": "try to buy from the second shop",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "X402_PAYTO_NOT_ALLOWED",
+              "account": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs"
+            },
+            {
+              "code": "X402_FEE_PAYER_NOT_ALLOWED",
+              "account": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+            },
+            {
+              "code": "X402_ASSET_NOT_ALLOWED",
+              "account": "CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM"
+            }
+          ],
+          "signerCalls": 0,
+          "sent": false,
+          "quotes": [
+            {
+              "option": 0,
+              "requirementsDigest": "2b9818c28ce09f175f1258334403d7933a6d1a7f259edda130a4819899b1fffb",
+              "payTo": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "10000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "deny",
+              "reasons": [
+                "X402_PAYTO_NOT_ALLOWED"
+              ]
+            },
+            {
+              "option": 1,
+              "requirementsDigest": "470b92ec9ed4fad04b87e41d0e03854f737c172e545a1e1d50b38031511eef99",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "10000",
+              "feePayer": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7",
+              "outcome": "deny",
+              "reasons": [
+                "X402_FEE_PAYER_NOT_ALLOWED"
+              ]
+            },
+            {
+              "option": 2,
+              "requirementsDigest": "cd6c36991b7946dbb070c0784047e5d7c1c89d8025ed43e0b9fc2788f90579b2",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM",
+              "amount": "10000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "deny",
+              "reasons": [
+                "X402_ASSET_NOT_ALLOWED"
+              ]
+            },
+            {
+              "option": 3,
+              "requirementsDigest": "20fd8c461fd3cb051782682f5f05601a77504d47bbe53b223c2cc742e31da997",
+              "payTo": "hPJVmdDZ3SQFtTfLYgoyuLDYMN5EUrAijP3QKpfZiRs",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "2000000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "removed by the SDK spend controls; the guard never saw it",
+              "reasons": []
+            }
+          ],
+          "note": "No payment header was sent. Reserved in the last 24 h before this purchase: 0.02 USDC. Client: Failed to create payment payload: All payment requirements were filtered out by policies for x402 version: 2"
+        }
+      ]
+    },
+    {
+      "scene": 14,
+      "title": "x402: a second report (0.04 USDC spent today), then a third against a 0.05 USDC daily budget",
+      "expected": "second purchase allowed and settled; third X402_BUDGET_EXCEEDED; signer calls 0 for the third",
+      "vectors": [
+        "x402-041"
+      ],
+      "steps": [
+        {
+          "label": "second report",
+          "outcome": "allow",
+          "reasons": [],
+          "messageDigest": "fc62fc62924638a199bf87341d4dfe95d3944f6eb6179f7411517df5a902eeaf",
+          "policyId": "demo-agent",
+          "signerCalls": 1,
+          "sent": true,
+          "signature": "3QADSkJgnZLUtijREWo9gLdJivJmhNEwBSDkK77U9U4Hk6HAFrfMvVRjfPvW1YhkUQPfZ9YNDzrV5c32v4m3rkLa",
+          "slot": "524612305",
+          "explorer": "https://explorer.solana.com/tx/3QADSkJgnZLUtijREWo9gLdJivJmhNEwBSDkK77U9U4Hk6HAFrfMvVRjfPvW1YhkUQPfZ9YNDzrV5c32v4m3rkLa?cluster=devnet",
+          "decision": {
+            "outcome": "allow",
+            "reasons": [],
+            "messageDigest": "fc62fc62924638a199bf87341d4dfe95d3944f6eb6179f7411517df5a902eeaf",
+            "policyDigest": "ba8f62e5113d9f5e0356b08e7151be9f5e302fa31d73e2ad51105e113c30ee0c",
+            "policyId": "demo-agent",
+            "version": "v1",
+            "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+            "requiredSigners": [
+              "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+            ],
+            "lifetime": {
+              "type": "blockhash",
+              "token": "8pCyvze24iBr82eWwhzjTu547kYf6P8Z8uDDTcMzjJZZ"
+            },
+            "transfers": [
+              {
+                "path": "ix[0]",
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "20000",
+                "decimals": 6,
+                "source": "65kegUBN4j6vG73sXLbCn9oF8ngcrunpUaJV8Sr4iuJH",
+                "destination": "4AsnBYugAXBB4fvh2ufkJstjsurg7bTjkkSeH7ySRkta",
+                "destinationOwner": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+                "authority": "HG71pA1MF7K8b2mKxavphvyTLRyooaBtxeY9EU7ZrWz7"
+              }
+            ],
+            "totals": [
+              {
+                "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                "amount": "20000"
+              }
+            ],
+            "fees": {
+              "source": "transactionConfig",
+              "computeUnitLimit": 20000,
+              "computeUnitPriceMicroLamports": null,
+              "priorityFeeLamports": "1",
+              "loadedAccountsDataSizeLimit": 4194304,
+              "heapSize": null
+            },
+            "lookupTableEntries": [],
+            "snapshotSlot": "524612299",
+            "x402": {
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+              "payee": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "ledger": {
+                "reservedLast24h": "20000",
+                "paymentsLastMinute": 1
+              }
+            }
+          },
+          "quotes": [
+            {
+              "option": 0,
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "allow",
+              "reasons": []
+            }
+          ],
+          "note": "Paid 0.02 USDC; the local facilitator verified and settled it. Reserved in the last 24 h before this purchase: 0.02 USDC. Report: \"Lantern Row market note (fictional): orders for small hardware rose this week. Nothing here is real data.\""
+        },
+        {
+          "label": "third report",
+          "outcome": "deny",
+          "reasons": [
+            {
+              "code": "X402_BUDGET_EXCEEDED"
+            }
+          ],
+          "signerCalls": 0,
+          "sent": false,
+          "quotes": [
+            {
+              "option": 0,
+              "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+              "payTo": "CZcNunzw25bmfcnwPT2nKugfpcVx6ULu5js14QTjckGM",
+              "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+              "amount": "20000",
+              "feePayer": "8wpoP1xJkigMBmSHGGa1HNS4BdtU6267DiCCk9ng4sjJ",
+              "outcome": "deny",
+              "reasons": [
+                "X402_BUDGET_EXCEEDED"
+              ]
+            }
+          ],
+          "note": "No payment header was sent. Reserved in the last 24 h before this purchase: 0.04 USDC. Client: Failed to create payment payload: All payment requirements were filtered out by policies for x402 version: 2"
+        }
+      ]
+    },
+    {
+      "scene": 15,
+      "title": "x402, facilitator side: a payment signed with the agent key outside the guard, whose token instruction is ApproveChecked, posted to the facilitator's /verify",
+      "expected": "the verifier returns X402_NOT_TRANSFER_CHECKED; the facilitator does not sign or settle; nothing is sent",
+      "vectors": [
+        "x402-004"
+      ],
+      "steps": [
+        {
+          "label": "POST /verify",
+          "outcome": "invalid",
+          "reasons": [
+            {
+              "code": "X402_NOT_TRANSFER_CHECKED",
+              "path": "ix[2]"
+            }
+          ],
+          "messageDigest": "1a441ca71201a18080e3f9f6748c2ea6845ebafffca79d65d369ecbc3fbc62da",
+          "signerCalls": 0,
+          "sent": false,
+          "decision": {
+            "outcome": "invalid",
+            "reasons": [
+              {
+                "code": "X402_NOT_TRANSFER_CHECKED",
+                "path": "ix[2]"
+              }
+            ],
+            "messageDigest": "1a441ca71201a18080e3f9f6748c2ea6845ebafffca79d65d369ecbc3fbc62da",
+            "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
+            "version": "v0",
+            "snapshotSlot": "0"
+          },
+          "note": "invalidReason solana-signing-firewall:X402_NOT_TRANSFER_CHECKED. Signer calls here count the facilitator's key. /settle was never called."
+        }
+      ]
+    }
+  ],
+  "balances": [
+    {
+      "account": "treasury",
+      "asset": "SOL",
+      "before": "938140140",
+      "after": "938140140"
+    },
+    {
+      "account": "treasury",
+      "asset": "USDC",
+      "before": "12900000",
+      "after": "12900000"
+    },
+    {
+      "account": "vendor A",
+      "asset": "USDC",
+      "before": "1900000",
+      "after": "1900000"
+    },
+    {
+      "account": "vendor B",
+      "asset": "USDC",
+      "before": "5100000",
+      "after": "5100000"
+    },
+    {
+      "account": "outsider",
+      "asset": "USDC",
+      "before": "0",
+      "after": "0"
+    },
+    {
+      "account": "outsider (not associated)",
+      "asset": "USDC",
+      "before": "0",
+      "after": "0"
+    },
+    {
+      "account": "agent",
+      "asset": "USDC",
+      "before": "60000",
+      "after": "20000"
+    },
+    {
+      "account": "shop",
+      "asset": "USDC",
+      "before": "40000",
+      "after": "80000"
+    },
+    {
+      "account": "facilitator fee payer",
+      "asset": "SOL",
+      "before": "49959996",
+      "after": "49939994"
+    }
+  ]
+}

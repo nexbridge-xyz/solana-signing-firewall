@@ -2,10 +2,10 @@
   "schema": "solana-signing-firewall.demo-run/v0",
   "network": "devnet",
   "code": {
-    "commit": "81dc0300018c7f04cfb7b7fe44d98c11ad64f29e",
+    "commit": "8d92d862ed5f320b636713cc1ce4cfa86bff2e4d",
     "dirty": false
   },
-  "startedAt": "2026-11-20T13:59:24.695Z",
+  "startedAt": "2026-11-21T05:47:10.917Z",
   "signer": "Solana Keychain (memory backend), wrapped by Signing Firewall",
   "cast": [
     {
@@ -66,7 +66,7 @@
       "file": "policies/demo-facilitator-verifier.json"
     }
   ],
-  "finishedAt": "2026-11-20T13:59:52.543Z",
+  "finishedAt": "2026-11-21T05:47:39.385Z",
   "complete": true,
   "scenes": [
     {
@@ -81,12 +81,12 @@
           "label": "review, sign and send",
           "outcome": "allow",
           "reasons": [],
-          "messageDigest": "f2364288b9c12d98f01bec2c7c02809470687d2832e0e87bb9452bdefb3747aa",
+          "messageDigest": "b1f647d08cc193e81cd7cd1caf598054d6bdeea1cf28e6669db71b18d49b4bfd",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "allow",
             "reasons": [],
-            "messageDigest": "f2364288b9c12d98f01bec2c7c02809470687d2832e0e87bb9452bdefb3747aa",
+            "messageDigest": "b1f647d08cc193e81cd7cd1caf598054d6bdeea1cf28e6669db71b18d49b4bfd",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "legacy",
@@ -96,7 +96,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "Gk2BCRnsAPoMBxsjRa9JqVBRfaPnX44zEVAjRJncBPYr"
+              "token": "F7Vsvf4Uq98jZFk5gkK8kCevA1rMESP3KsQEYTPyrYZx"
             },
             "transfers": [
               {
@@ -125,13 +125,13 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375227"
+            "snapshotSlot": "524612064"
           },
           "signerCalls": 1,
           "sent": true,
-          "signature": "3ahhXcUaTqBU3QK6gDAbnDp9TYcaHSQBUbjYe2dN4dhLksBD7VbS5gxBCoU4JCPmJQffFrgswiHEY6AMsnys9jeX",
-          "slot": "524375232",
-          "explorer": "https://explorer.solana.com/tx/3ahhXcUaTqBU3QK6gDAbnDp9TYcaHSQBUbjYe2dN4dhLksBD7VbS5gxBCoU4JCPmJQffFrgswiHEY6AMsnys9jeX?cluster=devnet"
+          "signature": "5DAYN3Wu9jSYzZJDD24P7mXc6PcUoMqjDX2kc4KdUYm3szCZbmHgzoJVvT5PSKYBfmXpUextJkHQrDuzBoXdGAqH",
+          "slot": "524612068",
+          "explorer": "https://explorer.solana.com/tx/5DAYN3Wu9jSYzZJDD24P7mXc6PcUoMqjDX2kc4KdUYm3szCZbmHgzoJVvT5PSKYBfmXpUextJkHQrDuzBoXdGAqH?cluster=devnet"
         }
       ]
     },
@@ -147,12 +147,12 @@
           "label": "review, sign and send",
           "outcome": "allow",
           "reasons": [],
-          "messageDigest": "18919d7baacd88ee9a6d9afeeb3ccff0ff8247f66ccb80d72a55b2419427452f",
+          "messageDigest": "13ce4e876cbcc0e9402fe9c9469991bf87d54445b329bb38abbd85376ea6c37c",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "allow",
             "reasons": [],
-            "messageDigest": "18919d7baacd88ee9a6d9afeeb3ccff0ff8247f66ccb80d72a55b2419427452f",
+            "messageDigest": "13ce4e876cbcc0e9402fe9c9469991bf87d54445b329bb38abbd85376ea6c37c",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v0",
@@ -162,7 +162,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "AtWurZvHKthTLrLjT7fRkJKYyprG2RePDNnQr1A7ARKm"
+              "token": "BcmSzTv3PHmjEs6gpZkyhVWspqPAT5nKH5ZVZUts4B8v"
             },
             "transfers": [
               {
@@ -210,13 +210,13 @@
                 "writable": false
               }
             ],
-            "snapshotSlot": "524375237"
+            "snapshotSlot": "524612071"
           },
           "signerCalls": 1,
           "sent": true,
-          "signature": "L8sd4nHz9KvASakaQmiUrxU5ojyHntCnfFAJ8PgPVKDuwFacQ5MpCJGXPvbmMa9oyYAxi5qpRKwpjFgMAyeGFF1",
-          "slot": "524375241",
-          "explorer": "https://explorer.solana.com/tx/L8sd4nHz9KvASakaQmiUrxU5ojyHntCnfFAJ8PgPVKDuwFacQ5MpCJGXPvbmMa9oyYAxi5qpRKwpjFgMAyeGFF1?cluster=devnet",
+          "signature": "DLw9mgqAV7wKgnxe7Q9Fin5W4THiE73cWUB5av59YNVWMB1MiyVRPaZXLARCuNFAuyQb32UkJPHfSZ3JACh1ooB",
+          "slot": "524612074",
+          "explorer": "https://explorer.solana.com/tx/DLw9mgqAV7wKgnxe7Q9Fin5W4THiE73cWUB5av59YNVWMB1MiyVRPaZXLARCuNFAuyQb32UkJPHfSZ3JACh1ooB?cluster=devnet",
           "note": "3 accounts loaded from lookup table FVtxNdpVUmnXoVKg3CuWTL1vvVfCCbcCasjNmPzaSvk1"
         }
       ]
@@ -233,12 +233,12 @@
           "label": "review, sign and send",
           "outcome": "allow",
           "reasons": [],
-          "messageDigest": "278bb23cb0a1ae9c3addaacb9ef92b01645c0ecb7611c81f3b418c7437348360",
+          "messageDigest": "863c783e1990d2bff0f239f5482c2d3210d03b3c63aab709d996cfa0d80ca00d",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "allow",
             "reasons": [],
-            "messageDigest": "278bb23cb0a1ae9c3addaacb9ef92b01645c0ecb7611c81f3b418c7437348360",
+            "messageDigest": "863c783e1990d2bff0f239f5482c2d3210d03b3c63aab709d996cfa0d80ca00d",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v1",
@@ -248,7 +248,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "BZ3dLZDKYwRGjC1YPAeUjTfE3pp2jFn1svmspxUFPDYC"
+              "token": "324pm1UvBUzUA8BDdbi2BUGKD9y22FkNriT8gUZEDxWW"
             },
             "transfers": [
               {
@@ -277,13 +277,13 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375243"
+            "snapshotSlot": "524612076"
           },
           "signerCalls": 1,
           "sent": true,
-          "signature": "3NKBhAJBEHjsecX82nCrZpap1FUB4gsMXFQxAAGqsvc1CT4m7VdZGtJyG591zYLYFSes6kWKvE6KARUvTGqLRGnJ",
-          "slot": "524375247",
-          "explorer": "https://explorer.solana.com/tx/3NKBhAJBEHjsecX82nCrZpap1FUB4gsMXFQxAAGqsvc1CT4m7VdZGtJyG591zYLYFSes6kWKvE6KARUvTGqLRGnJ?cluster=devnet",
+          "signature": "2GvC2QcuwMhBrVw7yAse8rBSZanQ2nFS8zkVn5bY95yYPkfkTEUo2JWYwvLv5ykpubvKXwEkmLU2w3fmq4M7khEP",
+          "slot": "524612080",
+          "explorer": "https://explorer.solana.com/tx/2GvC2QcuwMhBrVw7yAse8rBSZanQ2nFS8zkVn5bY95yYPkfkTEUo2JWYwvLv5ykpubvKXwEkmLU2w3fmq4M7khEP?cluster=devnet",
           "note": "priority fee 10000 lamports and compute-unit limit 30000, read from transactionConfig"
         }
       ]
@@ -300,12 +300,12 @@
           "label": "review, sign and send",
           "outcome": "allow",
           "reasons": [],
-          "messageDigest": "b6a57f42117835542185931664b10c6a0894b9622fcc5e8b7f1567123bf6d98e",
+          "messageDigest": "006b84318002231713c1ac55feaec04a5afeec7839ad0199056cd52365d111d6",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "allow",
             "reasons": [],
-            "messageDigest": "b6a57f42117835542185931664b10c6a0894b9622fcc5e8b7f1567123bf6d98e",
+            "messageDigest": "006b84318002231713c1ac55feaec04a5afeec7839ad0199056cd52365d111d6",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v0",
@@ -315,7 +315,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "28tasrqgsq9UhGKPrqBJ1vpHETQgkYykc6S1CiEWjr39"
+              "token": "AbDc6ss2GoUz3YYHwfbueyNjvbEBNyhRmMob5ADdKi2f"
             },
             "transfers": [
               {
@@ -354,13 +354,13 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375248"
+            "snapshotSlot": "524612083"
           },
           "signerCalls": 1,
           "sent": true,
-          "signature": "5pYsBboAsCby6FtUydxLhvM4mA4xEAuiYVadRG8hP5Vf7AmLLZesxMxTkmDhUWKyjAcu7bYoN5KcVqocnRgwejcf",
-          "slot": "524375252",
-          "explorer": "https://explorer.solana.com/tx/5pYsBboAsCby6FtUydxLhvM4mA4xEAuiYVadRG8hP5Vf7AmLLZesxMxTkmDhUWKyjAcu7bYoN5KcVqocnRgwejcf?cluster=devnet"
+          "signature": "2zhSY9RWb9rwFM6aP4oGZU2yg1kMoFpaFxbLW1Y7oQQ3VrhG8Z2oRzG5dHonvgWsH5uFDUX7fHrKbYCpkjFGgpRt",
+          "slot": "524612091",
+          "explorer": "https://explorer.solana.com/tx/2zhSY9RWb9rwFM6aP4oGZU2yg1kMoFpaFxbLW1Y7oQQ3VrhG8Z2oRzG5dHonvgWsH5uFDUX7fHrKbYCpkjFGgpRt?cluster=devnet"
         }
       ]
     },
@@ -381,12 +381,12 @@
               "code": "APPROVAL_REQUIRED"
             }
           ],
-          "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+          "messageDigest": "8ff6d23f2866a5a96da97898b7005d6e1da203b2bdda4b1a06a6cf9be81c3c8b",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "needs_approval",
             "reasons": [],
-            "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+            "messageDigest": "8ff6d23f2866a5a96da97898b7005d6e1da203b2bdda4b1a06a6cf9be81c3c8b",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v0",
@@ -396,7 +396,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "GPxFsxxyTQBJucNmM3HZVrnPHY3Je6C8MhWfd9QZGxRB"
+              "token": "F4EnhrKXNXfT7BzyvX171zN59LGzBLM3iGyxpbE75cgr"
             },
             "transfers": [
               {
@@ -425,7 +425,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375255"
+            "snapshotSlot": "524612097"
           },
           "signerCalls": 0,
           "sent": false
@@ -434,12 +434,12 @@
           "label": "after the approver signs",
           "outcome": "allow with approval",
           "reasons": [],
-          "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+          "messageDigest": "8ff6d23f2866a5a96da97898b7005d6e1da203b2bdda4b1a06a6cf9be81c3c8b",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "needs_approval",
             "reasons": [],
-            "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+            "messageDigest": "8ff6d23f2866a5a96da97898b7005d6e1da203b2bdda4b1a06a6cf9be81c3c8b",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v0",
@@ -449,7 +449,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "GPxFsxxyTQBJucNmM3HZVrnPHY3Je6C8MhWfd9QZGxRB"
+              "token": "F4EnhrKXNXfT7BzyvX171zN59LGzBLM3iGyxpbE75cgr"
             },
             "transfers": [
               {
@@ -478,23 +478,23 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375255"
+            "snapshotSlot": "524612099"
           },
           "signerCalls": 1,
           "sent": true,
-          "signature": "3BwLLDQS4LK65BWn6r27Rszp3NcfUNDmUtRYMHbG3qut8N3Yw7PUi1TsWSLPqkdQ3gnHZyrzmfSh5az9aB85kbuY",
-          "slot": "524375259",
-          "explorer": "https://explorer.solana.com/tx/3BwLLDQS4LK65BWn6r27Rszp3NcfUNDmUtRYMHbG3qut8N3Yw7PUi1TsWSLPqkdQ3gnHZyrzmfSh5az9aB85kbuY?cluster=devnet",
+          "signature": "2DizYEgJhfXFv8TXinWWGeQxzA9B7P3UsaEpsJHpr4d1V97guQuo7utcCj7hqLDL793eZc9cKbXASRdaKU9Gw3jb",
+          "slot": "524612102",
+          "explorer": "https://explorer.solana.com/tx/2DizYEgJhfXFv8TXinWWGeQxzA9B7P3UsaEpsJHpr4d1V97guQuo7utcCj7hqLDL793eZc9cKbXASRdaKU9Gw3jb?cluster=devnet",
           "approval": {
             "schema": "solana-signing-firewall.approval/v0",
-            "messageDigest": "28d7864a17bb023d99de9938c8dd5b0562f7f1d8d471e8f278fbc63b67dd16f9",
+            "messageDigest": "8ff6d23f2866a5a96da97898b7005d6e1da203b2bdda4b1a06a6cf9be81c3c8b",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
-            "issuedAt": "2026-11-20T13:59:31.836Z",
-            "expiresAt": "2026-11-20T14:00:31.836Z",
+            "issuedAt": "2026-11-21T05:47:19.342Z",
+            "expiresAt": "2026-11-21T05:48:19.342Z",
             "approver": "2JqCdsSuzJddHxjdMThsNQCufqgDWX7wQfSgnByYtXHY",
-            "signature": "Bry7bG19whUgeXFUQyzve8xYyPRtmbqc9Yp4GvdyBrDcGpNjUg7W7qQdkW55p6iuxnedXxvTMNXn8sC9E9jS2zj"
+            "signature": "LQJaE9X72PaH2tN1znt5pAUJet8NAqRdNEXwNAhQQWtm67eoSLcbPSdKz2HhRapoWKU9yNwKmPSDMwzQ5bWumEv"
           },
-          "note": "approved by 2JqCdsSuzJddHxjdMThsNQCufqgDWX7wQfSgnByYtXHY, valid for 60 seconds, for message 28d7864a17bb..."
+          "note": "approved by 2JqCdsSuzJddHxjdMThsNQCufqgDWX7wQfSgnByYtXHY, valid for 60 seconds, for message 8ff6d23f2866..."
         }
       ]
     },
@@ -514,12 +514,12 @@
               "code": "APPROVAL_MESSAGE_MISMATCH"
             }
           ],
-          "messageDigest": "5cacc7664a2d1a2be9d48c1bf9c1ed3c31e665f01beca2fd74fd0ee24c095373",
+          "messageDigest": "7361b2b4277c81c45dd0e9fbab91d79152cd3343867c248047082e9e5e8db9c8",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "needs_approval",
             "reasons": [],
-            "messageDigest": "5cacc7664a2d1a2be9d48c1bf9c1ed3c31e665f01beca2fd74fd0ee24c095373",
+            "messageDigest": "7361b2b4277c81c45dd0e9fbab91d79152cd3343867c248047082e9e5e8db9c8",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v0",
@@ -529,7 +529,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "8bHmLE2PdVEWvXXydphjc6mm9MwSNxufVae6gxroy2Cp"
+              "token": "5W8eN3TDHpw1FNLQBwCFJXLFjy5NH7rS5RA8ND7qnFR"
             },
             "transfers": [
               {
@@ -558,7 +558,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375261"
+            "snapshotSlot": "524612104"
           },
           "signerCalls": 0,
           "sent": false
@@ -588,7 +588,7 @@
               "account": "DZHtGDEQLTHyNAXxjMiZMWbE9VGBbjjDrXqjQVXDtQYc"
             }
           ],
-          "messageDigest": "49b393c87122f5c479d1d7fc5d6877d7f0c2c6a89921fe24eed464a1cac1c411",
+          "messageDigest": "386fb92a0f1b46ddc33b9a86bab0b62ec9861b44753740328a6f0c7b87b3bf50",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "deny",
@@ -604,7 +604,7 @@
                 "account": "DZHtGDEQLTHyNAXxjMiZMWbE9VGBbjjDrXqjQVXDtQYc"
               }
             ],
-            "messageDigest": "49b393c87122f5c479d1d7fc5d6877d7f0c2c6a89921fe24eed464a1cac1c411",
+            "messageDigest": "386fb92a0f1b46ddc33b9a86bab0b62ec9861b44753740328a6f0c7b87b3bf50",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v0",
@@ -614,7 +614,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "48KqsGJrNPzXesVAeVkGeX6oZemEJzhS47jgVxk4fJsa"
+              "token": "5W8eN3TDHpw1FNLQBwCFJXLFjy5NH7rS5RA8ND7qnFR"
             },
             "transfers": [
               {
@@ -643,7 +643,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375261"
+            "snapshotSlot": "524612105"
           },
           "signerCalls": 0,
           "sent": false
@@ -667,7 +667,7 @@
               "account": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
             }
           ],
-          "messageDigest": "43d2e707675468e5e74602240003abe5209cf04d970cddab51d16ea67a83d21b",
+          "messageDigest": "51cf72d9d4b0601d710f17fc775fa5022788f462a58df55b1ea46dfeea8f6f26",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "deny",
@@ -678,7 +678,7 @@
                 "detail": "6000000 > 5000000"
               }
             ],
-            "messageDigest": "43d2e707675468e5e74602240003abe5209cf04d970cddab51d16ea67a83d21b",
+            "messageDigest": "51cf72d9d4b0601d710f17fc775fa5022788f462a58df55b1ea46dfeea8f6f26",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v0",
@@ -688,7 +688,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "48KqsGJrNPzXesVAeVkGeX6oZemEJzhS47jgVxk4fJsa"
+              "token": "12rBoWUnEKjuC1HWFUUh8HFwbmJCYzJDQMmBrAF9U1vN"
             },
             "transfers": [
               {
@@ -737,7 +737,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375261"
+            "snapshotSlot": "524612111"
           },
           "signerCalls": 0,
           "sent": false
@@ -761,7 +761,7 @@
               "path": "ix[0].batch[1]"
             }
           ],
-          "messageDigest": "31e2f0e8ea86a4060902ab3da24dd615a5336cf526e52b4cd65a69f99ceff94e",
+          "messageDigest": "e15f9a09ce6f7237f99548c5332d6346a498b205de29da02b11bb71cbb550638",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "deny",
@@ -772,7 +772,7 @@
                 "detail": "Approve"
               }
             ],
-            "messageDigest": "31e2f0e8ea86a4060902ab3da24dd615a5336cf526e52b4cd65a69f99ceff94e",
+            "messageDigest": "e15f9a09ce6f7237f99548c5332d6346a498b205de29da02b11bb71cbb550638",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v0",
@@ -782,7 +782,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "4aC1o9iVy775PbTYqVE3g9kUkTdARmXVk9FXhdsbK9si"
+              "token": "12rBoWUnEKjuC1HWFUUh8HFwbmJCYzJDQMmBrAF9U1vN"
             },
             "transfers": [
               {
@@ -811,7 +811,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375263"
+            "snapshotSlot": "524612111"
           },
           "signerCalls": 0,
           "sent": false
@@ -884,7 +884,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375263"
+            "snapshotSlot": "524612112"
           },
           "signerCalls": 0,
           "sent": false
@@ -911,7 +911,7 @@
               "code": "FEE_CAP_EXCEEDED"
             }
           ],
-          "messageDigest": "5abf8f51de75ec30af1f860767d27f7ab2ff4acfa014b988ba2c687ff4245290",
+          "messageDigest": "dfbc4380dbc6d65bad4af282b408e9135d318e8ec2bd6678ff381c51283d061e",
           "policyId": "demo-payouts",
           "decision": {
             "outcome": "deny",
@@ -925,7 +925,7 @@
                 "detail": "5000000 > 50000 lamports"
               }
             ],
-            "messageDigest": "5abf8f51de75ec30af1f860767d27f7ab2ff4acfa014b988ba2c687ff4245290",
+            "messageDigest": "dfbc4380dbc6d65bad4af282b408e9135d318e8ec2bd6678ff381c51283d061e",
             "policyDigest": "c1b0b306b00c61eb4f68f7207f7830c3b7736bdc34a8beb5830bd9c36386375f",
             "policyId": "demo-payouts",
             "version": "v1",
@@ -935,7 +935,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "FGbpLGyeE7jAqH8hFCuez91UuHo3inRDXvVYPPKRUpnt"
+              "token": "35TGBHGzGFHELwfpS5LsYejn58CfYTPaBnTsMLW3KNgN"
             },
             "transfers": [
               {
@@ -964,7 +964,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375264"
+            "snapshotSlot": "524612118"
           },
           "signerCalls": 0,
           "sent": false
@@ -984,17 +984,17 @@
           "label": "buy one report",
           "outcome": "allow",
           "reasons": [],
-          "messageDigest": "21a0d2e551e6d4e4230a88a0ade75696f79567417dfb81ed494acc722585b87b",
+          "messageDigest": "547d3efb4b49e7f46f405808191412c83ef46706f7f474994a6142d9afdc38d5",
           "policyId": "demo-agent",
           "signerCalls": 1,
           "sent": true,
-          "signature": "4qVJW9UkZvnk7Zd7C2hjL3JijJjyG9LsF8UFv5VK8sPYdnwi6odaPcQk4AHpbyihDs7LHprfcWV9S2eBtdxrEeDf",
-          "slot": "524375290",
-          "explorer": "https://explorer.solana.com/tx/4qVJW9UkZvnk7Zd7C2hjL3JijJjyG9LsF8UFv5VK8sPYdnwi6odaPcQk4AHpbyihDs7LHprfcWV9S2eBtdxrEeDf?cluster=devnet",
+          "signature": "3AgTsRYj5UAYqYVoS86GmY9EnXvaeJn7uRoLjxGv7dkP5MweXwj5viGcSWtagq19Kbg9NBm26BK1wNmWJqYRcMVF",
+          "slot": "524612135",
+          "explorer": "https://explorer.solana.com/tx/3AgTsRYj5UAYqYVoS86GmY9EnXvaeJn7uRoLjxGv7dkP5MweXwj5viGcSWtagq19Kbg9NBm26BK1wNmWJqYRcMVF?cluster=devnet",
           "decision": {
             "outcome": "allow",
             "reasons": [],
-            "messageDigest": "21a0d2e551e6d4e4230a88a0ade75696f79567417dfb81ed494acc722585b87b",
+            "messageDigest": "547d3efb4b49e7f46f405808191412c83ef46706f7f474994a6142d9afdc38d5",
             "policyDigest": "ba8f62e5113d9f5e0356b08e7151be9f5e302fa31d73e2ad51105e113c30ee0c",
             "policyId": "demo-agent",
             "version": "v1",
@@ -1005,7 +1005,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "5pYFi4r6YUa1KGGBe99kYmXSiBR6GvTNL34eiXiGP4Vq"
+              "token": "3nxWv5XCHaZBYcrWp4hjYnhgPYPL3rkFQycoMiHMjism"
             },
             "transfers": [
               {
@@ -1034,7 +1034,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375272",
+            "snapshotSlot": "524612124",
             "x402": {
               "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
               "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
@@ -1066,13 +1066,12 @@
     },
     {
       "scene": 13,
-      "title": "x402: the second shop offers four options, each with one fault",
+      "title": "x402: the second shop offers four options, each outside the policy",
       "expected": "options 1 to 3 denied by the guard (X402_PAYTO_NOT_ALLOWED, X402_FEE_PAYER_NOT_ALLOWED, X402_ASSET_NOT_ALLOWED); option 4 removed by the SDK per-payment cap; no payment header sent; signer calls 0",
       "vectors": [
         "x402-036",
         "x402-037",
-        "x402-035",
-        "x402-038"
+        "x402-035"
       ],
       "steps": [
         {
@@ -1158,17 +1157,17 @@
           "label": "second report",
           "outcome": "allow",
           "reasons": [],
-          "messageDigest": "130e831b133a1dd9572eaf0311870cf7e198af3e22073db627e3618a1eda6304",
+          "messageDigest": "fae871135623ae35245616dfc8613a2b2eaa15e776d9794801d1ee02e6ade2b3",
           "policyId": "demo-agent",
           "signerCalls": 1,
           "sent": true,
-          "signature": "5bcNRTvdzDcGuCWuUK9FV5k26tGPAoTdhxwiRuoLqNy3urisqF1xAebCx2aw3PHJxniTHJ7vGcJ8W2V1Q3Fkx7Pq",
-          "slot": "524375303",
-          "explorer": "https://explorer.solana.com/tx/5bcNRTvdzDcGuCWuUK9FV5k26tGPAoTdhxwiRuoLqNy3urisqF1xAebCx2aw3PHJxniTHJ7vGcJ8W2V1Q3Fkx7Pq?cluster=devnet",
+          "signature": "549rPqREiN8Wer3vKXioqVS2JCQzQGBNW1xhTAwQiZWPi71AsEBDX7j33YXTg9kioSidh7kBFcHe5R1Ju4bgFGdd",
+          "slot": "524612146",
+          "explorer": "https://explorer.solana.com/tx/549rPqREiN8Wer3vKXioqVS2JCQzQGBNW1xhTAwQiZWPi71AsEBDX7j33YXTg9kioSidh7kBFcHe5R1Ju4bgFGdd?cluster=devnet",
           "decision": {
             "outcome": "allow",
             "reasons": [],
-            "messageDigest": "130e831b133a1dd9572eaf0311870cf7e198af3e22073db627e3618a1eda6304",
+            "messageDigest": "fae871135623ae35245616dfc8613a2b2eaa15e776d9794801d1ee02e6ade2b3",
             "policyDigest": "ba8f62e5113d9f5e0356b08e7151be9f5e302fa31d73e2ad51105e113c30ee0c",
             "policyId": "demo-agent",
             "version": "v1",
@@ -1179,7 +1178,7 @@
             ],
             "lifetime": {
               "type": "blockhash",
-              "token": "H25bxE12s1zG9UKLfYDM12gyox1rJvFBRNXRePqVgBgE"
+              "token": "GwPQD7m3kqPbwFZfEsdgA5Ufc2ADRDgcdVG8VJB9qZzo"
             },
             "transfers": [
               {
@@ -1208,7 +1207,7 @@
               "heapSize": null
             },
             "lookupTableEntries": [],
-            "snapshotSlot": "524375292",
+            "snapshotSlot": "524612136",
             "x402": {
               "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
               "network": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
@@ -1281,7 +1280,7 @@
               "path": "ix[2]"
             }
           ],
-          "messageDigest": "354d7a034f2183394ec7629c95ea02ec77bb15395f2908efcdcb6fcb6c60a67c",
+          "messageDigest": "5c614309712f62832ba979a12c2dbcd981b3a37c3e6d0e5897644baba107bf1a",
           "signerCalls": 0,
           "sent": false,
           "decision": {
@@ -1292,7 +1291,7 @@
                 "path": "ix[2]"
               }
             ],
-            "messageDigest": "354d7a034f2183394ec7629c95ea02ec77bb15395f2908efcdcb6fcb6c60a67c",
+            "messageDigest": "5c614309712f62832ba979a12c2dbcd981b3a37c3e6d0e5897644baba107bf1a",
             "requirementsDigest": "ddef7af74e4e3c62075624374fe25f76489d77195d19c5d54a57df1f91ef5e8b",
             "version": "v0",
             "snapshotSlot": "0"
@@ -1306,8 +1305,8 @@
     {
       "account": "treasury",
       "asset": "SOL",
-      "before": "938235200",
-      "after": "938200170"
+      "before": "938175170",
+      "after": "938140140"
     },
     {
       "account": "treasury",
@@ -1354,8 +1353,8 @@
     {
       "account": "facilitator fee payer",
       "asset": "SOL",
-      "before": "50000000",
-      "after": "49979998"
+      "before": "49979998",
+      "after": "49959996"
     }
   ]
 }
