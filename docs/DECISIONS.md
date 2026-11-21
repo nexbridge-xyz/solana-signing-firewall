@@ -455,6 +455,10 @@ Decided by the maintainers on 2026-11-20, after the devnet run:
 - Open before going public: check the README's quotation of Solana's x402 guide against the page.
   The wording comes from a maintainer's reading of the page; solana.com answered HTTP 429 to every
   fetch from this session.
+- Closed on 2026-11-21: the maintainers compared the quotation with two live pages, the
+  getting-started guide the README links to
+  (`https://solana.com/developers/guides/getstarted/intro-to-x402`) and Solana's x402
+  documentation, and the sentence is the same on both.
 
 ### D40. Security review of 8a50ffc
 
@@ -692,6 +696,13 @@ Each has a `stricter_than_spec` vector:
   the signer's associated token account.
 - `bindingReasons()`, which is exported, takes the fee payers to keep out of instructions.
 - Tests: `packages/signing-firewall/test/x402-source-account.test.ts`.
+- Known limit: the source is checked by its address. An SPL Token account's owner can be changed
+  after the account is created, so the account at the payer's associated address could belong to
+  the fee payer. A transfer out of it would still need the payer as its delegate, which only the
+  fee payer can grant, by signing an `Approve` itself. Later work: compare the source's owner in the
+  snapshot with the transfer authority (THREAT_MODEL, "What v0.1.0 does not do for x402").
+- For x402 payments the check narrows the policy's `sources`: only the signer's associated token
+  account for the asset can pay, even when `sources` lists other accounts (POLICY.md, X402.md).
 
 ### D55. Info items of the security review
 
@@ -705,10 +716,12 @@ Each has a `stricter_than_spec` vector:
   tests (`packages/signing-firewall/test/x402-quote-rules.test.ts`), and the documents state no
   mutation score until it is measured again (D34).
 - Not done here:
-  - I-05: `packageManager` names pnpm without an integrity hash; adding one needs the hash of the
-    published pnpm release, which this offline pass did not fetch. The pinned Action commit ids
-    were not compared with their tags, which needs GitHub. `@solana/sysvars` stays: no file imports
-    it, but `@solana-program/token-2022` declares it as a peer dependency.
+  - I-05, done afterwards with read-only queries: `packageManager` carries the sha512 of the pnpm
+    12.18.0 release in the form corepack checks (the registry's `dist.integrity`, in hex; it equals
+    the hash corepack recorded for the copy it had installed), and each pinned Action commit id was
+    compared through the GitHub API with the tag in its comment: `actions/checkout` v7.0.1 and
+    `actions/setup-node` v7.1.0 both match. `@solana/sysvars` stays: no file imports it, but
+    `@solana-program/token-2022` declares it as a peer dependency.
   - I-06: nothing to do; the demo facilitator listens on 127.0.0.1 only, and SECURITY.md puts the
     demo servers out of scope.
   - I-07: the vector runners compare codes as sets and skip a side whose policy or config is

@@ -68,6 +68,8 @@ Numbers refer to the review (`docs/DECISIONS.md`, D40 and after).
 - I-13: the version-1 payment layout requires `computeUnitLimit`, in the guard as in the verifier.
 - Documents: the statements the review found untrue or inexact are corrected, and no mutation score
   is stated until it is measured again (D55, D34).
+- I-05: `packageManager` pins pnpm 12.18.0 with its sha512, and the Action commit ids are confirmed
+  to match their tags.
 
 ### Fixed before the first release
 

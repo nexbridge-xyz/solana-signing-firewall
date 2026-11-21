@@ -191,6 +191,13 @@ is called at all, so a refused payment is neither signed nor simulated (scene 15
   (`TOKEN_PROGRAM_NOT_ALLOWED`, D26).
 - **One process per budget file.** The file ledger is for one Node.js process, and anyone who can
   edit the file can reset the budget (D27, below).
+- **The source is checked by its address.** The guard and the verifier require the source to be
+  the payer's associated token account for the asset, and they derive that address from the payer
+  and the asset alone (D54). An SPL Token account's owner can be changed after the account is
+  created, so the account at that address could by then belong to the fee payer. A transfer from
+  it still needs the payer to be its delegate, and only the fee payer can grant that, by signing an
+  `Approve` itself. Comparing the source's owner in the snapshot with the payer would close this;
+  that check is later work.
 
 ### A budget file anyone on the machine can reset
 
