@@ -459,6 +459,10 @@ Decided by the maintainers on 2026-11-20, after the devnet run:
   getting-started guide the README links to
   (`https://solana.com/developers/guides/getstarted/intro-to-x402`) and Solana's x402
   documentation, and the sentence is the same on both.
+- Done on 2026-11-21, after the review's fixes: the devnet demo ran again on `8d92d86`, in the order
+  setup, `pnpm demo`, `pnpm demo:x402`, `pnpm verify-run` (and `--x402`), `pnpm demo:record`,
+  `pnpm demo:recycle`. Every scene matched the rehearsal. Its record in `docs/devnet-run/` replaces
+  the run of 2026-11-20, which stays in the git history.
 
 ### D40. Security review of 8a50ffc
 

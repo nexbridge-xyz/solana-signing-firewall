@@ -1,6 +1,6 @@
 # Shots
 
-Every shot comes from the devnet run of 2026-11-20. The terminal output is in
+Every shot comes from the devnet run of 2026-11-21. The terminal output is in
 `docs/devnet-run/terminal.txt`; show it as it is, or replay it at reading speed. Do not run the
 demo again for the video: a new run makes new transactions that would not match the record.
 

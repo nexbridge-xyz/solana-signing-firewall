@@ -1,7 +1,7 @@
 # Video script
 
 Two and a half minutes or less, in English, with captions (`captions.srt`). It follows the devnet
-run of 2026-11-20 (`docs/devnet-run/`); the shots are in `shots.md`. Recorded at 1440×900 with a
+run of 2026-11-21 (`docs/devnet-run/`); the shots are in `shots.md`. Recorded at 1440×900 with a
 large terminal font. Fictional names only; no third-party logos and no music.
 
 If the narration uses a synthetic (AI) voice, the upload must follow YouTube's rules for labelling
