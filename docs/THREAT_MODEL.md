@@ -158,9 +158,11 @@ The policy's `memo.maxBytes` lowers that bound (32 still admits the SDK's own no
 longer seller memos); v0.1.0 has no switch that refuses seller memos or limits their characters.
 The rate limit and the daily budget bound how many payments, and so how many bytes, that is.
 
-Use `@x402/svm` 2.23.0 or later. V12's x402 disclosure (2026-10-22) reported, among 25 findings, a
-facilitator that accepted `ApproveChecked` as a payment and a client with no default spending cap;
-the fixes first shipped in `@x402/svm` 2.23.0.
+Use 2.23.0 or later of the `@x402` TypeScript packages. V12's x402 disclosure (2026-10-22) reported,
+among 25 findings, a facilitator that accepted `ApproveChecked` as a payment and a client with no
+default spending cap. The facilitator check first shipped in `@x402/svm` 2.23.0; TypeScript clients
+get the default cap from `@x402/fetch` or `@x402/axios` 2.23.0, which pull in the matching
+`@x402/core`.
 
 ### A prompt-injected agent that keeps paying
 
